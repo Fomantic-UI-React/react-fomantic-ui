@@ -80,7 +80,6 @@
     "babel-plugin-filter-imports": "^4.0.0",
     "babel-plugin-lodash": "^3.3.4",
     "babel-plugin-transform-next-use-client": "^1.1.1",
-    "babel-plugin-transform-react-handled-props": "^2.1.0",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "babel-plugin-transform-rename-import": "^2.3.0",
     "cross-env": "^7.0.2",
