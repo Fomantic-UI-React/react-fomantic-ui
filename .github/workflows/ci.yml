@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: yarn
+
+      - name: Install
+        run: yarn install --frozen-lockfile
+
+      - name: Lint
+        run: yarn lint
+
+      - name: TypeScript definitions
+        run: yarn tsd:test
+
+      - name: Build
+        run: yarn build:dist
+
+      # Guards the handledProps invariant: getUnhandledProps reads a static
+      # array on each component to decide which props are its own API. If
+      # those go missing, every declared prop silently leaks onto the DOM.
+      - name: Verify built output
+        run: node scripts/verify-build.js
