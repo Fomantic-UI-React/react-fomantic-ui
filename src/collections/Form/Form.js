@@ -117,6 +117,23 @@ Form.propTypes = {
   widths: PropTypes.oneOf(['equal']),
 }
 
+Form.handledProps = [
+  'action',
+  'as',
+  'children',
+  'className',
+  'error',
+  'inverted',
+  'loading',
+  'onSubmit',
+  'reply',
+  'size',
+  'success',
+  'unstackable',
+  'warning',
+  'widths',
+]
+
 Form.Field = FormField
 Form.Button = FormButton
 Form.Checkbox = FormCheckbox

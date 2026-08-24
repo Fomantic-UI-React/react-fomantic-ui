@@ -157,6 +157,26 @@ Header.propTypes = {
   textAlign: PropTypes.oneOf(SUI.TEXT_ALIGNMENTS),
 }
 
+Header.handledProps = [
+  'as',
+  'attached',
+  'block',
+  'children',
+  'className',
+  'color',
+  'content',
+  'disabled',
+  'dividing',
+  'floated',
+  'icon',
+  'image',
+  'inverted',
+  'size',
+  'sub',
+  'subheader',
+  'textAlign',
+]
+
 Header.Content = HeaderContent
 Header.Subheader = HeaderSubheader
 

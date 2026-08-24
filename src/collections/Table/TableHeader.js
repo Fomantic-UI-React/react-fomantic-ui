@@ -45,4 +45,6 @@ TableHeader.propTypes = {
   fullWidth: PropTypes.bool,
 }
 
+TableHeader.handledProps = ['as', 'children', 'className', 'content', 'fullWidth']
+
 export default TableHeader

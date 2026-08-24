@@ -35,4 +35,6 @@ MessageContent.propTypes = {
   content: customPropTypes.contentShorthand,
 }
 
+MessageContent.handledProps = ['as', 'children', 'className', 'content']
+
 export default MessageContent

@@ -36,4 +36,6 @@ FeedUser.propTypes = {
   content: customPropTypes.contentShorthand,
 }
 
+FeedUser.handledProps = ['as', 'children', 'className', 'content']
+
 export default FeedUser

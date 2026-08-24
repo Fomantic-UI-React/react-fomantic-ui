@@ -123,6 +123,9 @@ passthrough props and shorthand factories.
 
 ### Phase 1 — rebrand + modern build
 
+`handledProps` codemod ✅ done (PR #2): 163 arrays baked into source, Babel
+plugin dropped, verified against a pre-change baseline with 0 value mismatches.
+
 - Re-run the identity sweep (a stash exists at `stash@{0}` but predates the
   deletions; re-run rather than pop). Covers `package.json`, the UMD global
   `semanticUIReact` → `reactFomanticUI`, the `unpkg` path, the debug
@@ -132,8 +135,8 @@ passthrough props and shorthand factories.
   package `author`, not the copyright holder.)
 - README: community fork of an unmaintained project, not affiliated with
   Semantic-Org or Fomantic-UI. Do not reuse the logo or `react.semantic-ui.com`.
-- Replace gulp + webpack 4 with tsup/rollup — **blocked on the open decision
-  below**.
+- Replace gulp + webpack 4 with tsup/rollup. **Unblocked** — the
+  `handledProps` constraint is resolved.
 - Port CircleCI → GitHub Actions on Node 22.
 - Decide the first published version (continuing the v3 line vs starting fresh).
 
@@ -154,21 +157,40 @@ this lands in tooling the team knows.
 
 ## Open decisions
 
-1. **`handledProps` strategy** — blocks phase 1's build replacement:
-
-   - _(a)_ Keep Babel as a transform stage inside rollup/Vite. Lowest risk,
-     preserves all five behaviourally-significant plugins, keeps the magic.
-   - _(b)_ Codemod the generated `handledProps` arrays permanently into source,
-     then drop the plugin. More work now; makes the source honest, frees the
-     bundler choice, and decouples from propTypes so phase 3 is unblocked.
-
-   Leaning (b), but it is a real fork in the road.
-
-2. **GitHub org name** — needed for `repository`/`bugs`/`homepage` URLs.
+1. ~~**`handledProps` strategy**~~ — **resolved**: option (b). 163 arrays
+   codemodded into source, Babel plugin dropped, bundler choice now
+   unconstrained.
+2. ~~**GitHub org name**~~ — **resolved**: `Fomantic-UI-React`, owned by the
+   personal account `aphenine`. Repo at
+   `github.com/Fomantic-UI-React/react-fomantic-ui`.
 3. **npm org/scope** — even publishing unscoped, reserving a scope is cheap.
 4. **First version number.**
 5. **Which components you actually use.** If it is eight of ~50, extracting
    those into your own design system may beat maintaining 22,340 LOC.
+
+## Upstream backlog worth harvesting
+
+`Semantic-Org/Semantic-UI-React` has **35 open PRs**, with submissions as recent
+as Aug 2026 — people still contribute to a repo that has merged nothing since
+
+2024. `upstream` is configured as a remote, so these can be cherry-picked.
+
+| PR           | Why                                                                                                    |
+| ------------ | ------------------------------------------------------------------------------------------------------ |
+| #4540, #4539 | "Refactor components for React 19.2 compatibility" (+1498/-1359, +787/-685) — substantial Phase 3 work |
+| #4513        | Widen react/react-dom peerDeps to v19                                                                  |
+| #4525, #4520 | Two independent fixes for the same Popup/Popper wrapper bug                                            |
+| #4504        | Portal Escape handling via addEventListener instead of event-stack                                     |
+
+None are reviewed or verified — treat as leads, not trusted patches. They also
+predate the tooling strip and the codemod, so expect conflicts.
+
+> **Before merging any harvested work: temporarily re-enable merge commits.**
+> The repo is squash-only, which collapses every commit in a PR into one
+> authored by the merger. That is right for our own PRs and wrong for upstream
+> contributions — it would erase the original authors from the history of a
+> fork whose legitimacy rests on respecting their work. Settings → General →
+> Pull Requests → tick "Allow merge commits", merge, then untick it.
 
 ## Reference numbers
 

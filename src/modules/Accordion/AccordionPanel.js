@@ -58,6 +58,8 @@ AccordionPanel.propTypes = {
   title: customPropTypes.itemShorthand,
 }
 
+AccordionPanel.handledProps = ['active', 'content', 'index', 'onTitleClick', 'title']
+
 AccordionPanel.create = createShorthandFactory(AccordionPanel, null)
 
 export default AccordionPanel

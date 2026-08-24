@@ -407,6 +407,32 @@ Portal.propTypes = {
   triggerRef: customPropTypes.ref,
 }
 
+Portal.handledProps = [
+  'children',
+  'closeOnDocumentClick',
+  'closeOnEscape',
+  'closeOnPortalMouseLeave',
+  'closeOnTriggerBlur',
+  'closeOnTriggerClick',
+  'closeOnTriggerMouseLeave',
+  'defaultOpen',
+  'eventPool',
+  'hideOnScroll',
+  'mountNode',
+  'mouseEnterDelay',
+  'mouseLeaveDelay',
+  'onClose',
+  'onMount',
+  'onOpen',
+  'onUnmount',
+  'open',
+  'openOnTriggerClick',
+  'openOnTriggerFocus',
+  'openOnTriggerMouseEnter',
+  'trigger',
+  'triggerRef',
+]
+
 Portal.Inner = PortalInner
 
 export default Portal

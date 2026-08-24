@@ -227,6 +227,38 @@ Table.propTypes = {
   verticalAlign: PropTypes.oneOf(SUI.VERTICAL_ALIGNMENTS),
 }
 
+Table.handledProps = [
+  'as',
+  'attached',
+  'basic',
+  'celled',
+  'children',
+  'className',
+  'collapsing',
+  'color',
+  'columns',
+  'compact',
+  'definition',
+  'fixed',
+  'footerRow',
+  'headerRow',
+  'headerRows',
+  'inverted',
+  'padded',
+  'renderBodyRow',
+  'selectable',
+  'singleLine',
+  'size',
+  'sortable',
+  'stackable',
+  'striped',
+  'structured',
+  'tableData',
+  'textAlign',
+  'unstackable',
+  'verticalAlign',
+]
+
 Table.Body = TableBody
 Table.Cell = TableCell
 Table.Footer = TableFooter

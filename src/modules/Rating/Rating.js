@@ -151,6 +151,19 @@ Rating.propTypes = {
   size: PropTypes.oneOf(_.without(SUI.SIZES, 'medium', 'big')),
 }
 
+Rating.handledProps = [
+  'as',
+  'className',
+  'clearable',
+  'defaultRating',
+  'disabled',
+  'icon',
+  'maxRating',
+  'onRate',
+  'rating',
+  'size',
+]
+
 Rating.Icon = RatingIcon
 
 export default Rating

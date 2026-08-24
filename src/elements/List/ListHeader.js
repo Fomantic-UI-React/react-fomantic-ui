@@ -42,6 +42,8 @@ ListHeader.propTypes = {
   content: customPropTypes.contentShorthand,
 }
 
+ListHeader.handledProps = ['as', 'children', 'className', 'content']
+
 ListHeader.create = createShorthandFactory(ListHeader, (content) => ({ content }))
 
 export default ListHeader

@@ -32,4 +32,6 @@ SearchResults.propTypes = {
   content: customPropTypes.contentShorthand,
 }
 
+SearchResults.handledProps = ['as', 'children', 'className', 'content']
+
 export default SearchResults

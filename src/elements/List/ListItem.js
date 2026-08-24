@@ -182,6 +182,21 @@ ListItem.propTypes = {
   /** A value for an ordered list. */
   value: PropTypes.string,
 }
+
+ListItem.handledProps = [
+  'active',
+  'as',
+  'children',
+  'className',
+  'content',
+  'description',
+  'disabled',
+  'header',
+  'icon',
+  'image',
+  'onClick',
+  'value',
+]
 ListItem.create = createShorthandFactory(ListItem, (content) => ({ content }))
 
 export default ListItem

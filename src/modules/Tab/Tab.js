@@ -161,6 +161,18 @@ Tab.propTypes = {
   renderActiveOnly: PropTypes.bool,
 }
 
+Tab.handledProps = [
+  'activeIndex',
+  'as',
+  'defaultActiveIndex',
+  'grid',
+  'menu',
+  'menuPosition',
+  'onTabChange',
+  'panes',
+  'renderActiveOnly',
+]
+
 Tab.Pane = TabPane
 
 export default Tab

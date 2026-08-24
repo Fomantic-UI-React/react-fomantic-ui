@@ -48,7 +48,6 @@ const plugins = [
     },
   ],
 
-  'transform-react-handled-props',
   [
     'transform-react-remove-prop-types',
     {

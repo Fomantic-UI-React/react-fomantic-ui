@@ -106,6 +106,22 @@ TableRow.propTypes = {
   warning: PropTypes.bool,
 }
 
+TableRow.handledProps = [
+  'active',
+  'as',
+  'cellAs',
+  'cells',
+  'children',
+  'className',
+  'disabled',
+  'error',
+  'negative',
+  'positive',
+  'textAlign',
+  'verticalAlign',
+  'warning',
+]
+
 TableRow.create = createShorthandFactory(TableRow, (cells) => ({ cells }))
 
 export default TableRow

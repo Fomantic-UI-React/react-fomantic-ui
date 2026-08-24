@@ -69,6 +69,17 @@ BreadcrumbSection.propTypes = {
   onClick: PropTypes.func,
 }
 
+BreadcrumbSection.handledProps = [
+  'active',
+  'as',
+  'children',
+  'className',
+  'content',
+  'href',
+  'link',
+  'onClick',
+]
+
 BreadcrumbSection.create = createShorthandFactory(BreadcrumbSection, (content) => ({
   content,
   link: true,

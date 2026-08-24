@@ -171,4 +171,14 @@ TransitionablePortal.propTypes = {
   transition: PropTypes.object,
 }
 
+TransitionablePortal.handledProps = [
+  'children',
+  'onClose',
+  'onHide',
+  'onOpen',
+  'onStart',
+  'open',
+  'transition',
+]
+
 export default TransitionablePortal

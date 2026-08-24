@@ -148,6 +148,26 @@ Icon.propTypes = {
   'aria-label': PropTypes.string,
 }
 
+Icon.handledProps = [
+  'aria-hidden',
+  'aria-label',
+  'as',
+  'bordered',
+  'circular',
+  'className',
+  'color',
+  'corner',
+  'disabled',
+  'fitted',
+  'flipped',
+  'inverted',
+  'link',
+  'loading',
+  'name',
+  'rotated',
+  'size',
+]
+
 // Heads up!
 // .create() factories should be defined on exported component to be visible as static properties
 const MemoIcon = React.memo(Icon)

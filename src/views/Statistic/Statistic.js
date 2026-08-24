@@ -113,6 +113,21 @@ Statistic.propTypes = {
   value: customPropTypes.contentShorthand,
 }
 
+Statistic.handledProps = [
+  'as',
+  'children',
+  'className',
+  'color',
+  'content',
+  'floated',
+  'horizontal',
+  'inverted',
+  'label',
+  'size',
+  'text',
+  'value',
+]
+
 Statistic.Group = StatisticGroup
 Statistic.Label = StatisticLabel
 Statistic.Value = StatisticValue

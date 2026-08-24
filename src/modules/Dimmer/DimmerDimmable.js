@@ -53,4 +53,6 @@ DimmerDimmable.propTypes = {
   dimmed: PropTypes.bool,
 }
 
+DimmerDimmable.handledProps = ['as', 'blurring', 'children', 'className', 'content', 'dimmed']
+
 export default DimmerDimmable

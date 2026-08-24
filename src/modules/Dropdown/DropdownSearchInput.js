@@ -57,6 +57,8 @@ DropdownSearchInput.propTypes = {
   value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 }
 
+DropdownSearchInput.handledProps = ['as', 'autoComplete', 'className', 'tabIndex', 'type', 'value']
+
 DropdownSearchInput.create = createShorthandFactory(DropdownSearchInput, (type) => ({ type }))
 
 export default DropdownSearchInput

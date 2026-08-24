@@ -20,4 +20,6 @@ TableFooter.propTypes = {
   as: PropTypes.elementType,
 }
 
+TableFooter.handledProps = ['as']
+
 export default TableFooter

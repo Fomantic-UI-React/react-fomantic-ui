@@ -234,6 +234,30 @@ Input.propTypes = {
   type: PropTypes.string,
 }
 
+Input.handledProps = [
+  'action',
+  'actionPosition',
+  'as',
+  'children',
+  'className',
+  'disabled',
+  'error',
+  'fluid',
+  'focus',
+  'icon',
+  'iconPosition',
+  'input',
+  'inverted',
+  'label',
+  'labelPosition',
+  'loading',
+  'onChange',
+  'size',
+  'tabIndex',
+  'transparent',
+  'type',
+]
+
 Input.create = createShorthandFactory(Input, (type) => ({ type }))
 
 export default Input

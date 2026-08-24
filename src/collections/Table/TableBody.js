@@ -30,4 +30,6 @@ TableBody.propTypes = {
   className: PropTypes.string,
 }
 
+TableBody.handledProps = ['as', 'children', 'className']
+
 export default TableBody

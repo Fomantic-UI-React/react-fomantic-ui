@@ -57,4 +57,14 @@ DropdownMenu.propTypes = {
   scrolling: PropTypes.bool,
 }
 
+DropdownMenu.handledProps = [
+  'as',
+  'children',
+  'className',
+  'content',
+  'direction',
+  'open',
+  'scrolling',
+]
+
 export default DropdownMenu

@@ -68,4 +68,16 @@ FormGroup.propTypes = {
   widths: PropTypes.oneOf([...SUI.WIDTHS, 'equal']),
 }
 
+FormGroup.handledProps = [
+  'as',
+  'children',
+  'className',
+  'disabled',
+  'error',
+  'grouped',
+  'inline',
+  'unstackable',
+  'widths',
+]
+
 export default FormGroup

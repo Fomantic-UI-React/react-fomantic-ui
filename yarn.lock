@@ -1999,14 +1999,6 @@ babel-plugin-transform-next-use-client@^1.1.1:
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-next-use-client/-/babel-plugin-transform-next-use-client-1.1.1.tgz#648f3b3de16a09b490f5d0bc34143516ef91a4df"
   integrity sha512-qqyurXN5ZWP7kqmgzzXaEgF0fCi8d72tE+wCQwSCrjfN+LC0fI1+ejhNE+DtVECY1EvYkUoO0tcr9izwC9xexg==
 
-babel-plugin-transform-react-handled-props@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/babel-plugin-transform-react-handled-props/-/babel-plugin-transform-react-handled-props-2.1.0.tgz#11ca76679f7143637d418579f7f021879d4f721e"
-  integrity sha512-Bm7Eqw+hBsKZPyRB6QnnH7FOln/kR2Wgpt9G7pl5S7Nw5Dy5U1DUijLzLwHtOw3/YNc9nvccpCf+QhyA/i0HoA==
-  dependencies:
-    "@babel/types" "^7.4.4"
-    lodash "^4.17.11"
-
 babel-plugin-transform-react-remove-prop-types@^0.4.24:
   version "0.4.24"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-react-remove-prop-types/-/babel-plugin-transform-react-remove-prop-types-0.4.24.tgz#f2edaf9b4c6a5fbe5c1d678bfb531078c1555f3a"

@@ -103,4 +103,15 @@ Confirm.propTypes = {
   size: PropTypes.oneOf(['mini', 'tiny', 'small', 'large', 'fullscreen']),
 }
 
+Confirm.handledProps = [
+  'cancelButton',
+  'confirmButton',
+  'content',
+  'header',
+  'onCancel',
+  'onConfirm',
+  'open',
+  'size',
+]
+
 export default Confirm

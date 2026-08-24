@@ -153,6 +153,25 @@ Card.propTypes = {
   raised: PropTypes.bool,
 }
 
+Card.handledProps = [
+  'as',
+  'centered',
+  'children',
+  'className',
+  'color',
+  'content',
+  'description',
+  'extra',
+  'fluid',
+  'header',
+  'href',
+  'image',
+  'link',
+  'meta',
+  'onClick',
+  'raised',
+]
+
 Card.Content = CardContent
 Card.Description = CardDescription
 Card.Group = CardGroup

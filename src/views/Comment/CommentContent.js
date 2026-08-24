@@ -35,4 +35,6 @@ CommentContent.propTypes = {
   content: customPropTypes.contentShorthand,
 }
 
+CommentContent.handledProps = ['as', 'children', 'className', 'content']
+
 export default CommentContent

@@ -28,4 +28,6 @@ FormCheckbox.propTypes = {
   control: FormField.propTypes.control,
 }
 
+FormCheckbox.handledProps = ['as', 'control']
+
 export default FormCheckbox

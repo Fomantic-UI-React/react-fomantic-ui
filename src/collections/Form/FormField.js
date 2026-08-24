@@ -201,4 +201,20 @@ FormField.propTypes = {
   width: PropTypes.oneOf(SUI.WIDTHS),
 }
 
+FormField.handledProps = [
+  'as',
+  'children',
+  'className',
+  'content',
+  'control',
+  'disabled',
+  'error',
+  'id',
+  'inline',
+  'label',
+  'required',
+  'type',
+  'width',
+]
+
 export default FormField

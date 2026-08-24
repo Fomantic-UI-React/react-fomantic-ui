@@ -163,6 +163,28 @@ List.propTypes = {
   verticalAlign: PropTypes.oneOf(SUI.VERTICAL_ALIGNMENTS),
 }
 
+List.handledProps = [
+  'animated',
+  'as',
+  'bulleted',
+  'celled',
+  'children',
+  'className',
+  'content',
+  'divided',
+  'floated',
+  'horizontal',
+  'inverted',
+  'items',
+  'link',
+  'onItemClick',
+  'ordered',
+  'relaxed',
+  'selection',
+  'size',
+  'verticalAlign',
+]
+
 List.Content = ListContent
 List.Description = ListDescription
 List.Header = ListHeader

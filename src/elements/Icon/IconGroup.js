@@ -40,4 +40,6 @@ IconGroup.propTypes = {
   size: PropTypes.oneOf(_.without(SUI.SIZES, 'medium')),
 }
 
+IconGroup.handledProps = ['as', 'children', 'className', 'content', 'size']
+
 export default IconGroup

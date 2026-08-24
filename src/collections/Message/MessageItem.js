@@ -42,6 +42,8 @@ MessageItem.propTypes = {
   content: customPropTypes.contentShorthand,
 }
 
+MessageItem.handledProps = ['as', 'children', 'className', 'content']
+
 MessageItem.create = createShorthandFactory(MessageItem, (content) => ({ content }))
 
 export default MessageItem

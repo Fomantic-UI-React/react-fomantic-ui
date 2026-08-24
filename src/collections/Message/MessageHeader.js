@@ -42,6 +42,8 @@ MessageHeader.propTypes = {
   content: customPropTypes.contentShorthand,
 }
 
+MessageHeader.handledProps = ['as', 'children', 'className', 'content']
+
 MessageHeader.create = createShorthandFactory(MessageHeader, (val) => ({ content: val }))
 
 export default MessageHeader

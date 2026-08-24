@@ -32,4 +32,6 @@ FormSelect.propTypes = {
   options: PropTypes.arrayOf(PropTypes.shape(Dropdown.Item.propTypes)).isRequired,
 }
 
+FormSelect.handledProps = ['as', 'control', 'options']
+
 export default FormSelect

@@ -60,6 +60,8 @@ Dimmer.propTypes = {
   page: PropTypes.bool,
 }
 
+Dimmer.handledProps = ['active', 'page']
+
 Dimmer.Dimmable = DimmerDimmable
 Dimmer.Inner = DimmerInner
 

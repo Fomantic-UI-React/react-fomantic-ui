@@ -698,6 +698,38 @@ Search.propTypes = {
   placeholder: PropTypes.string,
 }
 
+Search.handledProps = [
+  'aligned',
+  'as',
+  'category',
+  'categoryLayoutRenderer',
+  'categoryRenderer',
+  'className',
+  'defaultOpen',
+  'defaultValue',
+  'fluid',
+  'icon',
+  'input',
+  'loading',
+  'minCharacters',
+  'noResultsDescription',
+  'noResultsMessage',
+  'onBlur',
+  'onFocus',
+  'onMouseDown',
+  'onResultSelect',
+  'onSearchChange',
+  'onSelectionChange',
+  'open',
+  'placeholder',
+  'resultRenderer',
+  'results',
+  'selectFirstResult',
+  'showNoResults',
+  'size',
+  'value',
+]
+
 SearchInner.autoControlledProps = ['open', 'value']
 
 if (process.env.NODE_ENV !== 'production') {

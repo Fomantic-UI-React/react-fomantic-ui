@@ -54,6 +54,8 @@ ModalContent.propTypes = {
   scrolling: PropTypes.bool,
 }
 
+ModalContent.handledProps = ['as', 'children', 'className', 'content', 'image', 'scrolling']
+
 ModalContent.create = createShorthandFactory(ModalContent, (content) => ({ content }))
 
 export default ModalContent

@@ -28,4 +28,6 @@ FormInput.propTypes = {
   control: FormField.propTypes.control,
 }
 
+FormInput.handledProps = ['as', 'control']
+
 export default FormInput

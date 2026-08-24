@@ -29,4 +29,6 @@ ButtonOr.propTypes = {
   text: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 }
 
+ButtonOr.handledProps = ['as', 'className', 'text']
+
 export default ButtonOr

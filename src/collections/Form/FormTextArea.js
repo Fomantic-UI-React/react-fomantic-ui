@@ -28,4 +28,6 @@ FormTextArea.propTypes = {
   control: FormField.propTypes.control,
 }
 
+FormTextArea.handledProps = ['as', 'control']
+
 export default FormTextArea

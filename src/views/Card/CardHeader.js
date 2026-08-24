@@ -46,4 +46,6 @@ CardHeader.propTypes = {
   textAlign: PropTypes.oneOf(_.without(SUI.TEXT_ALIGNMENTS, 'justified')),
 }
 
+CardHeader.handledProps = ['as', 'children', 'className', 'content', 'textAlign']
+
 export default CardHeader

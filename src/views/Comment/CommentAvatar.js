@@ -40,4 +40,6 @@ CommentAvatar.propTypes = {
   src: PropTypes.string,
 }
 
+CommentAvatar.handledProps = ['as', 'className', 'src']
+
 export default CommentAvatar

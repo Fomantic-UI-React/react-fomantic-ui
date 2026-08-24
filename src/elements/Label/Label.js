@@ -206,6 +206,33 @@ Label.propTypes = {
   tag: PropTypes.bool,
 }
 
+Label.handledProps = [
+  'active',
+  'as',
+  'attached',
+  'basic',
+  'children',
+  'circular',
+  'className',
+  'color',
+  'content',
+  'corner',
+  'detail',
+  'empty',
+  'floating',
+  'horizontal',
+  'icon',
+  'image',
+  'onClick',
+  'onRemove',
+  'pointing',
+  'prompt',
+  'removeIcon',
+  'ribbon',
+  'size',
+  'tag',
+]
+
 Label.Detail = LabelDetail
 Label.Group = LabelGroup
 

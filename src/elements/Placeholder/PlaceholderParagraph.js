@@ -36,4 +36,6 @@ PlaceholderParagraph.propTypes = {
   content: customPropTypes.contentShorthand,
 }
 
+PlaceholderParagraph.handledProps = ['as', 'children', 'className', 'content']
+
 export default PlaceholderParagraph

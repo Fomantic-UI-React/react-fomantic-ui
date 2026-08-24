@@ -35,4 +35,6 @@ CommentMetadata.propTypes = {
   content: customPropTypes.contentShorthand,
 }
 
+CommentMetadata.handledProps = ['as', 'children', 'className', 'content']
+
 export default CommentMetadata

@@ -79,6 +79,8 @@ ModalActions.propTypes = {
   onActionClick: customPropTypes.every([customPropTypes.disallow(['children']), PropTypes.func]),
 }
 
+ModalActions.handledProps = ['actions', 'as', 'children', 'className', 'content', 'onActionClick']
+
 ModalActions.create = createShorthandFactory(ModalActions, (actions) => ({ actions }))
 
 export default ModalActions

@@ -85,4 +85,18 @@ Divider.propTypes = {
   vertical: PropTypes.bool,
 }
 
+Divider.handledProps = [
+  'as',
+  'children',
+  'className',
+  'clearing',
+  'content',
+  'fitted',
+  'hidden',
+  'horizontal',
+  'inverted',
+  'section',
+  'vertical',
+]
+
 export default Divider

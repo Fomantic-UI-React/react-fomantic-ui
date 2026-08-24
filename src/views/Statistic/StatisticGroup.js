@@ -88,4 +88,17 @@ StatisticGroup.propTypes = {
   widths: PropTypes.oneOf(SUI.WIDTHS),
 }
 
+StatisticGroup.handledProps = [
+  'as',
+  'children',
+  'className',
+  'color',
+  'content',
+  'horizontal',
+  'inverted',
+  'items',
+  'size',
+  'widths',
+]
+
 export default StatisticGroup

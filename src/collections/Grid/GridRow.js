@@ -101,4 +101,19 @@ GridRow.propTypes = {
   verticalAlign: PropTypes.oneOf(SUI.VERTICAL_ALIGNMENTS),
 }
 
+GridRow.handledProps = [
+  'as',
+  'centered',
+  'children',
+  'className',
+  'color',
+  'columns',
+  'divided',
+  'only',
+  'reversed',
+  'stretched',
+  'textAlign',
+  'verticalAlign',
+]
+
 export default GridRow

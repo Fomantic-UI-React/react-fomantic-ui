@@ -53,4 +53,6 @@ ButtonContent.propTypes = {
   visible: PropTypes.bool,
 }
 
+ButtonContent.handledProps = ['as', 'children', 'className', 'content', 'hidden', 'visible']
+
 export default ButtonContent

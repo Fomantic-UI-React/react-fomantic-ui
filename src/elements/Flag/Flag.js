@@ -530,6 +530,8 @@ Flag.propTypes = {
   name: customPropTypes.suggest(names),
 }
 
+Flag.handledProps = ['as', 'className', 'name']
+
 // Heads up!
 // .create() factories should be defined on exported component to be visible as static properties
 const MemoFlag = React.memo(Flag)

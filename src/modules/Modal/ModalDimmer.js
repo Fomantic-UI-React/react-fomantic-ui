@@ -79,6 +79,18 @@ ModalDimmer.propTypes = {
   scrolling: PropTypes.bool,
 }
 
+ModalDimmer.handledProps = [
+  'as',
+  'blurring',
+  'centered',
+  'children',
+  'className',
+  'content',
+  'inverted',
+  'mountNode',
+  'scrolling',
+]
+
 ModalDimmer.create = createShorthandFactory(ModalDimmer, (content) => ({ content }))
 
 export default ModalDimmer

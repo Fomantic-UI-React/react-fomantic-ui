@@ -128,6 +128,26 @@ TableCell.propTypes = {
   width: PropTypes.oneOf(SUI.WIDTHS),
 }
 
+TableCell.handledProps = [
+  'active',
+  'as',
+  'children',
+  'className',
+  'collapsing',
+  'content',
+  'disabled',
+  'error',
+  'icon',
+  'negative',
+  'positive',
+  'selectable',
+  'singleLine',
+  'textAlign',
+  'verticalAlign',
+  'warning',
+  'width',
+]
+
 TableCell.create = createShorthandFactory(TableCell, (content) => ({ content }))
 
 export default TableCell

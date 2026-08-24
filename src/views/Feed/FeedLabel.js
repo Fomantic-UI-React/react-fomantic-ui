@@ -59,4 +59,6 @@ FeedLabel.propTypes = {
   image: customPropTypes.itemShorthand,
 }
 
+FeedLabel.handledProps = ['as', 'children', 'className', 'content', 'icon', 'image']
+
 export default FeedLabel

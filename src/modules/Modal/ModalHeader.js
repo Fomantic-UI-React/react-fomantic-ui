@@ -41,6 +41,8 @@ ModalHeader.propTypes = {
   content: customPropTypes.contentShorthand,
 }
 
+ModalHeader.handledProps = ['as', 'children', 'className', 'content']
+
 ModalHeader.create = createShorthandFactory(ModalHeader, (content) => ({ content }))
 
 export default ModalHeader

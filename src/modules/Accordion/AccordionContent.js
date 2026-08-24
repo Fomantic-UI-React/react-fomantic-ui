@@ -46,6 +46,8 @@ AccordionContent.propTypes = {
   content: customPropTypes.contentShorthand,
 }
 
+AccordionContent.handledProps = ['active', 'as', 'children', 'className', 'content']
+
 AccordionContent.create = createShorthandFactory(AccordionContent, (content) => ({ content }))
 
 export default AccordionContent

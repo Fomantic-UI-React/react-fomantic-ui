@@ -18,6 +18,8 @@ Select.propTypes = {
   options: PropTypes.arrayOf(PropTypes.shape(Dropdown.Item.propTypes)).isRequired,
 }
 
+Select.handledProps = ['options']
+
 Select.Divider = Dropdown.Divider
 Select.Header = Dropdown.Header
 Select.Item = Dropdown.Item

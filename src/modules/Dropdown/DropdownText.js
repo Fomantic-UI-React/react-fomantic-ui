@@ -48,6 +48,8 @@ DropdownText.propTypes = {
   content: customPropTypes.contentShorthand,
 }
 
+DropdownText.handledProps = ['as', 'children', 'className', 'content']
+
 DropdownText.create = createShorthandFactory(DropdownText, (val) => ({ content: val }))
 
 export default DropdownText

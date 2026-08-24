@@ -82,4 +82,6 @@ Advertisement.propTypes = {
   ]).isRequired,
 }
 
+Advertisement.handledProps = ['as', 'centered', 'children', 'className', 'content', 'test', 'unit']
+
 export default Advertisement

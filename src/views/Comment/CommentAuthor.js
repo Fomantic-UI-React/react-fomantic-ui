@@ -35,4 +35,6 @@ CommentAuthor.propTypes = {
   content: customPropTypes.contentShorthand,
 }
 
+CommentAuthor.handledProps = ['as', 'children', 'className', 'content']
+
 export default CommentAuthor

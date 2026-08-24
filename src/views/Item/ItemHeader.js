@@ -42,6 +42,8 @@ ItemHeader.propTypes = {
   content: customPropTypes.contentShorthand,
 }
 
+ItemHeader.handledProps = ['as', 'children', 'className', 'content']
+
 ItemHeader.create = createShorthandFactory(ItemHeader, (content) => ({ content }))
 
 export default ItemHeader

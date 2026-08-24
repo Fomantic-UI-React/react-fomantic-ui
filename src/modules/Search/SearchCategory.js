@@ -75,4 +75,16 @@ SearchCategory.propTypes = {
   results: PropTypes.array,
 }
 
+SearchCategory.handledProps = [
+  'active',
+  'as',
+  'children',
+  'className',
+  'content',
+  'layoutRenderer',
+  'name',
+  'renderer',
+  'results',
+]
+
 export default SearchCategory

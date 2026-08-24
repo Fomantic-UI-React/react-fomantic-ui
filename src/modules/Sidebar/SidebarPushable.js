@@ -35,4 +35,6 @@ SidebarPushable.propTypes = {
   content: customPropTypes.contentShorthand,
 }
 
+SidebarPushable.handledProps = ['as', 'children', 'className', 'content']
+
 export default SidebarPushable

@@ -74,4 +74,16 @@ ItemContent.propTypes = {
   verticalAlign: PropTypes.oneOf(SUI.VERTICAL_ALIGNMENTS),
 }
 
+ItemContent.handledProps = [
+  'as',
+  'children',
+  'className',
+  'content',
+  'description',
+  'extra',
+  'header',
+  'meta',
+  'verticalAlign',
+]
+
 export default ItemContent

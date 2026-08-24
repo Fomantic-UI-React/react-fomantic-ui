@@ -28,4 +28,6 @@ FormRadio.propTypes = {
   control: FormField.propTypes.control,
 }
 
+FormRadio.handledProps = ['as', 'control']
+
 export default FormRadio

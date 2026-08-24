@@ -45,4 +45,6 @@ SidebarPusher.propTypes = {
   dimmed: PropTypes.bool,
 }
 
+SidebarPusher.handledProps = ['as', 'children', 'className', 'content', 'dimmed']
+
 export default SidebarPusher

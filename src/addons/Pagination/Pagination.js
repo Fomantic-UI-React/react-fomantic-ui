@@ -155,6 +155,23 @@ Pagination.propTypes = {
   totalPages: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
 }
 
+Pagination.handledProps = [
+  'activePage',
+  'aria-label',
+  'boundaryRange',
+  'defaultActivePage',
+  'disabled',
+  'ellipsisItem',
+  'firstItem',
+  'lastItem',
+  'nextItem',
+  'onPageChange',
+  'pageItem',
+  'prevItem',
+  'siblingRange',
+  'totalPages',
+]
+
 Pagination.Item = PaginationItem
 
 export default Pagination

@@ -41,6 +41,8 @@ StepTitle.propTypes = {
   content: customPropTypes.contentShorthand,
 }
 
+StepTitle.handledProps = ['as', 'children', 'className', 'content']
+
 StepTitle.create = createShorthandFactory(StepTitle, (content) => ({ content }))
 
 export default StepTitle
