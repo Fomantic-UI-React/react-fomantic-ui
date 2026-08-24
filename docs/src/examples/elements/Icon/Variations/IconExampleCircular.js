@@ -1,5 +1,5 @@
 import React from 'react'
-import { Icon } from 'semantic-ui-react'
+import { Icon } from 'react-fomantic-ui'
 
 const IconExampleCircular = () => (
   <div>

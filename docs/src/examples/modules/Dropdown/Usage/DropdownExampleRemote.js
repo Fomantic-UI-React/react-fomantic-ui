@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import faker from 'faker'
 import React, { Component } from 'react'
-import { GridColumn, Button, Dropdown, Grid, Header } from 'semantic-ui-react'
+import { GridColumn, Button, Dropdown, Grid, Header } from 'react-fomantic-ui'
 
 const getOptions = () =>
   _.times(3, () => {

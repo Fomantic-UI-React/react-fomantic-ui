@@ -7,7 +7,7 @@ import {
   Grid,
   Image,
   Transition,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 export default class TransitionExampleDuration extends Component {
   state = { hide: 500, show: 500, visible: true }

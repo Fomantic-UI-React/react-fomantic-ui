@@ -1,5 +1,5 @@
 import React from 'react'
-import { Image, Rail, Segment } from 'semantic-ui-react'
+import { Image, Rail, Segment } from 'react-fomantic-ui'
 
 const RailExampleInternal = () => (
   <Segment textAlign='center'>

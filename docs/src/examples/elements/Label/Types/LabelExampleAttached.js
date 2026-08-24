@@ -6,7 +6,7 @@ import {
   Image,
   Label,
   Segment,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const LabelExampleAttached = () => (
   <Grid columns={3}>

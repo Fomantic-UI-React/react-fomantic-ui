@@ -1,5 +1,5 @@
 import React from 'react'
-import { FormInput, Button, Form } from 'semantic-ui-react'
+import { FormInput, Button, Form } from 'react-fomantic-ui'
 
 const FormExampleLoading = () => (
   <Form loading>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { GridRow, GridColumn, Grid, Image } from 'semantic-ui-react'
+import { GridRow, GridColumn, Grid, Image } from 'react-fomantic-ui'
 
 const GridExampleColumns = () => (
   <Grid>

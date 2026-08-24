@@ -7,7 +7,7 @@ import {
   TableCell,
   TableBody,
   Table,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const TableExampleLarge = () => (
   <Table size='large'>

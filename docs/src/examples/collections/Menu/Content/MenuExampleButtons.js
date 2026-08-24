@@ -1,5 +1,5 @@
 import React from 'react'
-import { MenuItem, Button, Menu } from 'semantic-ui-react'
+import { MenuItem, Button, Menu } from 'react-fomantic-ui'
 
 const MenuExampleButtons = () => (
   <Menu>

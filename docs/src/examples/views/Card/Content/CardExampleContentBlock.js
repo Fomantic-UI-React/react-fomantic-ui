@@ -9,7 +9,7 @@ import {
   CardContent,
   Card,
   Feed,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const CardExampleContentBlock = () => (
   <Card>

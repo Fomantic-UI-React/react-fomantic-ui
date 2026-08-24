@@ -1,5 +1,5 @@
 import React from 'react'
-import { Header, Icon, Message, Segment } from 'semantic-ui-react'
+import { Header, Icon, Message, Segment } from 'react-fomantic-ui'
 
 const SegmentExampleAttachedComplex = () => (
   <div>

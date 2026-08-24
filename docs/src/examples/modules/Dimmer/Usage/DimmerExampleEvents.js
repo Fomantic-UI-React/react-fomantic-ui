@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { DimmerDimmable, Button, Header, Image } from 'semantic-ui-react'
+import { DimmerDimmable, Button, Header, Image } from 'react-fomantic-ui'
 
 export default class DimmerExampleEvents extends Component {
   state = {}

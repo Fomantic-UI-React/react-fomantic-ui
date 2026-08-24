@@ -1,5 +1,5 @@
 import React from 'react'
-import { StatisticGroup } from 'semantic-ui-react'
+import { StatisticGroup } from 'react-fomantic-ui'
 
 const items = [
   { key: 'faves', label: 'Faves', value: '22' },

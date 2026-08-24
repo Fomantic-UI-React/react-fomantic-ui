@@ -9,7 +9,7 @@ import {
   Card,
   Image,
   Rating,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const PopupExampleTrigger = () => (
   <Popup

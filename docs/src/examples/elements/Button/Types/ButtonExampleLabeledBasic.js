@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Icon, Label } from 'semantic-ui-react'
+import { Button, Icon, Label } from 'react-fomantic-ui'
 
 const ButtonExampleLabeledBasic = () => (
   <div>

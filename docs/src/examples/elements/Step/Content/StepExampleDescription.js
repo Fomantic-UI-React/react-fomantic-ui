@@ -1,5 +1,5 @@
 import React from 'react'
-import { StepTitle, StepGroup, StepDescription, Step } from 'semantic-ui-react'
+import { StepTitle, StepGroup, StepDescription, Step } from 'react-fomantic-ui'
 
 const StepExampleDescription = () => (
   <StepGroup>

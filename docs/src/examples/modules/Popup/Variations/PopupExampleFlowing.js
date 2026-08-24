@@ -1,5 +1,5 @@
 import React from 'react'
-import { GridColumn, Header, Button, Popup, Grid } from 'semantic-ui-react'
+import { GridColumn, Header, Button, Popup, Grid } from 'react-fomantic-ui'
 
 const PopupExampleFlowing = () => (
   <Popup trigger={<Button>Show flowing popup</Button>} flowing hoverable>

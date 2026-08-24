@@ -1,5 +1,5 @@
 import React from 'react'
-import { GridColumn, Button, Grid, Input, Popup } from 'semantic-ui-react'
+import { GridColumn, Button, Grid, Input, Popup } from 'react-fomantic-ui'
 
 const PopupExampleActions = () => (
   <Grid columns={1}>

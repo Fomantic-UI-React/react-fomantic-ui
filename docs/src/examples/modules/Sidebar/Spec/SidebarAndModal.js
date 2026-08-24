@@ -12,7 +12,7 @@ import {
   Segment,
   Sidebar,
   Modal,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const SidebarAndModal = () => {
   const [visible, setVisible] = React.useState(false)

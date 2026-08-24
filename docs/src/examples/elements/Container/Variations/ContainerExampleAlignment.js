@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 
 import React from 'react'
-import { Container, Divider } from 'semantic-ui-react'
+import { Container, Divider } from 'react-fomantic-ui'
 
 const ContainerExampleAlignment = () => (
   <div>

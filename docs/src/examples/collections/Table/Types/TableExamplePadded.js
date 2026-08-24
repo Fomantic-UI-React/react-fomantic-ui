@@ -8,7 +8,7 @@ import {
   Header,
   Table,
   Rating,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const TableExamplePadded = () => (
   <Table celled padded>

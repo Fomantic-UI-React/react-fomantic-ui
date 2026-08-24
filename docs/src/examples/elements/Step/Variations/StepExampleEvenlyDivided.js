@@ -5,7 +5,7 @@ import {
   StepContent,
   Icon,
   Step,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const StepExampleEvenlyDivided = () => (
   <StepGroup widths={3}>

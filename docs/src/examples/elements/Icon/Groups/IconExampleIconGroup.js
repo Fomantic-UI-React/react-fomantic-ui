@@ -1,5 +1,5 @@
 import React from 'react'
-import { IconGroup, Icon } from 'semantic-ui-react'
+import { IconGroup, Icon } from 'react-fomantic-ui'
 
 const IconExampleIconGroup = () => (
   <IconGroup size='huge'>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Header, Image } from 'semantic-ui-react'
+import { Header, Image } from 'react-fomantic-ui'
 
 const HeaderExampleImage = () => (
   <Header as='h2'>

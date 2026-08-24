@@ -5,7 +5,7 @@ import {
   FormCheckbox,
   Button,
   Form,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const FormExampleUnstackableGroup = () => (
   <Form>

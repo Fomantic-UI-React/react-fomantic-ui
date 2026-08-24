@@ -1,5 +1,5 @@
 import React from 'react'
-import { ButtonGroup } from 'semantic-ui-react'
+import { ButtonGroup } from 'react-fomantic-ui'
 
 const ButtonExampleGroupIconShorthand = () => (
   <div>

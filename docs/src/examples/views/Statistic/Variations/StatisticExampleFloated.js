@@ -4,7 +4,7 @@ import {
   StatisticLabel,
   Segment,
   Statistic,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const StatisticExampleFloated = () => (
   <Segment>

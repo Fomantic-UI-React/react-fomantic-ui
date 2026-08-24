@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { MenuMenu, MenuItem, Icon, Menu, Segment } from 'semantic-ui-react'
+import { MenuMenu, MenuItem, Icon, Menu, Segment } from 'react-fomantic-ui'
 
 export default class MenuExampleTabularOnBottom extends Component {
   state = { activeItem: 'active' }

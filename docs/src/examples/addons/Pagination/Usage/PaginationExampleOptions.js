@@ -8,7 +8,7 @@ import {
   Form,
   Pagination,
   Segment,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 export default class PaginationExampleCustomization extends Component {
   state = {

@@ -6,7 +6,7 @@ import {
   Dimmer,
   Image,
   Segment,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 export default class DimmerExampleBlurringInverted extends Component {
   state = {}

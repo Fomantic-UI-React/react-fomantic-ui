@@ -3,7 +3,7 @@ import _ from 'lodash'
 import React from 'react'
 import ReactIs from 'react-is'
 import ReactDOMServer from 'react-dom/server'
-import * as semanticUIReact from 'semantic-ui-react'
+import * as reactFomanticUI from 'react-fomantic-ui'
 
 import { componentInfoContext } from 'docs/src/utils'
 import {
@@ -70,11 +70,11 @@ export default function isConformant(Component, options = {}) {
   // ----------------------------------------
   // Is exported or private
   // ----------------------------------------
-  // detect components like: semanticUIReact.H1
-  const isTopLevelAPIProp = _.has(semanticUIReact, constructorName)
+  // detect components like: reactFomanticUI.H1
+  const isTopLevelAPIProp = _.has(reactFomanticUI, constructorName)
 
-  // find the apiPath in the semanticUIReact object
-  const foundAsSubcomponent = ReactIs.isValidElementType(_.get(semanticUIReact, info.apiPath))
+  // find the apiPath in the reactFomanticUI object
+  const foundAsSubcomponent = ReactIs.isValidElementType(_.get(reactFomanticUI, info.apiPath))
 
   // require all components to be exported at the top level
   it('is exported at the top level', () => {

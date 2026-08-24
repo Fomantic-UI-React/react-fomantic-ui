@@ -1,6 +1,6 @@
 import faker from 'faker'
 import React from 'react'
-import { Dropdown, Image } from 'semantic-ui-react'
+import { Dropdown, Image } from 'react-fomantic-ui'
 
 const trigger = (
   <span>

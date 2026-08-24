@@ -7,7 +7,7 @@ import {
   Grid,
   Placeholder,
   Segment,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const PlaceholderExampleGrid = () => (
   <Grid columns={3} stackable>

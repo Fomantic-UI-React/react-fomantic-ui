@@ -1,5 +1,5 @@
 import React from 'react'
-import { Dropdown, Header } from 'semantic-ui-react'
+import { Dropdown, Header } from 'react-fomantic-ui'
 
 const options = [
   {

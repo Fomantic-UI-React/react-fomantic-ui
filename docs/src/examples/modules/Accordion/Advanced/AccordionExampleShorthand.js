@@ -1,7 +1,7 @@
 import faker from 'faker'
 import _ from 'lodash'
 import React from 'react'
-import { Accordion, Label, Message } from 'semantic-ui-react'
+import { Accordion, Label, Message } from 'react-fomantic-ui'
 
 const panels = _.times(3, (i) => ({
   key: `panel-${i}`,

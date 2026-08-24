@@ -1,5 +1,5 @@
 import React from 'react'
-import { MenuItem, Icon, Label, Menu } from 'semantic-ui-react'
+import { MenuItem, Icon, Label, Menu } from 'react-fomantic-ui'
 
 const LabelExampleFloating = () => (
   <Menu compact>

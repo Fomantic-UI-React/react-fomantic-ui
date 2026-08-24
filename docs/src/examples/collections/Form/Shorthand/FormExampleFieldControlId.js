@@ -7,7 +7,7 @@ import {
   TextArea,
   Button,
   Select,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const genderOptions = [
   { key: 'm', text: 'Male', value: 'male' },

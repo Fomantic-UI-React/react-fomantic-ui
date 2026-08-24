@@ -1,5 +1,5 @@
 import React from 'react'
-import { LabelGroup, LabelDetail, Icon, Label } from 'semantic-ui-react'
+import { LabelGroup, LabelDetail, Icon, Label } from 'react-fomantic-ui'
 
 const LabelExampleGroupSize = () => (
   <LabelGroup color='blue'>

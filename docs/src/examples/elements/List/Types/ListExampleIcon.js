@@ -1,5 +1,5 @@
 import React from 'react'
-import { ListItem, ListIcon, ListContent, List } from 'semantic-ui-react'
+import { ListItem, ListIcon, ListContent, List } from 'react-fomantic-ui'
 
 const ListExampleIcon = () => (
   <List>

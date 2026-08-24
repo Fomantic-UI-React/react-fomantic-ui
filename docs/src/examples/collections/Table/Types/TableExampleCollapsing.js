@@ -10,7 +10,7 @@ import {
   Header,
   Image,
   Table,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const TableExampleCollapsing = () => (
   <Table basic='very' celled collapsing>

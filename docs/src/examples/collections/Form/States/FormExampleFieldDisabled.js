@@ -1,5 +1,5 @@
 import React from 'react'
-import { FormInput, FormGroup, Form } from 'semantic-ui-react'
+import { FormInput, FormGroup, Form } from 'react-fomantic-ui'
 
 const FormExampleFieldDisabled = () => (
   <Form>

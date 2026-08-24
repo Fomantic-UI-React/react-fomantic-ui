@@ -1,5 +1,5 @@
 import React from 'react'
-import { TableRow, TableCell, TableBody, Icon, Table } from 'semantic-ui-react'
+import { TableRow, TableCell, TableBody, Icon, Table } from 'react-fomantic-ui'
 
 const TableExampleCollapsingCell = () => (
   <Table>

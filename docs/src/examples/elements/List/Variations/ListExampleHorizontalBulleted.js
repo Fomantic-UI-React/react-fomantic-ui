@@ -1,5 +1,5 @@
 import React from 'react'
-import { ListItem, List } from 'semantic-ui-react'
+import { ListItem, List } from 'react-fomantic-ui'
 
 const ListExampleHorizontalBulleted = () => (
   <List bulleted horizontal link>

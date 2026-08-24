@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { MenuItem, GridColumn, Grid, Menu, Segment } from 'semantic-ui-react'
+import { MenuItem, GridColumn, Grid, Menu, Segment } from 'react-fomantic-ui'
 
 export default class MenuExampleTabularOnLeft extends Component {
   state = { activeItem: 'bio' }

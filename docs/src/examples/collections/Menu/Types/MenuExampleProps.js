@@ -1,5 +1,5 @@
 import React from 'react'
-import { Menu } from 'semantic-ui-react'
+import { Menu } from 'react-fomantic-ui'
 
 const items = [
   { key: 'editorials', active: true, name: 'Editorials' },

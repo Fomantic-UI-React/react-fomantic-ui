@@ -7,7 +7,7 @@ import {
   TableCell,
   TableBody,
   Table,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const tableData = [
   { name: 'John', age: 15, gender: 'Male' },

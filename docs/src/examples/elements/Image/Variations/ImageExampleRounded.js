@@ -1,5 +1,5 @@
 import React from 'react'
-import { Image } from 'semantic-ui-react'
+import { Image } from 'react-fomantic-ui'
 
 const ImageExampleRounded = () => (
   <Image src='/images/wireframe/square-image.png' size='medium' rounded />

@@ -6,7 +6,7 @@ import {
   Divider,
   Grid,
   Popup,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const PopupExampleEventsEnabled = () => {
   const [eventsEnabled, setEventsEnabled] = React.useState(true)

@@ -1,5 +1,5 @@
 import React from 'react'
-import { MenuItem, GridRow, GridColumn, Grid, Menu } from 'semantic-ui-react'
+import { MenuItem, GridRow, GridColumn, Grid, Menu } from 'react-fomantic-ui'
 
 const GridExampleTextAlignmentCenter = () => (
   <Grid textAlign='center' columns={3}>

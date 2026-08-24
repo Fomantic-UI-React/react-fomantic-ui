@@ -1,5 +1,5 @@
 import React from 'react'
-import { MessageHeader, MessageContent, Message, Icon } from 'semantic-ui-react'
+import { MessageHeader, MessageContent, Message, Icon } from 'react-fomantic-ui'
 
 const MessageExampleIcon = () => (
   <Message icon>

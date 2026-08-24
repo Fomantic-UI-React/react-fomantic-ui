@@ -1,5 +1,5 @@
 import React from 'react'
-import { CardContent, Card, Icon } from 'semantic-ui-react'
+import { CardContent, Card, Icon } from 'react-fomantic-ui'
 
 const description = [
   'Amy is a violinist with 2 years experience in the wedding industry.',

@@ -11,7 +11,7 @@ import {
   FeedContent,
   Feed,
   Icon,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const FeedExampleSizeLarge = () => (
   <Feed size='large'>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { StepGroup } from 'semantic-ui-react'
+import { StepGroup } from 'react-fomantic-ui'
 
 const steps = [
   {

@@ -1,5 +1,5 @@
 import React from 'react'
-import { GridColumn, Grid, Image } from 'semantic-ui-react'
+import { GridColumn, Grid, Image } from 'react-fomantic-ui'
 
 const GridExampleResponsiveWidth = () => (
   <div>

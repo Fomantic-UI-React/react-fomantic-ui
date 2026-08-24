@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { TabPane, Segment, Tab } from 'semantic-ui-react'
+import { TabPane, Segment, Tab } from 'react-fomantic-ui'
 
 const panes = [
   { menuItem: 'Tab 1', render: () => <TabPane>Tab 1 Content</TabPane> },

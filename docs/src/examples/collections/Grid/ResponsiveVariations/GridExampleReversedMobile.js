@@ -1,5 +1,5 @@
 import React from 'react'
-import { GridColumn, Grid } from 'semantic-ui-react'
+import { GridColumn, Grid } from 'react-fomantic-ui'
 
 const GridExampleReversedMobile = () => (
   <Grid reversed='mobile' columns='equal'>

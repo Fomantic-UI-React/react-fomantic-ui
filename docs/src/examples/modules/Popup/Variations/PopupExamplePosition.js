@@ -1,5 +1,5 @@
 import React from 'react'
-import { GridRow, GridColumn, Icon, Popup, Grid } from 'semantic-ui-react'
+import { GridRow, GridColumn, Icon, Popup, Grid } from 'react-fomantic-ui'
 
 const PopupExamplePosition = () => (
   <Grid columns={3} style={{ width: '600px' }}>

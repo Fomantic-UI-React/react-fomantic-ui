@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { MenuItem, Icon, Menu } from 'semantic-ui-react'
+import { MenuItem, Icon, Menu } from 'react-fomantic-ui'
 
 export default class MenuExampleLabeledIconsVertical extends Component {
   state = { activeItem: 'gamepad' }

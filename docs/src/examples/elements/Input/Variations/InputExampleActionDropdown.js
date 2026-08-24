@@ -1,5 +1,5 @@
 import React from 'react'
-import { Dropdown, Input } from 'semantic-ui-react'
+import { Dropdown, Input } from 'react-fomantic-ui'
 
 const options = [
   { key: 'page', text: 'This Page', value: 'page' },

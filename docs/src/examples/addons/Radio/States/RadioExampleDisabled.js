@@ -1,5 +1,5 @@
 import React from 'react'
-import { FormField, Form, Radio } from 'semantic-ui-react'
+import { FormField, Form, Radio } from 'react-fomantic-ui'
 
 const RadioExampleDisabled = () => (
   <Form>

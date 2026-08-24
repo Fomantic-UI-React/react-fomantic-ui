@@ -1,5 +1,5 @@
 import React from 'react'
-import { LabelDetail, Label } from 'semantic-ui-react'
+import { LabelDetail, Label } from 'react-fomantic-ui'
 
 const LabelExampleDetail = () => (
   <Label>

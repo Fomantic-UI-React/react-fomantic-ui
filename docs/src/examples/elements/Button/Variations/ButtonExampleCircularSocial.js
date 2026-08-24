@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button } from 'semantic-ui-react'
+import { Button } from 'react-fomantic-ui'
 
 const ButtonExampleCircularSocial = () => (
   <div>

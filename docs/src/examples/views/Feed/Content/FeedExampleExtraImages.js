@@ -7,7 +7,7 @@ import {
   FeedDate,
   FeedContent,
   Feed,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const FeedExampleAdditionalInformation = () => (
   <Feed>

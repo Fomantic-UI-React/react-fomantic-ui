@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { MenuMenu, MenuItem, Menu } from 'semantic-ui-react'
+import { MenuMenu, MenuItem, Menu } from 'react-fomantic-ui'
 
 export default class MenuExampleMenus extends Component {
   state = {}

@@ -7,7 +7,7 @@ import {
   TableBody,
   Icon,
   Table,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const TableExamplePositiveNegative = () => (
   <Table celled>

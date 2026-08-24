@@ -1,5 +1,5 @@
 import React from 'react'
-import { Select } from 'semantic-ui-react'
+import { Select } from 'react-fomantic-ui'
 
 const countryOptions = [
   { key: 'af', value: 'af', text: 'Afghanistan' },

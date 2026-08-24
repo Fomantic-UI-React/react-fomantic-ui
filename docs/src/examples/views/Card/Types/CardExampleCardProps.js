@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, Icon } from 'semantic-ui-react'
+import { Card, Icon } from 'react-fomantic-ui'
 
 const extra = (
   <a>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Input } from 'semantic-ui-react'
+import { Input } from 'react-fomantic-ui'
 
 const InputExampleFocus = () => <Input focus placeholder='Search...' />
 

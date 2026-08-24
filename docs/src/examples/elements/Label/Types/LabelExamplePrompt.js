@@ -1,5 +1,5 @@
 import React from 'react'
-import { FormField, Form, Input, Label } from 'semantic-ui-react'
+import { FormField, Form, Input, Label } from 'react-fomantic-ui'
 
 const LabelExamplePrompt = () => (
   <Form>

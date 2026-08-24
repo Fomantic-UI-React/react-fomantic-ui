@@ -6,7 +6,7 @@ import {
   StepContent,
   Icon,
   Step,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const StepExampleSizeSmall = () => (
   <StepGroup size='small'>

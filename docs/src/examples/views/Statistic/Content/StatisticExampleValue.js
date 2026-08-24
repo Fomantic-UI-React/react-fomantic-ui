@@ -6,7 +6,7 @@ import {
   Icon,
   Image,
   Statistic,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const StatisticExampleValue = () => (
   <StatisticGroup>

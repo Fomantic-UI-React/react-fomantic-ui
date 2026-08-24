@@ -5,7 +5,7 @@ import {
   ListContent,
   Image,
   List,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const ListExampleSizes = () => {
   const sizes = ['mini', 'tiny', 'small', 'large', 'big', 'huge', 'massive']

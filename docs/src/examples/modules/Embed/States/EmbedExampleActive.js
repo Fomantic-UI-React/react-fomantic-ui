@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button, Divider, Embed } from 'semantic-ui-react'
+import { Button, Divider, Embed } from 'react-fomantic-ui'
 
 export default class EmbedExampleActive extends Component {
   state = {}

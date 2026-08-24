@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Checkbox } from 'semantic-ui-react'
+import { Button, Checkbox } from 'react-fomantic-ui'
 
 function CheckboxExampleRemoteControl() {
   const [checked, setChecked] = React.useState(false)

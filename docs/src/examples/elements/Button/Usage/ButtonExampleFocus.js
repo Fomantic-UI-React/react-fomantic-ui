@@ -1,5 +1,5 @@
 import React, { Component, createRef } from 'react'
-import { GridColumn, Button, Grid } from 'semantic-ui-react'
+import { GridColumn, Button, Grid } from 'react-fomantic-ui'
 
 export default class ButtonExampleFocus extends Component {
   buttonRef = createRef()

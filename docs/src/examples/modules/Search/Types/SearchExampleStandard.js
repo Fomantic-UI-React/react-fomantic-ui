@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import faker from 'faker'
 import React from 'react'
-import { GridColumn, Search, Grid, Header, Segment } from 'semantic-ui-react'
+import { GridColumn, Search, Grid, Header, Segment } from 'react-fomantic-ui'
 
 const source = _.times(5, () => ({
   title: faker.company.companyName(),

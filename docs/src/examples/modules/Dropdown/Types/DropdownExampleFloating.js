@@ -1,5 +1,5 @@
 import React from 'react'
-import { ButtonGroup, Button, Dropdown } from 'semantic-ui-react'
+import { ButtonGroup, Button, Dropdown } from 'react-fomantic-ui'
 
 const options = [
   { key: 'edit', icon: 'edit', text: 'Edit Post', value: 'edit' },

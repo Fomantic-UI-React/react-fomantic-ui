@@ -1,5 +1,5 @@
 import React from 'react'
-import { Segment, Icon } from 'semantic-ui-react'
+import { Segment, Icon } from 'react-fomantic-ui'
 
 const IconExampleInvertedColored = () => (
   <Segment inverted>

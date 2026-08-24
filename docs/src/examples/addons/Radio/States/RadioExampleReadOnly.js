@@ -1,5 +1,5 @@
 import React from 'react'
-import { Radio } from 'semantic-ui-react'
+import { Radio } from 'react-fomantic-ui'
 
 const RadioExampleReadOnly = () => (
   <Radio label='This radio is read-only' readOnly />

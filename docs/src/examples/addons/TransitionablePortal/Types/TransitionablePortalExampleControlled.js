@@ -4,7 +4,7 @@ import {
   Header,
   Segment,
   TransitionablePortal,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 export default class TransitionablePortalExampleControlled extends Component {
   state = { open: false }

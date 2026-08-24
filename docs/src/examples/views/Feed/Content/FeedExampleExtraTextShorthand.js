@@ -7,7 +7,7 @@ import {
   FeedDate,
   FeedContent,
   Feed,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const image = '/images/avatar/small/laura.jpg'
 const date = '3 days ago'

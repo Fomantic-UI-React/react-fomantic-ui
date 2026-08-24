@@ -9,7 +9,7 @@ import {
   Icon,
   Menu,
   Segment,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 // TODO: Update <Search> usage after its will be implemented
 

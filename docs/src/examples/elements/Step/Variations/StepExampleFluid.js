@@ -8,7 +8,7 @@ import {
   Icon,
   Grid,
   Step,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const StepExampleFluid = () => (
   <Grid columns={2}>

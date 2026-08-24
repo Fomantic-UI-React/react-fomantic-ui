@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Divider, Input, Segment } from 'semantic-ui-react'
+import { Button, Divider, Input, Segment } from 'react-fomantic-ui'
 
 const DividerExampleHorizontal = () => (
   <Segment basic textAlign='center'>

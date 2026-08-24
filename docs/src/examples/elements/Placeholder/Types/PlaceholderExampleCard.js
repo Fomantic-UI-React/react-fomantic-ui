@@ -15,7 +15,7 @@ import {
   Divider,
   Image,
   Placeholder,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const cards = [
   {

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Icon, Popup } from 'semantic-ui-react'
+import { Icon, Popup } from 'react-fomantic-ui'
 
 const PopupExampleSize = () => (
   <>

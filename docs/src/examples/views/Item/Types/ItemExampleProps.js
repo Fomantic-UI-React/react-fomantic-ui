@@ -1,5 +1,5 @@
 import React from 'react'
-import { ItemGroup } from 'semantic-ui-react'
+import { ItemGroup } from 'react-fomantic-ui'
 
 const items = [
   {

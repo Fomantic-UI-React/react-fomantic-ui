@@ -9,7 +9,7 @@ import {
   Menu,
   Segment,
   Sidebar,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const SidebarExampleVisible = () => (
   <SidebarPushable as={Segment}>

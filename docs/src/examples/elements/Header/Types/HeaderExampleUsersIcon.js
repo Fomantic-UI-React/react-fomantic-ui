@@ -1,5 +1,5 @@
 import React from 'react'
-import { HeaderContent, Header, Icon, Image } from 'semantic-ui-react'
+import { HeaderContent, Header, Icon, Image } from 'react-fomantic-ui'
 
 const HeaderExampleUsersIcon = () => (
   <div>

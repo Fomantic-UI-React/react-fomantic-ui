@@ -1,5 +1,5 @@
 import React from 'react'
-import { Embed } from 'semantic-ui-react'
+import { Embed } from 'react-fomantic-ui'
 
 const EmbedExampleCustom = () => (
   <Embed

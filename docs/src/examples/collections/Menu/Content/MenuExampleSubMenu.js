@@ -8,7 +8,7 @@ import {
   Icon,
   Input,
   Menu,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 export default class MenuExampleSubMenu extends Component {
   state = {}

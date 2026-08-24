@@ -7,7 +7,7 @@ import {
   Header,
   Icon,
   Table,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const DividerExampleHorizontalTable = () => (
   <>

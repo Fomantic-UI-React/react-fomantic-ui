@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button, Confirm } from 'semantic-ui-react'
+import { Button, Confirm } from 'react-fomantic-ui'
 
 class ConfirmExampleCallbacks extends Component {
   state = { open: false, result: 'show the modal to capture a result' }

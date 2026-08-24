@@ -8,7 +8,7 @@ import {
   Header,
   Placeholder,
   Popup,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const PopupExamplePopperDependencies = () => {
   const [data, setData] = React.useState(null)

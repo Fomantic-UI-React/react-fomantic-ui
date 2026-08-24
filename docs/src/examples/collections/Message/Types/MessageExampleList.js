@@ -4,7 +4,7 @@ import {
   MessageList,
   MessageHeader,
   Message,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const MessageExampleList = () => (
   <Message>

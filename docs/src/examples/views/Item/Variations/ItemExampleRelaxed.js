@@ -5,7 +5,7 @@ import {
   ItemGroup,
   ItemContent,
   Item,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const ItemExampleRelaxed = () => (
   <ItemGroup relaxed>

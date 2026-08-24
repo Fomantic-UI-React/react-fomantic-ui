@@ -1,5 +1,5 @@
 import React from 'react'
-import { ButtonOr, ButtonGroup, Button } from 'semantic-ui-react'
+import { ButtonOr, ButtonGroup, Button } from 'react-fomantic-ui'
 
 const ButtonExampleGroupOrSize = () => (
   <ButtonGroup size='large'>

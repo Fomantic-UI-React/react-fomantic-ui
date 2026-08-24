@@ -8,7 +8,7 @@ import {
   Button,
   Image,
   List,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const users = ['ade', 'chris', 'christian', 'daniel', 'elliot', 'helen']
 

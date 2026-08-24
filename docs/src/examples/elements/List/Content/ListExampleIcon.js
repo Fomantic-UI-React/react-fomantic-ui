@@ -6,7 +6,7 @@ import {
   ListContent,
   Icon,
   List,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const ListExampleIcon = () => (
   <List>

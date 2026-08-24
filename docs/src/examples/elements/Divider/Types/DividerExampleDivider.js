@@ -1,5 +1,5 @@
 import React from 'react'
-import { Divider } from 'semantic-ui-react'
+import { Divider } from 'react-fomantic-ui'
 
 const DividerExampleDivider = () => <Divider />
 

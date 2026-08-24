@@ -1,5 +1,5 @@
 import React from 'react'
-import { DropdownMenu, DropdownItem, Dropdown, Icon } from 'semantic-ui-react'
+import { DropdownMenu, DropdownItem, Dropdown, Icon } from 'react-fomantic-ui'
 
 const DropdownExampleMenuDirectionLeft = () => (
   <Dropdown text='Menu' floating labeled button className='icon'>

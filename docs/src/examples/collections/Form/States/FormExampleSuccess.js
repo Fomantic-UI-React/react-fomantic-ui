@@ -1,5 +1,5 @@
 import React from 'react'
-import { FormInput, Button, Form, Message } from 'semantic-ui-react'
+import { FormInput, Button, Form, Message } from 'react-fomantic-ui'
 
 const FormExampleSuccess = () => (
   <Form success>

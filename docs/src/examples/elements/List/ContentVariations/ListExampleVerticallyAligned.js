@@ -1,5 +1,5 @@
 import React from 'react'
-import { ListItem, ListContent, Image, List } from 'semantic-ui-react'
+import { ListItem, ListContent, Image, List } from 'react-fomantic-ui'
 
 const ListExampleVerticallyAligned = () => (
   <List horizontal>

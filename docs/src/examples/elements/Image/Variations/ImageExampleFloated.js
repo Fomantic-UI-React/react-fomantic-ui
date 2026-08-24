@@ -1,5 +1,5 @@
 import React from 'react'
-import { Segment, Image } from 'semantic-ui-react'
+import { Segment, Image } from 'react-fomantic-ui'
 
 const src = '/images/wireframe/image-text.png'
 

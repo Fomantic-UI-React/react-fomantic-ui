@@ -5,7 +5,7 @@ import {
   Dimmer,
   Header,
   Icon,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 export default class DimmerExamplePage extends Component {
   state = {}

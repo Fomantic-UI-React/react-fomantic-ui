@@ -1,5 +1,5 @@
 import React from 'react'
-import { GridColumn, Divider, Grid, Image, Segment } from 'semantic-ui-react'
+import { GridColumn, Divider, Grid, Image, Segment } from 'react-fomantic-ui'
 
 const DividerExampleVertical = () => (
   <Segment>

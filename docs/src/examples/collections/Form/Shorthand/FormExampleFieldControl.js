@@ -9,7 +9,7 @@ import {
   Radio,
   Select,
   TextArea,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const options = [
   { key: 'm', text: 'Male', value: 'male' },

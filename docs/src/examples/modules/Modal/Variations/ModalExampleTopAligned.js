@@ -6,7 +6,7 @@ import {
   ModalActions,
   Button,
   Modal,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 function ModalExampleTopAligned() {
   const [open, setOpen] = React.useState(false)

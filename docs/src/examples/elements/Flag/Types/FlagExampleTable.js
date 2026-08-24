@@ -7,7 +7,7 @@ import {
   TableBody,
   Table,
   Flag,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const countries = [
   { name: 'Afghanistan', countryCode: 'af' },

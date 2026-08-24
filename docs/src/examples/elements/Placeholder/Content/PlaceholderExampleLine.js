@@ -1,5 +1,5 @@
 import React from 'react'
-import { PlaceholderLine, Placeholder } from 'semantic-ui-react'
+import { PlaceholderLine, Placeholder } from 'react-fomantic-ui'
 
 const PlaceholderExampleLine = () => (
   <Placeholder>

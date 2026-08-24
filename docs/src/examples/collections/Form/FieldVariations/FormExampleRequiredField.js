@@ -1,5 +1,5 @@
 import React from 'react'
-import { FormField, Form, Input } from 'semantic-ui-react'
+import { FormField, Form, Input } from 'react-fomantic-ui'
 
 const FormExampleRequiredField = () => (
   <Form>

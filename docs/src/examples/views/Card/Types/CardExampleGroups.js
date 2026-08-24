@@ -8,7 +8,7 @@ import {
   Button,
   Card,
   Image,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const CardExampleGroups = () => (
   <CardGroup>

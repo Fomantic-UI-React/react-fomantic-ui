@@ -1,5 +1,5 @@
 import React from 'react'
-import { ImageGroup, Divider, Image } from 'semantic-ui-react'
+import { ImageGroup, Divider, Image } from 'react-fomantic-ui'
 
 const src = '/images/wireframe/image.png'
 

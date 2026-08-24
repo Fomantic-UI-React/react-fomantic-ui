@@ -1,5 +1,5 @@
 import React from 'react'
-import { FeedLabel, FeedEvent, FeedContent, Feed } from 'semantic-ui-react'
+import { FeedLabel, FeedEvent, FeedContent, Feed } from 'react-fomantic-ui'
 
 const image = '/images/avatar/small/jenny.jpg'
 const date = '3 days ago'

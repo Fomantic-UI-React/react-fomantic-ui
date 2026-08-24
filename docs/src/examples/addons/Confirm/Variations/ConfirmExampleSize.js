@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button, Confirm } from 'semantic-ui-react'
+import { Button, Confirm } from 'react-fomantic-ui'
 
 export default class ConfirmExampleSize extends Component {
   state = { open: false }

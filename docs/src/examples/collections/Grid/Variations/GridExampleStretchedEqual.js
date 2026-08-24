@@ -1,5 +1,5 @@
 import React from 'react'
-import { GridRow, GridColumn, Grid, Image, Segment } from 'semantic-ui-react'
+import { GridRow, GridColumn, Grid, Image, Segment } from 'react-fomantic-ui'
 
 const GridExampleStretchedEqual = () => (
   <Grid columns='equal'>

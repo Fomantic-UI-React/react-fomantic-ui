@@ -1,5 +1,5 @@
 import React from 'react'
-import { FormGroup, FormField, Form } from 'semantic-ui-react'
+import { FormGroup, FormField, Form } from 'react-fomantic-ui'
 
 const FormExampleFieldControlHTML = () => (
   <Form>

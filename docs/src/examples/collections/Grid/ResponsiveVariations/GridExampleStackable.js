@@ -1,5 +1,5 @@
 import React from 'react'
-import { GridColumn, Grid, Image, Segment } from 'semantic-ui-react'
+import { GridColumn, Grid, Image, Segment } from 'react-fomantic-ui'
 
 const GridExampleStackable = () => (
   <Grid stackable columns={2}>

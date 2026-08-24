@@ -7,7 +7,7 @@ import {
   Header,
   Image,
   Segment,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 export default class DimmerExampleVerticalAlignBottom extends Component {
   state = {}

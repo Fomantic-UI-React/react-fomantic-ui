@@ -8,7 +8,7 @@ import {
   Form,
   Grid,
   Image,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const transitions = [
   'browse',

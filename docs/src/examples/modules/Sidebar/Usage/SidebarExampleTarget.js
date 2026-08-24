@@ -11,7 +11,7 @@ import {
   Menu,
   Segment,
   Sidebar,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const SidebarExampleTarget = () => {
   const segmentRef = React.useRef()

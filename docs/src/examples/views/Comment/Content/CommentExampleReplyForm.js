@@ -12,7 +12,7 @@ import {
   Button,
   Comment,
   Form,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const CommentExampleReplyForm = () => (
   <CommentGroup>

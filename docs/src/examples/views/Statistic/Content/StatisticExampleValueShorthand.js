@@ -1,5 +1,5 @@
 import React from 'react'
-import { StatisticGroup, Statistic } from 'semantic-ui-react'
+import { StatisticGroup, Statistic } from 'react-fomantic-ui'
 
 const StatisticExampleValueShorthand = () => (
   <StatisticGroup>

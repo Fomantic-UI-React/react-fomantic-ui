@@ -1,5 +1,5 @@
 import React from 'react'
-import { GridRow, GridColumn, Grid } from 'semantic-ui-react'
+import { GridRow, GridColumn, Grid } from 'react-fomantic-ui'
 
 const GridExampleReversedComputer = () => (
   <Grid reversed='computer' columns='equal'>

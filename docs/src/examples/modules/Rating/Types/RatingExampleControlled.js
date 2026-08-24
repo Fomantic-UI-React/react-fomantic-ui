@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Rating } from 'semantic-ui-react'
+import { Rating } from 'react-fomantic-ui'
 
 export default class RatingExampleControlled extends Component {
   state = { rating: 0 }

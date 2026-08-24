@@ -12,7 +12,7 @@ import {
   Image,
   Item,
   Label,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const paragraph = <Image src='/images/wireframe/short-paragraph.png' />
 

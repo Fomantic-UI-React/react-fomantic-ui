@@ -4,7 +4,7 @@ import {
   StatisticLabel,
   Divider,
   Statistic,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const StatisticExampleSizeDivided = () => (
   <div>

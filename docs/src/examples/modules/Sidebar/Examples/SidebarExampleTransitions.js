@@ -15,7 +15,7 @@ import {
   Menu,
   Segment,
   Sidebar,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const HorizontalSidebar = ({ animation, direction, visible }) => (
   <Sidebar

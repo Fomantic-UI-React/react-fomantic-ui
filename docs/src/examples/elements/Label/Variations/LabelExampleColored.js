@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import React from 'react'
-import { Label } from 'semantic-ui-react'
+import { Label } from 'react-fomantic-ui'
 
 const colors = [
   'red',

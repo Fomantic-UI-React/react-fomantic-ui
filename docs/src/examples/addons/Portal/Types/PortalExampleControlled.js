@@ -6,7 +6,7 @@ import {
   Header,
   Segment,
   Portal,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 export default class PortalExampleControlled extends Component {
   state = { open: false }

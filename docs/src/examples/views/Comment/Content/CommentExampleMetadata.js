@@ -8,7 +8,7 @@ import {
   CommentAuthor,
   Comment,
   Icon,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const CommentExampleMetadata = () => (
   <CommentGroup>

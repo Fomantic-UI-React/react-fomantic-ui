@@ -1,5 +1,5 @@
 import React from 'react'
-import { FormField, Form, Checkbox } from 'semantic-ui-react'
+import { FormField, Form, Checkbox } from 'react-fomantic-ui'
 
 function CheckboxExampleRadioGroup() {
   const [value, setValue] = React.useState('this')

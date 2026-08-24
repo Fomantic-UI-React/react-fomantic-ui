@@ -4,7 +4,7 @@ import {
   AccordionContent,
   Accordion,
   Icon,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 export default class AccordionExampleFluid extends Component {
   state = { activeIndex: 0 }

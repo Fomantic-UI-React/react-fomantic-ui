@@ -1,5 +1,5 @@
 import React from 'react'
-import { CardGroup, Card } from 'semantic-ui-react'
+import { CardGroup, Card } from 'react-fomantic-ui'
 
 const CardExampleFluid = () => (
   <CardGroup>

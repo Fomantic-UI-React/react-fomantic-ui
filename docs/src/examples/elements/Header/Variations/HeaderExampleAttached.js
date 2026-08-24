@@ -1,5 +1,5 @@
 import React from 'react'
-import { Header, Segment } from 'semantic-ui-react'
+import { Header, Segment } from 'react-fomantic-ui'
 
 const HeaderExampleAttached = () => (
   <div>

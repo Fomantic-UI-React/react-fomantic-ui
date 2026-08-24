@@ -5,7 +5,7 @@ import {
   PlaceholderImage,
   Card,
   Placeholder,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const PlaceholderExampleImageSquare = () => (
   <CardGroup itemsPerRow={3}>

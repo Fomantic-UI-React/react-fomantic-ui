@@ -1,5 +1,5 @@
 import React from 'react'
-import { Radio, Segment } from 'semantic-ui-react'
+import { Radio, Segment } from 'react-fomantic-ui'
 
 const RadioExampleFitted = () => (
   <div>

@@ -7,7 +7,7 @@ import {
   Image,
   Loader,
   Segment,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 export default class DimmerExampleLoader extends Component {
   state = {}

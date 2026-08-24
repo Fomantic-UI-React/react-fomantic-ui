@@ -7,7 +7,7 @@ import {
   FeedContent,
   Feed,
   Icon,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const FeedExampleIconLabel = () => (
   <Feed>
