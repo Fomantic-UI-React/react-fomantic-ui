@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button, Radio } from 'semantic-ui-react'
+import { Button, Radio } from 'react-fomantic-ui'
 
 export default class RadioExampleRemoteControl extends Component {
   state = { checked: false }

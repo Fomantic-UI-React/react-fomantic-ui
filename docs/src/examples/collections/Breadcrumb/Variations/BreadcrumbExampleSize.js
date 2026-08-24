@@ -4,7 +4,7 @@ import {
   BreadcrumbDivider,
   Breadcrumb,
   Divider,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const sizes = ['mini', 'tiny', 'small', 'large', 'big', 'huge', 'massive']
 

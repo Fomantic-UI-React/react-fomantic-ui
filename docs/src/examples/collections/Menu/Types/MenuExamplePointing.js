@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { MenuMenu, MenuItem, Input, Menu, Segment } from 'semantic-ui-react'
+import { MenuMenu, MenuItem, Input, Menu, Segment } from 'react-fomantic-ui'
 
 export default class MenuExamplePointing extends Component {
   state = { activeItem: 'home' }

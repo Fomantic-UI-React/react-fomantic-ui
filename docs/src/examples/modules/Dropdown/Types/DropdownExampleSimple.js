@@ -1,5 +1,5 @@
 import React from 'react'
-import { Dropdown, Menu } from 'semantic-ui-react'
+import { Dropdown, Menu } from 'react-fomantic-ui'
 
 const options = [
   { key: 1, text: 'Choice 1', value: 1 },

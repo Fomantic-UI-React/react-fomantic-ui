@@ -1,5 +1,5 @@
 import React from 'react'
-import { StatisticValue, StatisticLabel, Statistic } from 'semantic-ui-react'
+import { StatisticValue, StatisticLabel, Statistic } from 'react-fomantic-ui'
 
 const StatisticExampleStatistic = () => (
   <Statistic>

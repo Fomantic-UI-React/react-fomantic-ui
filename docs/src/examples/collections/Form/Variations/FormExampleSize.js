@@ -1,5 +1,5 @@
 import React from 'react'
-import { FormGroup, FormField, Button, Divider, Form } from 'semantic-ui-react'
+import { FormGroup, FormField, Button, Divider, Form } from 'react-fomantic-ui'
 
 const sizes = ['mini', 'tiny', 'small', 'large', 'big', 'huge', 'massive']
 

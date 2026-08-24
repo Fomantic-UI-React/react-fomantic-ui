@@ -1,5 +1,5 @@
 import React from 'react'
-import { Image, Loader, Segment } from 'semantic-ui-react'
+import { Image, Loader, Segment } from 'react-fomantic-ui'
 
 const LoaderExampleInverted = () => (
   <Segment inverted>

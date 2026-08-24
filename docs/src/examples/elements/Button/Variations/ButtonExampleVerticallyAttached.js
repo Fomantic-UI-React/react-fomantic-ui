@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Segment } from 'semantic-ui-react'
+import { Button, Segment } from 'react-fomantic-ui'
 
 const ButtonExampleVerticallyAttached = () => (
   <div>

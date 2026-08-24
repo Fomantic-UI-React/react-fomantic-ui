@@ -1,5 +1,5 @@
 import React from 'react'
-import { Progress } from 'semantic-ui-react'
+import { Progress } from 'react-fomantic-ui'
 
 const ProgressExampleSuccess = () => (
   <Progress percent={100} success>

@@ -6,7 +6,7 @@ import {
   ListDescription,
   ListContent,
   List,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const ListExampleDivided = () => (
   <List divided relaxed>

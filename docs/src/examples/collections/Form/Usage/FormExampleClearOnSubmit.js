@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { FormInput, FormGroup, FormButton, Form } from 'semantic-ui-react'
+import { FormInput, FormGroup, FormButton, Form } from 'react-fomantic-ui'
 
 class FormExampleClearOnSubmit extends Component {
   state = {}

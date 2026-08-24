@@ -9,7 +9,7 @@ import {
   CommentAuthor,
   Checkbox,
   Comment,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 export default class CommentExampleCollapsed extends Component {
   state = { collapsed: true }

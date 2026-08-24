@@ -1,5 +1,5 @@
 import React from 'react'
-import { GridColumn, Button, Grid, Popup } from 'semantic-ui-react'
+import { GridColumn, Button, Grid, Popup } from 'react-fomantic-ui'
 
 const PopupExampleNested = () => (
   <Popup wide trigger={<Button content='Are you the one?' />} on='click'>

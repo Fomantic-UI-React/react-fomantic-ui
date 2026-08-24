@@ -9,7 +9,7 @@ import {
   Icon,
   Image,
   Segment,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 export default class DimmerExampleDimmer extends Component {
   state = {}

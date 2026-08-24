@@ -9,7 +9,7 @@ import {
   Accordion,
   Form,
   Menu,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const ColorForm = (
   <Form>

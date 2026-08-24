@@ -9,7 +9,7 @@ import {
   Icon,
   Search,
   Segment,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const SegmentExamplePlaceholderGrid = () => (
   <Segment placeholder>

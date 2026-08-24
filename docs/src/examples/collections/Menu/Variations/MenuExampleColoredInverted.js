@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { MenuItem, Menu } from 'semantic-ui-react'
+import { MenuItem, Menu } from 'react-fomantic-ui'
 
 const colorsA = ['red', 'orange', 'yellow', 'olive', 'green', 'teal']
 const colorsB = ['blue', 'violet', 'purple', 'pink', 'brown', 'grey']

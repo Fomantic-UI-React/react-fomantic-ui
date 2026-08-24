@@ -9,7 +9,7 @@ import {
   ItemContent,
   Image,
   Item,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const ItemExampleItems = () => (
   <ItemGroup>

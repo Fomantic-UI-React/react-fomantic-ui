@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Icon, Popup } from 'semantic-ui-react'
+import { Button, Icon, Popup } from 'react-fomantic-ui'
 
 const PopupExampleInverted = () => (
   <>

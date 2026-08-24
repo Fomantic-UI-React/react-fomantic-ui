@@ -1,5 +1,5 @@
 import React from 'react'
-import { FormCheckbox, Form } from 'semantic-ui-react'
+import { FormCheckbox, Form } from 'react-fomantic-ui'
 
 const FormExampleRequiredFieldShorthand = () => (
   <Form>

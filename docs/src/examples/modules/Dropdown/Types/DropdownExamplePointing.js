@@ -7,7 +7,7 @@ import {
   MenuItem,
   Dropdown,
   Menu,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const DropdownExamplePointing = () => (
   <Menu>

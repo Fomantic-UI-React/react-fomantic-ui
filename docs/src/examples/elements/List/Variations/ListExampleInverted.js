@@ -5,7 +5,7 @@ import {
   ListContent,
   List,
   Segment,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const ListExampleInverted = () => (
   <Segment inverted>

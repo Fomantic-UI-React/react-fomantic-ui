@@ -1,5 +1,5 @@
 import React from 'react'
-import { Loader, Image, Segment } from 'semantic-ui-react'
+import { Loader, Image, Segment } from 'react-fomantic-ui'
 
 const LoaderExampleDisabled = () => (
   <Segment>

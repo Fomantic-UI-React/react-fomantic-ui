@@ -10,7 +10,7 @@ import {
   Checkbox,
   Icon,
   Table,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const TableExampleFullWidth = () => (
   <Table celled compact definition>

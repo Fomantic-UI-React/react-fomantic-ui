@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Icon } from 'semantic-ui-react'
+import { Button, Icon } from 'react-fomantic-ui'
 
 const ButtonExampleIcon = () => (
   <Button icon>

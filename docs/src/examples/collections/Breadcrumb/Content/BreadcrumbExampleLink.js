@@ -3,7 +3,7 @@ import {
   BreadcrumbSection,
   BreadcrumbDivider,
   Breadcrumb,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const BreadcrumbExampleLink = () => (
   <Breadcrumb>

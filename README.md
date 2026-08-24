@@ -1,160 +1,120 @@
-<!-- Logo -->
-<p align="center">
-  <a href="https://react.semantic-ui.com">
-    <img height="128" width="128" src="https://github.com/Semantic-Org/Semantic-UI-React/raw/master/docs/public/logo.png">
-  </a>
-</p>
+# react-fomantic-ui
 
-<!-- Name -->
-<h1 align="center">
-  <a href="https://react.semantic-ui.com/">Semantic UI React</a>
-</h1>
+React components that render [Semantic UI][sui] / [Fomantic-UI][fomantic]
+markup. A community-maintained fork of [semantic-ui-react][upstream].
 
-<!-- Badges -->
-<p align="center">
-  <a href="https://gitter.im/Semantic-Org/Semantic-UI-React">
-    <img alt="Gitter" src="https://img.shields.io/badge/gitter-join_chat-1dce73.svg?logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4NCjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB4PSIwIiB5PSI1IiBmaWxsPSIjZmZmIiB3aWR0aD0iMSIgaGVpZ2h0PSI1Ii8%2BPHJlY3QgeD0iMiIgeT0iNiIgZmlsbD0iI2ZmZiIgd2lkdGg9IjEiIGhlaWdodD0iNyIvPjxyZWN0IHg9IjQiIHk9IjYiIGZpbGw9IiNmZmYiIHdpZHRoPSIxIiBoZWlnaHQ9IjciLz48cmVjdCB4PSI2IiB5PSI2IiBmaWxsPSIjZmZmIiB3aWR0aD0iMSIgaGVpZ2h0PSI0Ii8%2BPC9zdmc%2B&logoWidth=8&style=flat-square&maxAge=2592000" />
-  </a>
-  <a href="https://circleci.com/gh/Semantic-Org/Semantic-UI-React/tree/master">
-    <img alt="Circle" src="https://img.shields.io/circleci/project/github/Semantic-Org/Semantic-UI-React/master.svg?style=flat-square" />
-  </a>
-  <a href="https://codecov.io/gh/Semantic-Org/Semantic-UI-React">
-    <img alt="Codecov" src="https://img.shields.io/codecov/c/github/Semantic-Org/Semantic-UI-React/master.svg?style=flat-square" />
-  </a>
-  <a href="https://david-dm.org/Semantic-Org/Semantic-UI-React">
-    <img alt="David" src="https://img.shields.io/david/Semantic-Org/Semantic-UI-React.svg?style=flat-square" />
-  </a>
-  <a href="https://www.npmjs.com/package/semantic-ui-react">
-    <img alt="npm" src="https://img.shields.io/npm/v/semantic-ui-react.svg?style=flat-square" />
-  </a>
-</p>
+> **This is a fork, and it is not official.**
+> It is not affiliated with, endorsed by, or maintained by the Semantic-Org
+> team or the Fomantic-UI team. Please do not send issues about this package
+> to either project. Report them [here][issues].
 
-## Installation & Usage
+## Why this exists
 
-See the [**Documentation**][2] for an introduction, usage information, and examples.
+`semantic-ui-react` is no longer maintained. Its last release was
+`2.1.5` in December 2023, `3.0.0-beta.2` has sat on the `beta` tag since the
+same month, and the last commit landed in November 2024 — while the package
+is still downloaded around 370,000 times a week.
 
-## Built With
+This fork exists to keep that work usable: to ship the stranded v3 line, to
+modernise the toolchain, and to support current React versions.
 
-<p align="center">
-  <img height="50" src="https://github.com/Semantic-Org/Semantic-UI-React/raw/master/docs/public/amazon-logo.png" />
-  <img height="50" src="https://github.com/Semantic-Org/Semantic-UI-React/raw/master/docs/public/netflix-logo.png" />
-  <img height="50" src="https://github.com/Semantic-Org/Semantic-UI-React/raw/master/docs/public/microsoft-logo.png" />
-</p>
+## Status
 
-- Amazon Publishing — the full-service publisher of Amazon — [APub.com](https://amazonpublishing.amazon.com)
-- Netflix's Edge Developer Experience team's numerous [internal apps](https://github.com/Semantic-Org/Semantic-UI-React/issues/1604)
-- Netflix's [flamescope][31]
-- Microsoft's [Teams](https://products.office.com/en-US/microsoft-teams/group-chat-software) prototyping
+Early. The library builds and its public API is unchanged from
+`3.0.0-beta.2`, but the test suite is mid-migration and there is no published
+release yet. See [PLAN.md](./PLAN.md) for the roadmap, the known landmines and
+what is done so far.
 
-## Example Projects
+Not yet ready to depend on in production unless you are comfortable tracking a
+moving target.
 
-This is a listing of example projects and guides that will help you integrate Semantic UI React into your new or existing projects.
+## Installation
 
-<details>
-  <summary>Show projects</summary>
- 
-  ### [semantic-ui-react-todos][100]
-  Semantic UI React implementation of [react-redux Todo List][101].
-</details>
+```sh
+npm install react-fomantic-ui
+# or
+yarn add react-fomantic-ui
+```
+
+This package ships **no CSS**. It renders Semantic UI class names, so you
+bring your own stylesheet — either the original [semantic-ui-css][suicss],
+the maintained [Fomantic-UI][fomantic] fork, or a custom theme:
+
+```sh
+npm install fomantic-ui-css
+```
+
+```js
+import 'fomantic-ui-css/semantic.min.css'
+import { Button } from 'react-fomantic-ui'
+
+const App = () => <Button primary>Click me</Button>
+```
+
+## Documentation
+
+This fork does not host its own documentation site yet. Upstream's
+[react.semantic-ui.com][upstreamdocs] still documents the same component API
+and remains broadly accurate — with the caveat that it describes the
+unmaintained package, not this one, and predates any changes made here.
+
+## Principles
+
+Inherited from the original project and still the intent:
+
+- No animation dependencies
+- Simple declarative component APIs over brittle HTML markup
+- Complete keyboard support
+- Complete Semantic UI component definition support
+- Completely documented
+- Completely tested
+- Accessible
 
 ## FAQ
 
 <details>
-  <summary><b>Can I use custom Icons?</b></summary>
-  Yes.  Just use <code>&lt;Icon className='my-icon' /&gt;</code> instead of <code>&lt;Icon name='my-icon' /&gt;</code>.  See https://github.com/Semantic-Org/Semantic-UI-React/issues/931#issuecomment-263643210 for detailed info and examples.
-</details>
+  <summary><b>Can I use custom icons?</b></summary>
 
-<details>
-  <summary><b>How do I setup CSS?</b></summary>
-
-There are several options. Refer to our doc on [CSS Usage][23].
+Yes. Use `<Icon className='my-icon' />` instead of `<Icon name='my-icon' />`.
 
 </details>
 
 <details>
   <summary><b>Can I use a custom CSS theme?</b></summary>
-  Yes.  Semantic UI React includes components that render valid Semantic UI HTML, no CSS is included.  This allows you to load any Semantic UI CSS theme on top of your Semantic UI React app.
+
+Yes. These components render valid Semantic UI markup and include no CSS of
+their own, so any Semantic UI or Fomantic-UI theme can be loaded on top.
+
 </details>
 
-<br />
+<details>
+  <summary><b>Does it work with the original semantic-ui-css?</b></summary>
 
-Here are some helpful links:
+Yes. The markup is unchanged, so `semantic-ui-css` and `fomantic-ui-css` both
+work. Fomantic-UI is the actively maintained option.
 
-- [Building CSS with Webpack][24]
-- [Building CSS with Meteor][30]
-- [Creating a standalone theme][25]
-
-## How Can I Help?
-
-### [Voice Your Opinion][19]
-
-Help shape this library by weighing in on our [RFC (request for comments)][19] issues.
-
-### [Contribute][1]
-
-Our [CONTRIBUTING.md][1] is a step-by-step setup and development guide.
-
-### [Good First Issue][21]
-
-Issues labeled [`good first issue`][21] are a great way to ease into development on this project.
-
-### [Missing Components][17]
-
-We're seeking component parity with Semantic UI, plus some addons. There is an issue for every missing component, labeled [`new component`][17]. Just comment on the issue you'd like to take.
-
-### [Help Wanted Label][4]
-
-Any other issue labeled [`help wanted`][4] is ready for a PR.
-
-## Principles
-
-- No animation dependencies
-- Simple declarative component APIs vs brittle HTML markup
-- Complete keyboard support
-- Complete SUI component definition support
-- Completely documented
-- Completely tested
-- Accessible
+</details>
 
 ## Credit
 
-Created by [@levithomason][26] and an amazing community of [contributors][20].
+Created by [@levithomason][levi] and a large community of
+[contributors][contributors], under the copyright of TechnologyAdvice. Made
+possible by [@jlukic][jlukic] authoring [Semantic UI][sui], and continued by
+the [Fomantic-UI][fomantic] team.
 
-Made possible only by [@jlukic][32] authoring [Semantic UI][5].
+This fork stands entirely on their work. The full commit history is preserved
+here, and the original MIT licence and copyright notice are retained.
 
-Blazing deployments by <a href="https://vercel.com/?utm_source=semantic-ui-react"><img height="12" width="14" src="https://github.com/Semantic-Org/Semantic-UI-React/raw/master/docs/public/vercel-logo.svg" /> Vercel</a>.
+## Licence
 
-[1]: https://github.com/Semantic-Org/Semantic-UI-React/blob/master/.github/CONTRIBUTING.md
-[2]: https://react.semantic-ui.com/
-[3]: https://facebook.github.io/react/
-[4]: https://github.com/Semantic-Org/Semantic-UI-React/labels/help%20wanted
-[5]: https://semantic-ui.com/
-[6]: https://github.com/Semantic-Org/Semantic-UI-React/milestone/1
-[7]: https://github.com/webpack/webpack-dev-server/
-[8]: https://github.com/Semantic-Org/Semantic-UI-React/issues/243
-[9]: https://github.com/TechnologyAdvice
-[10]: https://en.wikipedia.org/wiki/Eating_your_own_dog_food
-[11]: https://github.com/Semantic-Org/Semantic-UI-React/issues/247
-[12]: https://github.com/Semantic-Org/Semantic-UI-React/issues/243
-[13]: https://webpack.github.io
-[14]: https://github.com/Semantic-Org/Semantic-UI-React/issues
-[15]: https://github.com/skywinder/github-changelog-generator
-[17]: https://github.com/Semantic-Org/Semantic-UI-React/issues?q=is%3Aissue+is%3Aopen+label%3A%22new+component%22
-[18]: https://github.com/Semantic-Org/Semantic-UI-React/blob/master/CHANGELOG.md
-[19]: https://github.com/Semantic-Org/Semantic-UI-React/issues?q=is%3Aopen+RFC+label%3ARFC
-[20]: https://github.com/Semantic-Org/Semantic-UI-React/graphs/contributors
-[21]: https://github.com/Semantic-Org/Semantic-UI-React/labels/good%20first%20issue
-[22]: https://github.com/Semantic-Org/Semantic-UI-React/edit/master/README.md
-[23]: https://react.semantic-ui.com/usage#css
-[24]: https://medium.com/webmonkeys/webpack-2-semantic-ui-theming-a216ddf60daf
-[25]: http://learnsemantic.com/themes/creating.html
-[26]: https://github.com/levithomason
-[27]: https://github.com/layershifter
-[30]: https://github.com/Semantic-Org/Semantic-UI-Meteor
-[31]: https://github.com/Netflix/flamescope
-[32]: https://github.com/jlukic
+MIT — see [LICENSE.md](./LICENSE.md).
 
-<!-- Examples -->
-
-[100]: https://github.com/wyc/semantic-ui-react-todos
-[101]: https://github.com/reactjs/redux/tree/master/examples/todos
+[sui]: https://semantic-ui.com/
+[fomantic]: https://fomantic-ui.com/
+[upstream]: https://github.com/Semantic-Org/Semantic-UI-React
+[upstreamdocs]: https://react.semantic-ui.com/
+[suicss]: https://www.npmjs.com/package/semantic-ui-css
+[issues]: https://github.com/Fomantic-UI-React/react-fomantic-ui/issues
+[levi]: https://github.com/levithomason
+[jlukic]: https://github.com/jlukic
+[contributors]: https://github.com/Semantic-Org/Semantic-UI-React/graphs/contributors

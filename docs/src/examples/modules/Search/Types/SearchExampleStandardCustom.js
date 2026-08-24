@@ -8,7 +8,7 @@ import {
   Header,
   Segment,
   Label,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const source = _.times(5, () => ({
   title: faker.company.companyName(),

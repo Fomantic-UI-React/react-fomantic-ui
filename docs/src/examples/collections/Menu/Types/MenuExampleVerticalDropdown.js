@@ -6,7 +6,7 @@ import {
   MenuItem,
   Dropdown,
   Menu,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 export default class MenuExampleVerticalDropdown extends Component {
   state = { activeItem: 'account' }

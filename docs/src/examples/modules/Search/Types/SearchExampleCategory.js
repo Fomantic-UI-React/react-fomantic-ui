@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import faker from 'faker'
 import React, { Component } from 'react'
-import { GridColumn, Search, Grid, Header, Segment } from 'semantic-ui-react'
+import { GridColumn, Search, Grid, Header, Segment } from 'react-fomantic-ui'
 
 const initialState = { isLoading: false, results: [], value: '' }
 

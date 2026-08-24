@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { MenuItem, Input, Label, Menu } from 'semantic-ui-react'
+import { MenuItem, Input, Label, Menu } from 'react-fomantic-ui'
 
 export default class MenuExampleVertical extends Component {
   state = { activeItem: 'inbox' }

@@ -7,7 +7,7 @@ import {
   Menu,
   Segment,
   Sticky,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 import _ from 'lodash'
 
 export default class StickyExampleAboveContent extends Component {

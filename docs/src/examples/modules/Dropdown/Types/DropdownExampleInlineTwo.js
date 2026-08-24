@@ -1,5 +1,5 @@
 import React from 'react'
-import { HeaderContent, Dropdown, Header, Icon } from 'semantic-ui-react'
+import { HeaderContent, Dropdown, Header, Icon } from 'react-fomantic-ui'
 
 const options = [
   {

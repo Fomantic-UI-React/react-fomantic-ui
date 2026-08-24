@@ -1,5 +1,5 @@
 import React from 'react'
-import { Icon, Label } from 'semantic-ui-react'
+import { Icon, Label } from 'react-fomantic-ui'
 
 const LabelExampleIcon = () => (
   <div>

@@ -9,7 +9,7 @@ import {
   Header,
   Segment,
   TransitionablePortal,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const transitions = [
   'browse',

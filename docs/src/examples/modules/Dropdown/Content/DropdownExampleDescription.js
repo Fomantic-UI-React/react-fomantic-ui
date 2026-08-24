@@ -5,7 +5,7 @@ import {
   DropdownHeader,
   DropdownDivider,
   Dropdown,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const DropdownExampleDescription = () => (
   <Dropdown

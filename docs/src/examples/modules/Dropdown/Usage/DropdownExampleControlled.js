@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { GridColumn, Dropdown, Grid, Segment } from 'semantic-ui-react'
+import { GridColumn, Dropdown, Grid, Segment } from 'react-fomantic-ui'
 
 const options = [
   { key: 1, text: 'One', value: 1 },

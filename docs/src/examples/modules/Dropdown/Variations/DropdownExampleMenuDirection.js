@@ -1,5 +1,5 @@
 import React from 'react'
-import { MenuMenu, Menu, Dropdown } from 'semantic-ui-react'
+import { MenuMenu, Menu, Dropdown } from 'react-fomantic-ui'
 
 const options = [
   { key: 1, text: 'This is a super long item', value: 1 },

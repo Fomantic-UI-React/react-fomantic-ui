@@ -8,7 +8,7 @@ import {
   Grid,
   Image,
   Transition,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const transitions = [
   'jiggle',

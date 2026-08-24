@@ -1,5 +1,5 @@
 import React from 'react'
-import { Flag, Segment } from 'semantic-ui-react'
+import { Flag, Segment } from 'react-fomantic-ui'
 
 const FlagExampleFlag = () => (
   <Segment>

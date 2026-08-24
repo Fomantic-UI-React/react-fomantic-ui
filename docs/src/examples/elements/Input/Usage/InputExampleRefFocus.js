@@ -1,5 +1,5 @@
 import React, { Component, createRef } from 'react'
-import { Input, Button } from 'semantic-ui-react'
+import { Input, Button } from 'react-fomantic-ui'
 
 class InputExampleRefFocus extends Component {
   inputRef = createRef()

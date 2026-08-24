@@ -1,5 +1,5 @@
 import React from 'react'
-import { SegmentInline, Button, Header, Icon, Segment } from 'semantic-ui-react'
+import { SegmentInline, Button, Header, Icon, Segment } from 'react-fomantic-ui'
 
 const SegmentExamplePlaceholderInline = () => (
   <Segment placeholder>

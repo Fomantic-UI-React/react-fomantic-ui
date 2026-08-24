@@ -1,5 +1,5 @@
 import React from 'react'
-import { FormInput, FormCheckbox, Form } from 'semantic-ui-react'
+import { FormInput, FormCheckbox, Form } from 'react-fomantic-ui'
 
 const FormExampleFieldErrorLabel = () => (
   <Form>

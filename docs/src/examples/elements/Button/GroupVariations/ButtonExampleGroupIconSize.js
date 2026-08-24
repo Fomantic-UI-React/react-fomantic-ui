@@ -1,5 +1,5 @@
 import React from 'react'
-import { ButtonGroup, Button } from 'semantic-ui-react'
+import { ButtonGroup, Button } from 'react-fomantic-ui'
 
 const ButtonExampleGroupIconSize = () => (
   <ButtonGroup basic size='small'>

@@ -14,7 +14,7 @@ import {
   Rail,
   Segment,
   Sticky,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const Placeholder = () => <Image src='/images/wireframe/paragraph.png' />
 

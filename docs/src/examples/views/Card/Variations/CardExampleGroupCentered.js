@@ -1,5 +1,5 @@
 import React from 'react'
-import { CardGroup } from 'semantic-ui-react'
+import { CardGroup } from 'react-fomantic-ui'
 
 const items = [
   {

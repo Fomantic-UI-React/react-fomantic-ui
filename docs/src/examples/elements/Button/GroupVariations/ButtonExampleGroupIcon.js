@@ -1,5 +1,5 @@
 import React from 'react'
-import { ButtonGroup, Button, Icon } from 'semantic-ui-react'
+import { ButtonGroup, Button, Icon } from 'react-fomantic-ui'
 
 const ButtonExampleGroupIcon = () => (
   <ButtonGroup icon>

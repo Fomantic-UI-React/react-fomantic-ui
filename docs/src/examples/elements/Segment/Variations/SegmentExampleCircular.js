@@ -1,5 +1,5 @@
 import React from 'react'
-import { HeaderSubheader, Header, Segment } from 'semantic-ui-react'
+import { HeaderSubheader, Header, Segment } from 'react-fomantic-ui'
 
 const square = { width: 175, height: 175 }
 

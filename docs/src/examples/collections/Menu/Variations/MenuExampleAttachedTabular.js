@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { MenuItem, Menu, Segment } from 'semantic-ui-react'
+import { MenuItem, Menu, Segment } from 'react-fomantic-ui'
 
 export default class MenuExampleAttachedTabular extends Component {
   state = { activeItem: 'tab1' }

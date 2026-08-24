@@ -1,5 +1,5 @@
 import React from 'react'
-import { Statistic } from 'semantic-ui-react'
+import { Statistic } from 'react-fomantic-ui'
 
 const StatisticExampleStatisticShorthand = () => (
   <Statistic label='Downloads' value='5,550' />

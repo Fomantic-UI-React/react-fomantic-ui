@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Popup } from 'semantic-ui-react'
+import { Button, Popup } from 'react-fomantic-ui'
 
 const style = {
   borderRadius: 0,

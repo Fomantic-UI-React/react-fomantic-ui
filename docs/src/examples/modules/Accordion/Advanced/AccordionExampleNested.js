@@ -1,5 +1,5 @@
 import React from 'react'
-import { AccordionAccordion, Accordion } from 'semantic-ui-react'
+import { AccordionAccordion, Accordion } from 'react-fomantic-ui'
 
 const level1Panels = [
   { key: 'panel-1a', title: 'Level 1A', content: 'Level 1A Contents' },

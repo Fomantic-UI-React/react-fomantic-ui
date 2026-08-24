@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { StepGroup, Step } from 'semantic-ui-react'
+import { StepGroup, Step } from 'react-fomantic-ui'
 
 export default class StepExampleLinkClickable extends Component {
   state = {}

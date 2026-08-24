@@ -1,5 +1,5 @@
 import React from 'react'
-import { Progress, Segment } from 'semantic-ui-react'
+import { Progress, Segment } from 'react-fomantic-ui'
 
 const ProgressExampleInverted = () => (
   <Segment inverted>

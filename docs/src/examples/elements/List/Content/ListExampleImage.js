@@ -6,7 +6,7 @@ import {
   ListContent,
   List,
   Image,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const ListExampleImage = () => (
   <List>

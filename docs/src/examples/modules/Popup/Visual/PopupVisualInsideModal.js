@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Modal, Popup } from 'semantic-ui-react'
+import { Button, Modal, Popup } from 'react-fomantic-ui'
 
 const PopupVisualInsideModal = () => (
   <Modal trigger={<Button data-tid='button-dialog'>Open a dialog</Button>}>

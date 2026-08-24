@@ -1,5 +1,5 @@
 import React from 'react'
-import { ItemImage, ItemGroup, ItemContent, Item } from 'semantic-ui-react'
+import { ItemImage, ItemGroup, ItemContent, Item } from 'react-fomantic-ui'
 
 const ItemExampleContents = () => (
   <ItemGroup divided>

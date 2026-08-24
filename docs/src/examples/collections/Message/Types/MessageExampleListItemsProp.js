@@ -1,5 +1,5 @@
 import React from 'react'
-import { MessageList, MessageHeader, Message } from 'semantic-ui-react'
+import { MessageList, MessageHeader, Message } from 'react-fomantic-ui'
 
 const items = [
   'You can now have cover images on blog pages',

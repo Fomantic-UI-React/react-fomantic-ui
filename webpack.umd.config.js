@@ -20,7 +20,7 @@ const webpackUMDConfig = {
   output: {
     filename: '[name].min.js',
     libraryTarget: 'umd',
-    library: 'semanticUIReact',
+    library: 'reactFomanticUI',
     path: paths.dist('umd'),
     publicPath: '/',
     pathinfo: true,

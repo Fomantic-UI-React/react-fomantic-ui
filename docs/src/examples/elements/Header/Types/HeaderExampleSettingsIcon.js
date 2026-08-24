@@ -1,5 +1,5 @@
 import React from 'react'
-import { HeaderSubheader, Header, Icon } from 'semantic-ui-react'
+import { HeaderSubheader, Header, Icon } from 'react-fomantic-ui'
 
 const HeaderExampleSettingsIcon = () => (
   <Header as='h2' icon>

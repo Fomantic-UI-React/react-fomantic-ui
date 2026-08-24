@@ -1,5 +1,5 @@
 import React from 'react'
-import { FeedLabel, FeedEvent, FeedContent, Feed } from 'semantic-ui-react'
+import { FeedLabel, FeedEvent, FeedContent, Feed } from 'react-fomantic-ui'
 
 const FeedExampleIconLabelShorthand = () => (
   <Feed>

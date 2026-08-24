@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { FormField, Form, Radio } from 'semantic-ui-react'
+import { FormField, Form, Radio } from 'react-fomantic-ui'
 
 export default class RadioExampleRadioGroup extends Component {
   state = {}

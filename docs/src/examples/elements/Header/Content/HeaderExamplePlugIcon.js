@@ -1,5 +1,5 @@
 import React from 'react'
-import { HeaderContent, Header, Icon } from 'semantic-ui-react'
+import { HeaderContent, Header, Icon } from 'react-fomantic-ui'
 
 const HeaderExamplePlugIcon = () => (
   <Header as='h2'>

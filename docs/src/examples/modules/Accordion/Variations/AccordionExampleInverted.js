@@ -5,7 +5,7 @@ import {
   Accordion,
   Icon,
   Segment,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 export default class AccordionExampleInverted extends Component {
   state = { activeIndex: 0 }

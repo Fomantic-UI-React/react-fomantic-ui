@@ -1,5 +1,5 @@
 import React from 'react'
-import { Rating } from 'semantic-ui-react'
+import { Rating } from 'react-fomantic-ui'
 
 const RatingExampleHeart = () => (
   <Rating icon='heart' defaultRating={1} maxRating={3} />

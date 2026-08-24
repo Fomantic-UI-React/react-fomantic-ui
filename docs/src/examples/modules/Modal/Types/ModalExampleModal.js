@@ -8,7 +8,7 @@ import {
   Header,
   Image,
   Modal,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 function ModalExampleModal() {
   const [open, setOpen] = React.useState(false)

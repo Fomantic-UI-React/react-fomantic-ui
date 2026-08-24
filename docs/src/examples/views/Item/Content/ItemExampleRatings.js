@@ -6,7 +6,7 @@ import {
   ItemContent,
   Icon,
   Item,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const ItemExampleRatings = () => (
   <ItemGroup>

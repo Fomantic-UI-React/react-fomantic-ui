@@ -9,7 +9,7 @@ import {
   Header,
   Segment,
   Label,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const categoryLayoutRenderer = ({ categoryContent, resultsContent }) => (
   <div>

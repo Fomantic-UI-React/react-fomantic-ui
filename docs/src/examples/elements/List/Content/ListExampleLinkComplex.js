@@ -1,5 +1,5 @@
 import React from 'react'
-import { ListItem, ListHeader, ListDescription, List } from 'semantic-ui-react'
+import { ListItem, ListHeader, ListDescription, List } from 'react-fomantic-ui'
 
 const ListExampleLinkComplex = () => (
   <List>

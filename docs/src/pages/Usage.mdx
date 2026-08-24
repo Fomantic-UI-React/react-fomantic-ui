@@ -1,5 +1,5 @@
 import { Link } from 'react-static'
-import { Button, Divider, Header, Icon, List, Message, Segment, Tab } from 'semantic-ui-react'
+import { Button, Divider, Header, Icon, List, Message, Segment, Tab } from 'react-fomantic-ui'
 
 import CodeSnippet from 'docs/src/components/CodeSnippet'
 import { semanticUIDocsURL, semanticUIRepoURL, semanticUICSSRepoURL } from 'docs/src/utils'
@@ -58,9 +58,9 @@ And then just add this link and script tag to the `<body>` after initializing Re
   <link
     async
     rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/semantic-ui@2/dist/semantic.min.css"
+    href="https://cdn.jsdelivr.net/npm/fomantic-ui@2/dist/semantic.min.css"
   />
-  <script src="https://cdn.jsdelivr.net/npm/semantic-ui-react/dist/umd/semantic-ui-react.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/react-fomantic-ui/dist/umd/react-fomantic-ui.min.js"></script>
 
   <!-- Load our React component. -->
   <script src="like_button.js"></script>
@@ -69,7 +69,7 @@ And then just add this link and script tag to the `<body>` after initializing Re
 
 ```js label=like_button.js
 const e = React.createElement
-const { Button } = semanticUIReact
+const { Button } = reactFomanticUI
 
 // ... Other JS code ...
 

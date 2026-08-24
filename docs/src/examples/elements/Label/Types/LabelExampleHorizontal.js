@@ -1,5 +1,5 @@
 import React from 'react'
-import { ListItem, Label, List } from 'semantic-ui-react'
+import { ListItem, Label, List } from 'react-fomantic-ui'
 
 const LabelExampleHorizontal = () => (
   <List divided selection>

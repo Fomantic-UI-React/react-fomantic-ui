@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { GridColumn, Button, Grid, Segment } from 'semantic-ui-react'
+import { GridColumn, Button, Grid, Segment } from 'react-fomantic-ui'
 
 export default class ButtonExampleAttachedEvents extends Component {
   state = { log: [] }

@@ -1,5 +1,5 @@
 import React from 'react'
-import { IconGroup, Header, Icon } from 'semantic-ui-react'
+import { IconGroup, Header, Icon } from 'react-fomantic-ui'
 
 const IconExampleTwitterGroup = () => (
   <Header as='h2'>

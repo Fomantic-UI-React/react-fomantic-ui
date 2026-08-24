@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 
 import React from 'react'
-import { Container, Header } from 'semantic-ui-react'
+import { Container, Header } from 'react-fomantic-ui'
 
 const ContainerExampleText = () => (
   <Container text>

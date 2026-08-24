@@ -11,7 +11,7 @@ import {
   Grid,
   Segment,
   Table,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 export default class CheckboxExampleDOMComparison extends Component {
   state = {

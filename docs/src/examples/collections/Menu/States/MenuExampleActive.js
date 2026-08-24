@@ -1,5 +1,5 @@
 import React from 'react'
-import { MenuItem, Menu } from 'semantic-ui-react'
+import { MenuItem, Menu } from 'react-fomantic-ui'
 
 const MenuExampleActive = () => (
   <Menu compact>

@@ -7,7 +7,7 @@ import {
   Button,
   Image,
   Modal,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 function ModalExampleContentImage() {
   const [open, setOpen] = React.useState(false)

@@ -7,7 +7,7 @@ import {
   Button,
   Form,
   Segment,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const panels = [
   {

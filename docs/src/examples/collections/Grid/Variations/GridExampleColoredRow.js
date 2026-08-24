@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import React from 'react'
-import { GridRow, GridColumn, Grid } from 'semantic-ui-react'
+import { GridRow, GridColumn, Grid } from 'react-fomantic-ui'
 
 const colors = [
   'red',

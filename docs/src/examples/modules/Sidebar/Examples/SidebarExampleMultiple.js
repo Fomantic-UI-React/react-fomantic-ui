@@ -12,7 +12,7 @@ import {
   Menu,
   Segment,
   Sidebar,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const SidebarExampleMultiple = () => {
   const [visible, setVisible] = React.useState(false)

@@ -5,7 +5,7 @@ import {
   StepDescription,
   StepContent,
   Step,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const StepExampleOrdered = () => (
   <StepGroup ordered>

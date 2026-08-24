@@ -1,5 +1,5 @@
 import React from 'react'
-import { Menu, Sidebar } from 'semantic-ui-react'
+import { Menu, Sidebar } from 'react-fomantic-ui'
 
 const SidebarAndMenu = () => (
   <Sidebar

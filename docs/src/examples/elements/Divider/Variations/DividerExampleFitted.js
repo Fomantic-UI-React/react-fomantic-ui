@@ -1,5 +1,5 @@
 import React from 'react'
-import { Divider, Segment } from 'semantic-ui-react'
+import { Divider, Segment } from 'react-fomantic-ui'
 
 const DividerExampleFitted = () => (
   <Segment>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { DropdownMenu, DropdownItem, Dropdown, Menu } from 'semantic-ui-react'
+import { DropdownMenu, DropdownItem, Dropdown, Menu } from 'react-fomantic-ui'
 
 const MenuExampleDropdownItem = () => (
   <Menu vertical>

@@ -6,7 +6,7 @@ import {
   StatisticGroup,
   Divider,
   Statistic,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const colors = [
   'red',

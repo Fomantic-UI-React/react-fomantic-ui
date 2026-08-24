@@ -4,7 +4,7 @@ import {
   StatisticLabel,
   StatisticGroup,
   Statistic,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const StatisticExampleColored = () => (
   <StatisticGroup>

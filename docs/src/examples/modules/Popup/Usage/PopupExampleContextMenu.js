@@ -1,5 +1,5 @@
 import React from 'react'
-import { Menu, Popup, Segment } from 'semantic-ui-react'
+import { Menu, Popup, Segment } from 'react-fomantic-ui'
 
 function createContextFromEvent(e) {
   const left = e.clientX

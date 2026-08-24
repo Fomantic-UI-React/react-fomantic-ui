@@ -1,5 +1,5 @@
 import React from 'react'
-import { Checkbox } from 'semantic-ui-react'
+import { Checkbox } from 'react-fomantic-ui'
 
 const CheckboxExampleShorthandObject = () => (
   <Checkbox label={{ children: 'Make my profile visible' }} />

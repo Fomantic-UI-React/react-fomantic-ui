@@ -1,5 +1,5 @@
 import React from 'react'
-import { Message } from 'semantic-ui-react'
+import { Message } from 'react-fomantic-ui'
 
 import Types from './Types'
 import Variations from './Variations'

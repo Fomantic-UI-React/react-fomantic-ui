@@ -4,7 +4,7 @@ import {
   DropdownItem,
   DropdownDivider,
   Dropdown,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 // TODO: This is missing functionality for sub-menu here from SUI core examples.
 // The "Publish To Web" item should contain a sub-menu.

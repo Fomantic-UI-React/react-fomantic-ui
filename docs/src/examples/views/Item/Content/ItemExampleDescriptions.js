@@ -6,7 +6,7 @@ import {
   ItemDescription,
   ItemContent,
   Item,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const description = [
   'Cute dogs come in a variety of shapes and sizes. Some cute dogs are cute for their adorable faces, others for their',

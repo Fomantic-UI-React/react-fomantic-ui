@@ -5,7 +5,7 @@ import {
   FeedContent,
   Feed,
   Header,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const FeedExampleSizeSmall = () => (
   <Feed size='small'>

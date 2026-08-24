@@ -1,5 +1,5 @@
 import React from 'react'
-import { Image, Segment } from 'semantic-ui-react'
+import { Image, Segment } from 'react-fomantic-ui'
 
 const SegmentExampleLoading = () => (
   <Segment loading>

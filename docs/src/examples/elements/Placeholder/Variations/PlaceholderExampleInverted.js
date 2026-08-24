@@ -5,7 +5,7 @@ import {
   PlaceholderHeader,
   Placeholder,
   Segment,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const PlaceholderExampleInverted = () => (
   <Segment inverted>

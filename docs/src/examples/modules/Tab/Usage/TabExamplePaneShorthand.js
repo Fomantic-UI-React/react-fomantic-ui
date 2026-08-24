@@ -1,5 +1,5 @@
 import React from 'react'
-import { TabPane, ListItem, List, Label, Tab } from 'semantic-ui-react'
+import { TabPane, ListItem, List, Label, Tab } from 'react-fomantic-ui'
 
 const panes = [
   {

@@ -5,7 +5,7 @@ import {
   StatisticGroup,
   Segment,
   Statistic,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const StatisticExampleInvertedGroup = () => (
   <Segment inverted>

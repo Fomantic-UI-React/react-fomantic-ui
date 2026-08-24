@@ -1,5 +1,5 @@
 import React from 'react'
-import { DimmerDimmable, Dimmer, Image, Segment } from 'semantic-ui-react'
+import { DimmerDimmable, Dimmer, Image, Segment } from 'react-fomantic-ui'
 
 const DimmerExampleSimple = () => (
   <DimmerDimmable as={Segment} dimmed>

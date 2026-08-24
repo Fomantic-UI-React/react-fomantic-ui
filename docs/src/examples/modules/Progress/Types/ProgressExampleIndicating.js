@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button, Progress } from 'semantic-ui-react'
+import { Button, Progress } from 'react-fomantic-ui'
 
 export default class ProgressExampleIndicating extends Component {
   state = { percent: 33 }

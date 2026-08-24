@@ -6,7 +6,7 @@ import {
   Header,
   Icon,
   Modal,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 function ModalExampleCloseIcon() {
   const [open, setOpen] = React.useState(false)

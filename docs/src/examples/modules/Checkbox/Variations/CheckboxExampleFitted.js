@@ -1,5 +1,5 @@
 import React from 'react'
-import { Checkbox, Segment } from 'semantic-ui-react'
+import { Checkbox, Segment } from 'react-fomantic-ui'
 
 const CheckboxExampleFitted = () => (
   <div>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { FormField, Checkbox, Form } from 'semantic-ui-react'
+import { FormField, Checkbox, Form } from 'react-fomantic-ui'
 
 const FormExampleFieldLabelElement = () => (
   <Form>

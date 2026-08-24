@@ -1,5 +1,5 @@
 import React from 'react'
-import { LabelGroup, Label } from 'semantic-ui-react'
+import { LabelGroup, Label } from 'react-fomantic-ui'
 
 const LabelExampleGroupTag = () => (
   <LabelGroup tag>

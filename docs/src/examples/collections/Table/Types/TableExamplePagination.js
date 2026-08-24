@@ -11,7 +11,7 @@ import {
   Label,
   Menu,
   Table,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const TableExamplePagination = () => (
   <Table celled>

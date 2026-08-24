@@ -1,5 +1,5 @@
 import React from 'react'
-import { SegmentGroup, Segment } from 'semantic-ui-react'
+import { SegmentGroup, Segment } from 'react-fomantic-ui'
 
 const SegmentExampleNestedSegments = () => (
   <SegmentGroup>

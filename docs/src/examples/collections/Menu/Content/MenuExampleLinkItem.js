@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { MenuItem, Menu, Message } from 'semantic-ui-react'
+import { MenuItem, Menu, Message } from 'react-fomantic-ui'
 
 export default class MenuExampleLinkItem extends Component {
   state = {}

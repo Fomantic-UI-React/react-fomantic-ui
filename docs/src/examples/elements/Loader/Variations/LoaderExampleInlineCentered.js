@@ -1,5 +1,5 @@
 import React from 'react'
-import { Loader } from 'semantic-ui-react'
+import { Loader } from 'react-fomantic-ui'
 
 const LoaderExampleInlineCentered = () => <Loader active inline='centered' />
 

@@ -9,7 +9,7 @@ import {
   Label,
   Modal,
   Segment,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 function exampleReducer(state, action) {
   switch (action.type) {

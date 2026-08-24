@@ -1,5 +1,5 @@
 import React from 'react'
-import { GridColumn, Grid, Segment } from 'semantic-ui-react'
+import { GridColumn, Grid, Segment } from 'react-fomantic-ui'
 
 const GridExampleEqualWidthColumn = () => (
   <Grid columns='equal'>

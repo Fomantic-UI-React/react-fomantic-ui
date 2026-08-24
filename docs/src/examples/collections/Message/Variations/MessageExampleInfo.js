@@ -1,5 +1,5 @@
 import React from 'react'
-import { MessageHeader, Message } from 'semantic-ui-react'
+import { MessageHeader, Message } from 'react-fomantic-ui'
 
 const MessageExampleInfo = () => (
   <Message info>

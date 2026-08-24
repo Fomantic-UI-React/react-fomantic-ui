@@ -1,5 +1,5 @@
 import React from 'react'
-import { Divider, Image, Segment } from 'semantic-ui-react'
+import { Divider, Image, Segment } from 'react-fomantic-ui'
 
 const DividerExampleInverted = () => (
   <Segment inverted>

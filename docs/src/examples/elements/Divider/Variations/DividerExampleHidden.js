@@ -1,5 +1,5 @@
 import React from 'react'
-import { Divider, Header, Image } from 'semantic-ui-react'
+import { Divider, Header, Image } from 'react-fomantic-ui'
 
 const DividerExampleHidden = () => (
   <>

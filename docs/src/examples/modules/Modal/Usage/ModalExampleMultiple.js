@@ -7,7 +7,7 @@ import {
   Button,
   Icon,
   Modal,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 function ModalExampleMultiple() {
   const [firstOpen, setFirstOpen] = React.useState(false)

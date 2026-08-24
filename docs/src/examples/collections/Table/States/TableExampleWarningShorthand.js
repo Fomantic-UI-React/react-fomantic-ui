@@ -1,5 +1,5 @@
 import React from 'react'
-import { Table } from 'semantic-ui-react'
+import { Table } from 'react-fomantic-ui'
 
 const tableData = [
   { name: undefined, status: undefined, notes: undefined },

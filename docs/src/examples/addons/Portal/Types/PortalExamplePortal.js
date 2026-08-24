@@ -8,7 +8,7 @@ import {
   Label,
   Segment,
   Portal,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 export default class PortalExamplePortal extends Component {
   state = {

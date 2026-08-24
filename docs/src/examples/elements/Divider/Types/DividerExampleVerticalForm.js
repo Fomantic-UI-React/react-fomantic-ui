@@ -7,7 +7,7 @@ import {
   Form,
   Grid,
   Segment,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const DividerExampleVerticalForm = () => (
   <Segment placeholder>

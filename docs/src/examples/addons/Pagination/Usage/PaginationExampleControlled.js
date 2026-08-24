@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { GridColumn, Grid, Input, Pagination, Segment } from 'semantic-ui-react'
+import { GridColumn, Grid, Input, Pagination, Segment } from 'react-fomantic-ui'
 
 export default class PaginationExampleControlled extends Component {
   state = { activePage: 1 }

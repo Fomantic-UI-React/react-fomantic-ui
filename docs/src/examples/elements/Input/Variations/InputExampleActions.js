@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Select, Input } from 'semantic-ui-react'
+import { Button, Select, Input } from 'react-fomantic-ui'
 
 const options = [
   { key: 'all', text: 'All', value: 'all' },

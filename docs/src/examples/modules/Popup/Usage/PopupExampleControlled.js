@@ -6,7 +6,7 @@ import {
   Header,
   Popup,
   Segment,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const timeoutLength = 2500
 

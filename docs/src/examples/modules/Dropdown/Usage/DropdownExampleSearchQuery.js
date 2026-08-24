@@ -1,7 +1,7 @@
 import faker from 'faker'
 import _ from 'lodash'
 import React, { Component } from 'react'
-import { Dropdown } from 'semantic-ui-react'
+import { Dropdown } from 'react-fomantic-ui'
 
 const addressDefinitions = faker.definitions.address
 const stateOptions = _.map(addressDefinitions.state, (state, index) => ({

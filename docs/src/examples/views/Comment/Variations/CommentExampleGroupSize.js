@@ -9,7 +9,7 @@ import {
   CommentAuthor,
   Comment,
   Header,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const CommentExampleGroupSize = () => (
   <div>

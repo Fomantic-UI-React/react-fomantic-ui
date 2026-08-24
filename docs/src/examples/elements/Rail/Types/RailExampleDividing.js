@@ -1,5 +1,5 @@
 import React from 'react'
-import { GridColumn, Grid, Image, Rail, Segment } from 'semantic-ui-react'
+import { GridColumn, Grid, Image, Rail, Segment } from 'react-fomantic-ui'
 
 const RailExampleDividing = () => (
   <Grid centered columns={3}>

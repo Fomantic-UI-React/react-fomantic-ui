@@ -4,7 +4,7 @@ import {
   PlaceholderLine,
   PlaceholderHeader,
   Placeholder,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const PlaceholderExamplePlaceholder = () => (
   <Placeholder>

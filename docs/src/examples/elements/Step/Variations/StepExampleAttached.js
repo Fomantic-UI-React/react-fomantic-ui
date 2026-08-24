@@ -8,7 +8,7 @@ import {
   Image,
   Segment,
   Step,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const StepExampleAttached = () => (
   <div>

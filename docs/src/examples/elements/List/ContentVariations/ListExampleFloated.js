@@ -1,5 +1,5 @@
 import React from 'react'
-import { ListItem, ListContent, Button, Image, List } from 'semantic-ui-react'
+import { ListItem, ListContent, Button, Image, List } from 'react-fomantic-ui'
 
 const ListExampleFloated = () => (
   <List divided verticalAlign='middle'>

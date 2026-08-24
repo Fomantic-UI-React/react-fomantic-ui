@@ -1,5 +1,5 @@
 import React from 'react'
-import { Segment } from 'semantic-ui-react'
+import { Segment } from 'react-fomantic-ui'
 
 const SegmentExampleCompact = () => <Segment compact>Compact content.</Segment>
 

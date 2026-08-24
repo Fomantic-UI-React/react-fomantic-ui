@@ -1,5 +1,5 @@
 import React from 'react'
-import { GridColumn, Grid, Image, Label, Segment } from 'semantic-ui-react'
+import { GridColumn, Grid, Image, Label, Segment } from 'react-fomantic-ui'
 
 const LabelExampleRibbon = () => (
   <Grid columns={2}>

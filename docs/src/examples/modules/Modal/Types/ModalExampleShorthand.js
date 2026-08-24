@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Modal } from 'semantic-ui-react'
+import { Button, Modal } from 'react-fomantic-ui'
 
 function ModalExampleShorthand() {
   return (

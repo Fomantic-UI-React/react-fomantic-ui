@@ -1,5 +1,5 @@
 import React from 'react'
-import { ButtonContent, Button, Icon } from 'semantic-ui-react'
+import { ButtonContent, Button, Icon } from 'react-fomantic-ui'
 
 const ButtonExampleAnimated = () => (
   <div>

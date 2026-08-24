@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Message } from 'semantic-ui-react'
+import { Message } from 'react-fomantic-ui'
 
 class MessageExampleDismissibleBlock extends Component {
   state = { visible: true }

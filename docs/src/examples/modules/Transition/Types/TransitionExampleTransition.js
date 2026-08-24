@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button, Divider, Image, Transition } from 'semantic-ui-react'
+import { Button, Divider, Image, Transition } from 'react-fomantic-ui'
 
 export default class TransitionExampleTransition extends Component {
   state = { visible: true }

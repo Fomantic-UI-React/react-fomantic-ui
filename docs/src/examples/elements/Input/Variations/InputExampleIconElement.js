@@ -1,5 +1,5 @@
 import React from 'react'
-import { Icon, Input } from 'semantic-ui-react'
+import { Icon, Input } from 'react-fomantic-ui'
 
 const InputExampleIconElement = () => (
   <Input

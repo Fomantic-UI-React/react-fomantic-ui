@@ -1,5 +1,5 @@
 import React from 'react'
-import { Image, Label } from 'semantic-ui-react'
+import { Image, Label } from 'react-fomantic-ui'
 
 const ImageExampleChildren = () => (
   <div>

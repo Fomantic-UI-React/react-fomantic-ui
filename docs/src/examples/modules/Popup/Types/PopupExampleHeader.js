@@ -1,5 +1,5 @@
 import React from 'react'
-import { Image, Popup } from 'semantic-ui-react'
+import { Image, Popup } from 'react-fomantic-ui'
 
 const users = [
   {

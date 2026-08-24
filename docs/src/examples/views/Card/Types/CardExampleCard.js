@@ -7,7 +7,7 @@ import {
   Card,
   Icon,
   Image,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const CardExampleCard = () => (
   <Card>

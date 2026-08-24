@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import React, { Component } from 'react'
-import { GridColumn, FormField, Grid, Dropdown, Form } from 'semantic-ui-react'
+import { GridColumn, FormField, Grid, Dropdown, Form } from 'react-fomantic-ui'
 
 const getOptions = (number, prefix = 'Choice ') =>
   _.times(number, (index) => ({

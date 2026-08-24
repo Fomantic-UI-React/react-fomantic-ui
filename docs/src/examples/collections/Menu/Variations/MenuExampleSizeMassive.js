@@ -7,7 +7,7 @@ import {
   Button,
   Dropdown,
   Menu,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 export default class MenuExampleSizeMassive extends Component {
   state = { activeItem: 'home' }

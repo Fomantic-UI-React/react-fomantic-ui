@@ -1,5 +1,5 @@
 import React from 'react'
-import { ListList, ListItem, List } from 'semantic-ui-react'
+import { ListList, ListItem, List } from 'react-fomantic-ui'
 
 const ListExampleCelledOrdered = () => (
   <List celled ordered>

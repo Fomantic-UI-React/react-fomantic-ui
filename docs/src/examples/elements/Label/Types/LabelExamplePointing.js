@@ -1,5 +1,5 @@
 import React from 'react'
-import { FormField, Divider, Form, Label } from 'semantic-ui-react'
+import { FormField, Divider, Form, Label } from 'react-fomantic-ui'
 
 const LabelExamplePointing = () => (
   <Form>

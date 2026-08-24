@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import React from 'react'
-import { MenuItem, Dropdown, Menu } from 'semantic-ui-react'
+import { MenuItem, Dropdown, Menu } from 'react-fomantic-ui'
 
 const getOptions = (number, prefix = 'Choice ') =>
   _.times(number, (index) => ({

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Feed } from 'semantic-ui-react'
+import { Feed } from 'react-fomantic-ui'
 
 const events = [
   {

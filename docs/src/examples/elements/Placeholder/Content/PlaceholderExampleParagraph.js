@@ -3,7 +3,7 @@ import {
   PlaceholderParagraph,
   PlaceholderLine,
   Placeholder,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const PlaceholderExampleParagraph = () => (
   <Placeholder>

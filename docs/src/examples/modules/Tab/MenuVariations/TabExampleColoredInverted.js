@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import React, { Component } from 'react'
-import { TabPane, Divider, Tab } from 'semantic-ui-react'
+import { TabPane, Divider, Tab } from 'react-fomantic-ui'
 
 const colors = [
   'red',

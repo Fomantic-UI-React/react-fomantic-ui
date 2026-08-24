@@ -1,5 +1,5 @@
 import React from 'react'
-import { RevealContent, Image, Reveal } from 'semantic-ui-react'
+import { RevealContent, Image, Reveal } from 'react-fomantic-ui'
 
 const RevealExampleDisabled = () => (
   <Reveal animated='move' disabled>

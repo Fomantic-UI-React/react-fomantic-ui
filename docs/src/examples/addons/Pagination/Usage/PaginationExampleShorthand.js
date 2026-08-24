@@ -1,5 +1,5 @@
 import React from 'react'
-import { Icon, Pagination } from 'semantic-ui-react'
+import { Icon, Pagination } from 'react-fomantic-ui'
 
 const PaginationExampleShorthand = () => (
   <Pagination

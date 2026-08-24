@@ -8,7 +8,7 @@ import {
   Icon,
   Image,
   Modal,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 function ModalScrollingExample() {
   const [open, setOpen] = React.useState(false)

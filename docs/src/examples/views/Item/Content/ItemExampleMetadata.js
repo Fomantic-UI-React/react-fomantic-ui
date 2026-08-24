@@ -8,7 +8,7 @@ import {
   ItemContent,
   Image,
   Item,
-} from 'semantic-ui-react'
+} from 'react-fomantic-ui'
 
 const paragraph = <Image src='/images/wireframe/short-paragraph.png' />
 
