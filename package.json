@@ -1,12 +1,12 @@
 {
-  "name": "semantic-ui-react",
-  "version": "3.0.0-beta.2",
-  "description": "The official Semantic-UI-React integration.",
+  "name": "react-fomantic-ui",
+  "version": "3.0.0-beta.3",
+  "description": "React components for Semantic UI / Fomantic-UI markup. Community-maintained fork of semantic-ui-react.",
   "jsnext:main": "dist/es/index.js",
   "main": "dist/commonjs/index.js",
   "module": "dist/es/index.js",
   "types": "index.d.ts",
-  "unpkg": "dist/umd/semantic-ui-react.min.js",
+  "unpkg": "dist/umd/react-fomantic-ui.min.js",
   "files": [
     "src",
     "dist",
@@ -42,14 +42,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://github.com/Semantic-Org/Semantic-UI-React.git"
+    "url": "git+ssh://github.com/Fomantic-UI-React/react-fomantic-ui.git"
   },
   "author": "Levi Thomason <me@levithomason.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Semantic-Org/Semantic-UI-React/issues"
+    "url": "https://github.com/Fomantic-UI-React/react-fomantic-ui/issues"
   },
-  "homepage": "https://github.com/Semantic-Org/Semantic-UI-React#readme",
+  "homepage": "https://github.com/Fomantic-UI-React/react-fomantic-ui#readme",
   "dependencies": {
     "@babel/runtime": "^7.23.7",
     "@fluentui/react-component-event-listener": "~0.63.0",
@@ -119,7 +119,7 @@
     "react-universal-component": "^3.0.3"
   },
   "changelog": {
-    "repo": "Semantic-Org/Semantic-UI-React",
+    "repo": "Fomantic-UI-React/react-fomantic-ui",
     "cacheDir": ".changelog",
     "labels": {
       "PR: Breaking Change :boom:": ":boom: Breaking Change",
