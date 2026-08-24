@@ -133,4 +133,24 @@ Grid.propTypes = {
   verticalAlign: PropTypes.oneOf(SUI.VERTICAL_ALIGNMENTS),
 }
 
+Grid.handledProps = [
+  'as',
+  'celled',
+  'centered',
+  'children',
+  'className',
+  'columns',
+  'container',
+  'divided',
+  'doubling',
+  'inverted',
+  'padded',
+  'relaxed',
+  'reversed',
+  'stackable',
+  'stretched',
+  'textAlign',
+  'verticalAlign',
+]
+
 export default Grid

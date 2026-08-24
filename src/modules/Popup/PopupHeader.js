@@ -42,6 +42,8 @@ PopupHeader.propTypes = {
   content: customPropTypes.contentShorthand,
 }
 
+PopupHeader.handledProps = ['as', 'children', 'className', 'content']
+
 PopupHeader.create = createShorthandFactory(PopupHeader, (children) => ({ children }))
 
 export default PopupHeader

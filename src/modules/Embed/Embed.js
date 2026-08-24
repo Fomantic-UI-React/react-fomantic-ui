@@ -190,4 +190,25 @@ Embed.propTypes = {
   url: customPropTypes.every([customPropTypes.disallow(['source']), PropTypes.string]),
 }
 
+Embed.handledProps = [
+  'active',
+  'as',
+  'aspectRatio',
+  'autoplay',
+  'brandedUI',
+  'children',
+  'className',
+  'color',
+  'content',
+  'defaultActive',
+  'hd',
+  'icon',
+  'id',
+  'iframe',
+  'onClick',
+  'placeholder',
+  'source',
+  'url',
+]
+
 export default Embed

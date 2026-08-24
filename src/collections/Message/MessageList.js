@@ -44,6 +44,8 @@ MessageList.propTypes = {
   items: customPropTypes.collectionShorthand,
 }
 
+MessageList.handledProps = ['as', 'children', 'className', 'items']
+
 MessageList.create = createShorthandFactory(MessageList, (val) => ({ items: val }))
 
 export default MessageList

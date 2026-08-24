@@ -59,4 +59,6 @@ Container.propTypes = {
   textAlign: PropTypes.oneOf(SUI.TEXT_ALIGNMENTS),
 }
 
+Container.handledProps = ['as', 'children', 'className', 'content', 'fluid', 'text', 'textAlign']
+
 export default Container

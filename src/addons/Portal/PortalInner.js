@@ -59,4 +59,6 @@ PortalInner.propTypes = {
   onUnmount: PropTypes.func,
 }
 
+PortalInner.handledProps = ['children', 'mountNode', 'onMount', 'onUnmount']
+
 export default PortalInner

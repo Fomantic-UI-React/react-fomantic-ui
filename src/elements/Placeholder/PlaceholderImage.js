@@ -36,4 +36,6 @@ PlaceholderImage.propTypes = {
   rectangular: customPropTypes.every([customPropTypes.disallow(['square']), PropTypes.bool]),
 }
 
+PlaceholderImage.handledProps = ['as', 'className', 'rectangular', 'square']
+
 export default PlaceholderImage

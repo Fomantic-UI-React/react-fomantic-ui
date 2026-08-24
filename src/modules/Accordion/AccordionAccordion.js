@@ -141,6 +141,17 @@ AccordionAccordion.propTypes = {
   ]),
 }
 
+AccordionAccordion.handledProps = [
+  'activeIndex',
+  'as',
+  'children',
+  'className',
+  'defaultActiveIndex',
+  'exclusive',
+  'onTitleClick',
+  'panels',
+]
+
 AccordionAccordion.create = createShorthandFactory(AccordionAccordion, (content) => ({ content }))
 
 export default AccordionAccordion

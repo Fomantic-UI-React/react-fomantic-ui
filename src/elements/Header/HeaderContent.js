@@ -36,4 +36,6 @@ HeaderContent.propTypes = {
   content: customPropTypes.contentShorthand,
 }
 
+HeaderContent.handledProps = ['as', 'children', 'className', 'content']
+
 export default HeaderContent

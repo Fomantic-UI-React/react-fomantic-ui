@@ -66,4 +66,6 @@ FeedSummary.propTypes = {
   user: customPropTypes.itemShorthand,
 }
 
+FeedSummary.handledProps = ['as', 'children', 'className', 'content', 'date', 'user']
+
 export default FeedSummary

@@ -82,4 +82,16 @@ Item.propTypes = {
   meta: customPropTypes.itemShorthand,
 }
 
+Item.handledProps = [
+  'as',
+  'children',
+  'className',
+  'content',
+  'description',
+  'extra',
+  'header',
+  'image',
+  'meta',
+]
+
 export default Item

@@ -32,4 +32,6 @@ Radio.propTypes = {
   type: Checkbox.propTypes.type,
 }
 
+Radio.handledProps = ['slider', 'toggle', 'type']
+
 export default Radio

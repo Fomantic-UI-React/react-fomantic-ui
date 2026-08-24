@@ -44,4 +44,6 @@ PlaceholderHeader.propTypes = {
   image: PropTypes.bool,
 }
 
+PlaceholderHeader.handledProps = ['as', 'children', 'className', 'content', 'image']
+
 export default PlaceholderHeader

@@ -35,4 +35,6 @@ MenuHeader.propTypes = {
   content: customPropTypes.contentShorthand,
 }
 
+MenuHeader.handledProps = ['as', 'children', 'className', 'content']
+
 export default MenuHeader

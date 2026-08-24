@@ -42,6 +42,8 @@ ItemExtra.propTypes = {
   content: customPropTypes.contentShorthand,
 }
 
+ItemExtra.handledProps = ['as', 'children', 'className', 'content']
+
 ItemExtra.create = createShorthandFactory(ItemExtra, (content) => ({ content }))
 
 export default ItemExtra

@@ -84,4 +84,17 @@ Loader.propTypes = {
   size: PropTypes.oneOf(SUI.SIZES),
 }
 
+Loader.handledProps = [
+  'active',
+  'as',
+  'children',
+  'className',
+  'content',
+  'disabled',
+  'indeterminate',
+  'inline',
+  'inverted',
+  'size',
+]
+
 export default Loader

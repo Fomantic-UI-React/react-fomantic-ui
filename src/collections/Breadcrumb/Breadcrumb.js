@@ -77,6 +77,8 @@ Breadcrumb.propTypes = {
   size: PropTypes.oneOf(_.without(SUI.SIZES, 'medium')),
 }
 
+Breadcrumb.handledProps = ['as', 'children', 'className', 'divider', 'icon', 'sections', 'size']
+
 Breadcrumb.Divider = BreadcrumbDivider
 Breadcrumb.Section = BreadcrumbSection
 

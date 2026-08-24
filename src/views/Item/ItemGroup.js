@@ -92,4 +92,16 @@ ItemGroup.propTypes = {
   unstackable: PropTypes.bool,
 }
 
+ItemGroup.handledProps = [
+  'as',
+  'children',
+  'className',
+  'content',
+  'divided',
+  'items',
+  'link',
+  'relaxed',
+  'unstackable',
+]
+
 export default ItemGroup

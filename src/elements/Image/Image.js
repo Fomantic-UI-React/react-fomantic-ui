@@ -186,6 +186,31 @@ Image.propTypes = {
   wrapped: PropTypes.bool,
 }
 
+Image.handledProps = [
+  'as',
+  'avatar',
+  'bordered',
+  'centered',
+  'children',
+  'circular',
+  'className',
+  'content',
+  'dimmer',
+  'disabled',
+  'floated',
+  'fluid',
+  'hidden',
+  'href',
+  'inline',
+  'label',
+  'rounded',
+  'size',
+  'spaced',
+  'ui',
+  'verticalAlign',
+  'wrapped',
+]
+
 Image.create = createShorthandFactory(Image, (value) => ({ src: value }))
 
 export default Image

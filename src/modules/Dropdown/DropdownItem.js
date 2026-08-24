@@ -151,6 +151,24 @@ DropdownItem.propTypes = {
   value: PropTypes.oneOfType([PropTypes.bool, PropTypes.number, PropTypes.string]),
 }
 
+DropdownItem.handledProps = [
+  'active',
+  'as',
+  'children',
+  'className',
+  'content',
+  'description',
+  'disabled',
+  'flag',
+  'icon',
+  'image',
+  'label',
+  'onClick',
+  'selected',
+  'text',
+  'value',
+]
+
 DropdownItem.create = createShorthandFactory(DropdownItem, (opts) => opts)
 
 export default DropdownItem

@@ -42,6 +42,8 @@ HeaderSubheader.propTypes = {
   content: customPropTypes.contentShorthand,
 }
 
+HeaderSubheader.handledProps = ['as', 'children', 'className', 'content']
+
 HeaderSubheader.create = createShorthandFactory(HeaderSubheader, (content) => ({ content }))
 
 export default HeaderSubheader

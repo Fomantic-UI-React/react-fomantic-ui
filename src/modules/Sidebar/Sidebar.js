@@ -199,6 +199,22 @@ Sidebar.propTypes = {
   width: PropTypes.oneOf(['very thin', 'thin', 'wide', 'very wide']),
 }
 
+Sidebar.handledProps = [
+  'animation',
+  'as',
+  'children',
+  'className',
+  'content',
+  'direction',
+  'onHidden',
+  'onHide',
+  'onShow',
+  'onVisible',
+  'target',
+  'visible',
+  'width',
+]
+
 Sidebar.animationDuration = 500
 
 Sidebar.Pushable = SidebarPushable

@@ -153,4 +153,6 @@ TransitionGroup.propTypes = {
   ]),
 }
 
+TransitionGroup.handledProps = ['animation', 'as', 'children', 'directional', 'duration']
+
 export default TransitionGroup

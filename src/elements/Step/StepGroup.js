@@ -121,4 +121,20 @@ StepGroup.propTypes = {
   ]),
 }
 
+StepGroup.handledProps = [
+  'as',
+  'attached',
+  'children',
+  'className',
+  'content',
+  'fluid',
+  'items',
+  'ordered',
+  'size',
+  'stackable',
+  'unstackable',
+  'vertical',
+  'widths',
+]
+
 export default StepGroup

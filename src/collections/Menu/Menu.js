@@ -195,6 +195,34 @@ Menu.propTypes = {
   widths: PropTypes.oneOf(SUI.WIDTHS),
 }
 
+Menu.handledProps = [
+  'activeIndex',
+  'as',
+  'attached',
+  'borderless',
+  'children',
+  'className',
+  'color',
+  'compact',
+  'defaultActiveIndex',
+  'fixed',
+  'floated',
+  'fluid',
+  'icon',
+  'inverted',
+  'items',
+  'onItemClick',
+  'pagination',
+  'pointing',
+  'secondary',
+  'size',
+  'stackable',
+  'tabular',
+  'text',
+  'vertical',
+  'widths',
+]
+
 Menu.Header = MenuHeader
 Menu.Item = MenuItem
 Menu.Menu = MenuMenu

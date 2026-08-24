@@ -72,6 +72,17 @@ Reveal.propTypes = {
   instant: PropTypes.bool,
 }
 
+Reveal.handledProps = [
+  'active',
+  'animated',
+  'as',
+  'children',
+  'className',
+  'content',
+  'disabled',
+  'instant',
+]
+
 Reveal.Content = RevealContent
 
 export default Reveal

@@ -54,4 +54,6 @@ RevealContent.propTypes = {
   visible: PropTypes.bool,
 }
 
+RevealContent.handledProps = ['as', 'children', 'className', 'content', 'hidden', 'visible']
+
 export default RevealContent

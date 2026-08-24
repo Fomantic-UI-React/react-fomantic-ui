@@ -234,4 +234,28 @@ Progress.propTypes = {
   warning: PropTypes.bool,
 }
 
+Progress.handledProps = [
+  'active',
+  'as',
+  'attached',
+  'autoSuccess',
+  'children',
+  'className',
+  'color',
+  'content',
+  'disabled',
+  'error',
+  'indicating',
+  'inverted',
+  'label',
+  'percent',
+  'precision',
+  'progress',
+  'size',
+  'success',
+  'total',
+  'value',
+  'warning',
+]
+
 export default Progress

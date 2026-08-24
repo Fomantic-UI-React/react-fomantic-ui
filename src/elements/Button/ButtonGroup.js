@@ -156,4 +156,29 @@ ButtonGroup.propTypes = {
   widths: PropTypes.oneOf(SUI.WIDTHS),
 }
 
+ButtonGroup.handledProps = [
+  'as',
+  'attached',
+  'basic',
+  'buttons',
+  'children',
+  'className',
+  'color',
+  'compact',
+  'content',
+  'floated',
+  'fluid',
+  'icon',
+  'inverted',
+  'labeled',
+  'negative',
+  'positive',
+  'primary',
+  'secondary',
+  'size',
+  'toggle',
+  'vertical',
+  'widths',
+]
+
 export default ButtonGroup

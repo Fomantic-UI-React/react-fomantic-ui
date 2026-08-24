@@ -104,4 +104,17 @@ CardGroup.propTypes = {
   textAlign: PropTypes.oneOf(_.without(SUI.TEXT_ALIGNMENTS, 'justified')),
 }
 
+CardGroup.handledProps = [
+  'as',
+  'centered',
+  'children',
+  'className',
+  'content',
+  'doubling',
+  'items',
+  'itemsPerRow',
+  'stackable',
+  'textAlign',
+]
+
 export default CardGroup

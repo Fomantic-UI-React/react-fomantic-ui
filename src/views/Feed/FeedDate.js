@@ -35,4 +35,6 @@ FeedDate.propTypes = {
   content: customPropTypes.contentShorthand,
 }
 
+FeedDate.handledProps = ['as', 'children', 'className', 'content']
+
 export default FeedDate

@@ -55,4 +55,6 @@ FeedMeta.propTypes = {
   like: customPropTypes.itemShorthand,
 }
 
+FeedMeta.handledProps = ['as', 'children', 'className', 'content', 'like']
+
 export default FeedMeta

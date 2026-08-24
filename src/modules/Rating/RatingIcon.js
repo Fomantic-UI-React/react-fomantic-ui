@@ -97,4 +97,15 @@ RatingIcon.propTypes = {
   selected: PropTypes.bool,
 }
 
+RatingIcon.handledProps = [
+  'active',
+  'as',
+  'className',
+  'index',
+  'onClick',
+  'onKeyUp',
+  'onMouseEnter',
+  'selected',
+]
+
 export default RatingIcon

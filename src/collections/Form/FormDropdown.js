@@ -28,4 +28,6 @@ FormDropdown.propTypes = {
   control: FormField.propTypes.control,
 }
 
+FormDropdown.handledProps = ['as', 'control']
+
 export default FormDropdown

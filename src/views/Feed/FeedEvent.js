@@ -76,4 +76,18 @@ FeedEvent.propTypes = {
   summary: customPropTypes.itemShorthand,
 }
 
+FeedEvent.handledProps = [
+  'as',
+  'children',
+  'className',
+  'content',
+  'date',
+  'extraImages',
+  'extraText',
+  'icon',
+  'image',
+  'meta',
+  'summary',
+]
+
 export default FeedEvent

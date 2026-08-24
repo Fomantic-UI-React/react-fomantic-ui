@@ -136,6 +136,23 @@ Step.propTypes = {
   title: customPropTypes.itemShorthand,
 }
 
+Step.handledProps = [
+  'active',
+  'as',
+  'children',
+  'className',
+  'completed',
+  'content',
+  'description',
+  'disabled',
+  'href',
+  'icon',
+  'link',
+  'onClick',
+  'ordered',
+  'title',
+]
+
 Step.Content = StepContent
 Step.Description = StepDescription
 Step.Group = StepGroup

@@ -39,4 +39,6 @@ ImageGroup.propTypes = {
   size: PropTypes.oneOf(SUI.SIZES),
 }
 
+ImageGroup.handledProps = ['as', 'children', 'className', 'content', 'size']
+
 export default ImageGroup

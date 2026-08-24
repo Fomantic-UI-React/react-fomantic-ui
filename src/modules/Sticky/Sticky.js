@@ -333,4 +333,21 @@ Sticky.propTypes = {
   styleElement: PropTypes.object,
 }
 
+Sticky.handledProps = [
+  'active',
+  'as',
+  'bottomOffset',
+  'children',
+  'className',
+  'context',
+  'offset',
+  'onBottom',
+  'onStick',
+  'onTop',
+  'onUnstick',
+  'pushing',
+  'scrollContext',
+  'styleElement',
+]
+
 export default Sticky

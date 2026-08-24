@@ -46,4 +46,6 @@ CardMeta.propTypes = {
   textAlign: PropTypes.oneOf(_.without(SUI.TEXT_ALIGNMENTS, 'justified')),
 }
 
+CardMeta.handledProps = ['as', 'children', 'className', 'content', 'textAlign']
+
 export default CardMeta

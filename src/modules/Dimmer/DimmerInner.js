@@ -132,4 +132,19 @@ DimmerInner.propTypes = {
   verticalAlign: PropTypes.oneOf(['bottom', 'top']),
 }
 
+DimmerInner.handledProps = [
+  'active',
+  'as',
+  'children',
+  'className',
+  'content',
+  'disabled',
+  'inverted',
+  'onClick',
+  'onClickOutside',
+  'page',
+  'simple',
+  'verticalAlign',
+]
+
 export default DimmerInner

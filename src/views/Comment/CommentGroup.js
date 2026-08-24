@@ -64,4 +64,15 @@ CommentGroup.propTypes = {
   threaded: PropTypes.bool,
 }
 
+CommentGroup.handledProps = [
+  'as',
+  'children',
+  'className',
+  'collapsed',
+  'content',
+  'minimal',
+  'size',
+  'threaded',
+]
+
 export default CommentGroup

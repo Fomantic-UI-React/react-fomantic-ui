@@ -29,4 +29,6 @@ TableHeaderCell.propTypes = {
   sorted: PropTypes.oneOf(['ascending', 'descending']),
 }
 
+TableHeaderCell.handledProps = ['as', 'className', 'sorted']
+
 export default TableHeaderCell

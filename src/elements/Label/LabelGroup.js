@@ -63,4 +63,15 @@ LabelGroup.propTypes = {
   tag: PropTypes.bool,
 }
 
+LabelGroup.handledProps = [
+  'as',
+  'children',
+  'circular',
+  'className',
+  'color',
+  'content',
+  'size',
+  'tag',
+]
+
 export default LabelGroup

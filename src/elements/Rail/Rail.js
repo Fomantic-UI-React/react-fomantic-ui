@@ -83,4 +83,17 @@ Rail.propTypes = {
   size: PropTypes.oneOf(_.without(SUI.SIZES, 'medium')),
 }
 
+Rail.handledProps = [
+  'as',
+  'attached',
+  'children',
+  'className',
+  'close',
+  'content',
+  'dividing',
+  'internal',
+  'position',
+  'size',
+]
+
 export default Rail

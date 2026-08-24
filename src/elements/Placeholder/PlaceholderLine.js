@@ -29,4 +29,6 @@ PlaceholderLine.propTypes = {
   length: PropTypes.oneOf(['full', 'very long', 'long', 'medium', 'short', 'very short']),
 }
 
+PlaceholderLine.handledProps = ['as', 'className', 'length']
+
 export default PlaceholderLine

@@ -53,6 +53,8 @@ Comment.propTypes = {
   content: customPropTypes.contentShorthand,
 }
 
+Comment.handledProps = ['as', 'children', 'className', 'collapsed', 'content']
+
 Comment.Author = CommentAuthor
 Comment.Action = CommentAction
 Comment.Actions = CommentActions

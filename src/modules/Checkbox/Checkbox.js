@@ -319,4 +319,29 @@ Checkbox.propTypes = {
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 }
 
+Checkbox.handledProps = [
+  'as',
+  'checked',
+  'className',
+  'defaultChecked',
+  'defaultIndeterminate',
+  'disabled',
+  'fitted',
+  'id',
+  'indeterminate',
+  'label',
+  'name',
+  'onChange',
+  'onClick',
+  'onMouseDown',
+  'onMouseUp',
+  'radio',
+  'readOnly',
+  'slider',
+  'tabIndex',
+  'toggle',
+  'type',
+  'value',
+]
+
 export default Checkbox

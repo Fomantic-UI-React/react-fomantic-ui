@@ -42,4 +42,6 @@ ListList.propTypes = {
   content: customPropTypes.contentShorthand,
 }
 
+ListList.handledProps = ['as', 'children', 'className', 'content']
+
 export default ListList

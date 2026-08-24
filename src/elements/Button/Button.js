@@ -318,6 +318,38 @@ Button.propTypes = {
   type: PropTypes.oneOf(['button', 'submit', 'reset']),
 }
 
+Button.handledProps = [
+  'active',
+  'animated',
+  'as',
+  'attached',
+  'basic',
+  'children',
+  'circular',
+  'className',
+  'color',
+  'compact',
+  'content',
+  'disabled',
+  'floated',
+  'fluid',
+  'icon',
+  'inverted',
+  'label',
+  'labelPosition',
+  'loading',
+  'negative',
+  'onClick',
+  'positive',
+  'primary',
+  'role',
+  'secondary',
+  'size',
+  'tabIndex',
+  'toggle',
+  'type',
+]
+
 Button.Content = ButtonContent
 Button.Group = ButtonGroup
 Button.Or = ButtonOr

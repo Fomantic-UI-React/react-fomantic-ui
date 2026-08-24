@@ -39,4 +39,6 @@ MenuMenu.propTypes = {
   position: PropTypes.oneOf(['left', 'right']),
 }
 
+MenuMenu.handledProps = ['as', 'children', 'className', 'content', 'position']
+
 export default MenuMenu

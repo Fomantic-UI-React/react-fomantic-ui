@@ -171,6 +171,30 @@ Message.propTypes = {
   warning: PropTypes.bool,
 }
 
+Message.handledProps = [
+  'as',
+  'attached',
+  'children',
+  'className',
+  'color',
+  'compact',
+  'content',
+  'error',
+  'floating',
+  'header',
+  'hidden',
+  'icon',
+  'info',
+  'list',
+  'negative',
+  'onDismiss',
+  'positive',
+  'size',
+  'success',
+  'visible',
+  'warning',
+]
+
 Message.Content = MessageContent
 Message.Header = MessageHeader
 Message.List = MessageList

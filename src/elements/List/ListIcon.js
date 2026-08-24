@@ -25,6 +25,8 @@ ListIcon.propTypes = {
   verticalAlign: PropTypes.oneOf(SUI.VERTICAL_ALIGNMENTS),
 }
 
+ListIcon.handledProps = ['className', 'verticalAlign']
+
 ListIcon.create = createShorthandFactory(ListIcon, (name) => ({ name }))
 
 export default ListIcon

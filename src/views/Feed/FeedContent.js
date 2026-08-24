@@ -77,4 +77,16 @@ FeedContent.propTypes = {
   summary: customPropTypes.itemShorthand,
 }
 
+FeedContent.handledProps = [
+  'as',
+  'children',
+  'className',
+  'content',
+  'date',
+  'extraImages',
+  'extraText',
+  'meta',
+  'summary',
+]
+
 export default FeedContent

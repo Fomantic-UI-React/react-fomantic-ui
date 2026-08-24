@@ -398,6 +398,33 @@ Modal.propTypes = {
    */
 }
 
+Modal.handledProps = [
+  'actions',
+  'as',
+  'basic',
+  'centered',
+  'children',
+  'className',
+  'closeIcon',
+  'closeOnDimmerClick',
+  'closeOnDocumentClick',
+  'content',
+  'defaultOpen',
+  'dimmer',
+  'eventPool',
+  'header',
+  'mountNode',
+  'onActionClick',
+  'onClose',
+  'onMount',
+  'onOpen',
+  'onUnmount',
+  'open',
+  'size',
+  'style',
+  'trigger',
+]
+
 Modal.Actions = ModalActions
 Modal.Content = ModalContent
 Modal.Description = ModalDescription

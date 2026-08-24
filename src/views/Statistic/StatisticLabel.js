@@ -41,6 +41,8 @@ StatisticLabel.propTypes = {
   content: customPropTypes.contentShorthand,
 }
 
+StatisticLabel.handledProps = ['as', 'children', 'className', 'content']
+
 StatisticLabel.create = createShorthandFactory(StatisticLabel, (content) => ({ content }))
 
 export default StatisticLabel

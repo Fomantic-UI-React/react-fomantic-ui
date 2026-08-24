@@ -76,6 +76,17 @@ AccordionTitle.propTypes = {
    */
   onClick: PropTypes.func,
 }
+
+AccordionTitle.handledProps = [
+  'active',
+  'as',
+  'children',
+  'className',
+  'content',
+  'icon',
+  'index',
+  'onClick',
+]
 AccordionTitle.create = createShorthandFactory(AccordionTitle, (content) => ({ content }))
 
 export default AccordionTitle

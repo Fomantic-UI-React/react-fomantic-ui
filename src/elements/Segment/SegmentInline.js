@@ -35,4 +35,6 @@ SegmentInline.propTypes = {
   content: customPropTypes.contentShorthand,
 }
 
+SegmentInline.handledProps = ['as', 'children', 'className', 'content']
+
 export default SegmentInline

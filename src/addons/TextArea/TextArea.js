@@ -65,4 +65,6 @@ TextArea.propTypes = {
   value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 }
 
+TextArea.handledProps = ['as', 'onChange', 'onInput', 'rows', 'value']
+
 export default TextArea

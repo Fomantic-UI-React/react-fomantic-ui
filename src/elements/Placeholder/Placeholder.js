@@ -57,6 +57,8 @@ Placeholder.propTypes = {
   inverted: PropTypes.bool,
 }
 
+Placeholder.handledProps = ['as', 'children', 'className', 'content', 'fluid', 'inverted']
+
 Placeholder.Header = PlaceholderHeader
 Placeholder.Image = PlaceholderImage
 Placeholder.Line = PlaceholderLine

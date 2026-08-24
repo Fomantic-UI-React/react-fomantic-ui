@@ -72,4 +72,17 @@ SegmentGroup.propTypes = {
   stacked: PropTypes.bool,
 }
 
+SegmentGroup.handledProps = [
+  'as',
+  'children',
+  'className',
+  'compact',
+  'content',
+  'horizontal',
+  'piled',
+  'raised',
+  'size',
+  'stacked',
+]
+
 export default SegmentGroup

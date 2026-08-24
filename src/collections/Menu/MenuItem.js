@@ -131,6 +131,24 @@ MenuItem.propTypes = {
   position: PropTypes.oneOf(['left', 'right']),
 }
 
+MenuItem.handledProps = [
+  'active',
+  'as',
+  'children',
+  'className',
+  'color',
+  'content',
+  'disabled',
+  'fitted',
+  'header',
+  'icon',
+  'index',
+  'link',
+  'name',
+  'onClick',
+  'position',
+]
+
 MenuItem.create = createShorthandFactory(MenuItem, (val) => ({ content: val, name: val }))
 
 export default MenuItem

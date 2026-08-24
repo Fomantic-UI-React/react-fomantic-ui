@@ -49,4 +49,6 @@ FeedLike.propTypes = {
   icon: customPropTypes.itemShorthand,
 }
 
+FeedLike.handledProps = ['as', 'children', 'className', 'content', 'icon']
+
 export default FeedLike

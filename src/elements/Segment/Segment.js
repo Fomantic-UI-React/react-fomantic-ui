@@ -160,4 +160,31 @@ Segment.propTypes = {
   vertical: PropTypes.bool,
 }
 
+Segment.handledProps = [
+  'as',
+  'attached',
+  'basic',
+  'children',
+  'circular',
+  'className',
+  'clearing',
+  'color',
+  'compact',
+  'content',
+  'disabled',
+  'floated',
+  'inverted',
+  'loading',
+  'padded',
+  'piled',
+  'placeholder',
+  'raised',
+  'secondary',
+  'size',
+  'stacked',
+  'tertiary',
+  'textAlign',
+  'vertical',
+]
+
 export default Segment

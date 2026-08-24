@@ -242,6 +242,22 @@ Transition.propTypes = {
   unmountOnHide: PropTypes.bool,
 }
 
+Transition.handledProps = [
+  'animation',
+  'children',
+  'directional',
+  'duration',
+  'mountOnShow',
+  'onComplete',
+  'onHide',
+  'onShow',
+  'onStart',
+  'reactKey',
+  'transitionOnMount',
+  'unmountOnHide',
+  'visible',
+]
+
 Transition.defaultProps = {
   animation: 'fade',
   duration: 500,

@@ -63,6 +63,8 @@ BreadcrumbDivider.propTypes = {
   icon: customPropTypes.itemShorthand,
 }
 
+BreadcrumbDivider.handledProps = ['as', 'children', 'className', 'content', 'icon']
+
 BreadcrumbDivider.create = createShorthandFactory(BreadcrumbDivider, (icon) => ({ icon }))
 
 export default BreadcrumbDivider

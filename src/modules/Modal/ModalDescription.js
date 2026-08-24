@@ -35,4 +35,6 @@ ModalDescription.propTypes = {
   content: customPropTypes.contentShorthand,
 }
 
+ModalDescription.handledProps = ['as', 'children', 'className', 'content']
+
 export default ModalDescription

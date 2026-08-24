@@ -439,6 +439,38 @@ Popup.propTypes = {
   wide: PropTypes.oneOfType([PropTypes.bool, PropTypes.oneOf(['very'])]),
 }
 
+Popup.handledProps = [
+  'as',
+  'basic',
+  'children',
+  'className',
+  'content',
+  'context',
+  'disabled',
+  'eventsEnabled',
+  'flowing',
+  'header',
+  'hideOnScroll',
+  'hoverable',
+  'inverted',
+  'offset',
+  'on',
+  'onClose',
+  'onMount',
+  'onOpen',
+  'onUnmount',
+  'pinned',
+  'popper',
+  'popperDependencies',
+  'popperModifiers',
+  'position',
+  'positionFixed',
+  'size',
+  'style',
+  'trigger',
+  'wide',
+]
+
 Popup.Content = PopupContent
 Popup.Header = PopupHeader
 

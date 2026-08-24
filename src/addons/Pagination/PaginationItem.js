@@ -76,6 +76,8 @@ PaginationItem.propTypes = {
   ]),
 }
 
+PaginationItem.handledProps = ['active', 'disabled', 'onClick', 'onKeyDown', 'type']
+
 PaginationItem.create = createShorthandFactory(PaginationItem, (content) => ({ content }))
 
 export default PaginationItem

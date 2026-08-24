@@ -42,6 +42,8 @@ Accordion.propTypes = {
   styled: PropTypes.bool,
 }
 
+Accordion.handledProps = ['className', 'fluid', 'inverted', 'styled']
+
 Accordion.Accordion = AccordionAccordion
 Accordion.Content = AccordionContent
 Accordion.Panel = AccordionPanel

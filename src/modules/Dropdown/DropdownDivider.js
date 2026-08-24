@@ -26,4 +26,6 @@ DropdownDivider.propTypes = {
   className: PropTypes.string,
 }
 
+DropdownDivider.handledProps = ['as', 'className']
+
 export default DropdownDivider

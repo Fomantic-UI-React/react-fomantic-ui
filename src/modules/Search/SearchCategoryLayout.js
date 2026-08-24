@@ -20,4 +20,6 @@ SearchCategoryLayout.propTypes = {
   resultsContent: PropTypes.element.isRequired,
 }
 
+SearchCategoryLayout.handledProps = ['categoryContent', 'resultsContent']
+
 export default SearchCategoryLayout

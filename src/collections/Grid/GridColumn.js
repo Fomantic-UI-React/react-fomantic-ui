@@ -123,6 +123,24 @@ GridColumn.propTypes = {
   ]),
 }
 
+GridColumn.handledProps = [
+  'as',
+  'children',
+  'className',
+  'color',
+  'computer',
+  'floated',
+  'largeScreen',
+  'mobile',
+  'only',
+  'stretched',
+  'tablet',
+  'textAlign',
+  'verticalAlign',
+  'widescreen',
+  'width',
+]
+
 GridColumn.create = createShorthandFactory(GridColumn, (children) => ({ children }))
 
 export default GridColumn

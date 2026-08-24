@@ -73,4 +73,6 @@ FeedExtra.propTypes = {
   text: PropTypes.bool,
 }
 
+FeedExtra.handledProps = ['as', 'children', 'className', 'content', 'images', 'text']
+
 export default FeedExtra

@@ -99,4 +99,18 @@ SearchResult.propTypes = {
   title: PropTypes.string.isRequired,
 }
 
+SearchResult.handledProps = [
+  'active',
+  'as',
+  'className',
+  'content',
+  'description',
+  'id',
+  'image',
+  'onClick',
+  'price',
+  'renderer',
+  'title',
+]
+
 export default SearchResult

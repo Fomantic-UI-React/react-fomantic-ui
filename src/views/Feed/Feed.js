@@ -65,6 +65,8 @@ Feed.propTypes = {
   size: PropTypes.oneOf(_.without(SUI.SIZES, 'mini', 'tiny', 'medium', 'big', 'huge', 'massive')),
 }
 
+Feed.handledProps = ['as', 'children', 'className', 'events', 'size']
+
 Feed.Content = FeedContent
 Feed.Date = FeedDate
 Feed.Event = FeedEvent
