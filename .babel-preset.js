@@ -82,23 +82,4 @@ module.exports = () => ({
     '@babel/react',
   ],
   plugins,
-  env: {
-    development: {
-      plugins: ['react-hot-loader/babel'],
-    },
-    test: {
-      plugins: [['istanbul', { include: ['src'] }]],
-    },
-  },
-  overrides: [
-    // A workaround to avoid collisions between "babel-plugin-dynamic-import-node" & "universal-import"
-    {
-      test: /react-static-routes.js/,
-      plugins: [
-        ['universal-import', { disableWarnings: true }],
-        '@babel/plugin-transform-modules-commonjs',
-      ],
-      presets: [['@babel/env', { modules: false }]],
-    },
-  ],
 })

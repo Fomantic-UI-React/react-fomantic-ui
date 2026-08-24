@@ -1,0 +1,23 @@
+# Talisman configuration.
+#
+# scopeconfig "node" excludes JS dependency manifests (yarn.lock,
+# package-lock.json) from scanning. Lockfile integrity hashes are base64/hex
+# by nature and trip the entropy detectors on every install.
+#
+# allowed_patterns covers this library's keyboard handling: it depends on
+# "keyboard-key", exposes a "childKey" shorthand prop and wires onKeyDown /
+# onKeyUp across the interactive components, all of which read as "key" to
+# the secret detectors.
+allowed_patterns:
+  - key
+  - Key
+  - KEY
+  - onKeyDown
+  - onKeyUp
+  - onKeyPress
+  - KeyboardEvent
+  - keyboard-key
+  - childKey
+version: ''
+scopeconfig:
+  - scope: node
