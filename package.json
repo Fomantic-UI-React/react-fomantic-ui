@@ -21,7 +21,6 @@
     "prettier": "prettier --list-different \"**/*.{js,jsx,ts,tsx}\"",
     "prettier:fix": "prettier --write \"**/*.{js,jsx,ts,tsx}\"",
     "tsd:test": "gulp build:dist:commonjs:tsd && tsc -p ./ --noEmit",
-    "test:umd": "gulp build:dist:umd && node test/umd.js",
     "ci": "yarn tsd:test && yarn lint",
     "prerelease": "yarn lint && yarn tsd:test && cross-env NODE_ENV=production yarn build",
     "release": "release-it"
