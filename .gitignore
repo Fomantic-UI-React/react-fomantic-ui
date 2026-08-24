@@ -8,10 +8,5 @@
 
 coverage/
 dist/
-docs/src/componentInfo
-docs/src/componentMenu.json
-docs/src/exampleSources.json
-docs/src/exampleMenus
-docs/dist/
 node_modules/
 tmp/
