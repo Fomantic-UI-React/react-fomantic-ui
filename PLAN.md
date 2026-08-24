@@ -185,6 +185,13 @@ as Aug 2026 — people still contribute to a repo that has merged nothing since
 None are reviewed or verified — treat as leads, not trusted patches. They also
 predate the tooling strip and the codemod, so expect conflicts.
 
+> **Before merging any harvested work: temporarily re-enable merge commits.**
+> The repo is squash-only, which collapses every commit in a PR into one
+> authored by the merger. That is right for our own PRs and wrong for upstream
+> contributions — it would erase the original authors from the history of a
+> fork whose legitimacy rests on respecting their work. Settings → General →
+> Pull Requests → tick "Allow merge commits", merge, then untick it.
+
 ## Reference numbers
 
 |                            |                                                                                 |
