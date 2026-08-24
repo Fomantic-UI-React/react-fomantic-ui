@@ -2,9 +2,10 @@ import gulp from 'gulp'
 import rimraf from 'rimraf'
 
 import sh from '../sh.mjs'
+import config from '../../config.js'
 
 const { dest, task, series, src, parallel } = gulp
-const { paths } = (await import('../../config.js')).default
+const { paths } = config
 
 // ----------------------------------------
 // Clean
