@@ -149,16 +149,6 @@ too, if you filter on it.
 Nothing to do. This package ships no CSS, so whatever stylesheet you already
 load — `semantic-ui-css`, `fomantic-ui-css` or a custom theme — keeps working.
 
-### Troubleshooting
-
-**Yarn refuses to install the version.** Yarn 4.18+ has `npmMinimalAgeGate`,
-which rejects releases published within a configured window (commonly 14 days).
-For a newly published version:
-
-```sh
-YARN_NPM_MINIMAL_AGE_GATE=0 yarn up semantic-ui-react
-```
-
 ## Documentation
 
 This fork does not host its own documentation site yet. Upstream's
