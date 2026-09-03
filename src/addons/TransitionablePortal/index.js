@@ -1,1 +1,1 @@
-export default from './TransitionablePortal'
+export { default } from './TransitionablePortal';
