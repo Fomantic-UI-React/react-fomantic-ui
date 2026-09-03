@@ -206,7 +206,7 @@ remaining in `test/specs` — no growing include-list in the config.
 | PR | Scope | Why here |
 | -- | ----- | -------- |
 | 1 | Harness: vitest + jsdom + RTL, `componentInfo`, conformance core, 3 proving components | ✅ Make-or-break, and it holds — 124 tests green on Button/Card/Divider |
-| 1b | Remaining `commonTests`: `rendersChildren`, `classNameHelpers`, `implementsClassNameProps`, `implementsShorthandProp`, `implementsCommonProps` | 5 helpers, ~790 LOC, all Enzyme-bearing. Needed before any area port |
+| 1b | Remaining `commonTests`: `rendersChildren`, `classNameHelpers`, `implementsClassNameProps`, `implementsShorthandProp`, `implementsCommonProps` | ✅ 5 helpers, ~790 LOC, all Enzyme-bearing. 482 tests green across 7 components |
 | 2 | `views` (38 files, 964 LOC) | Smallest and simplest; shakes out harness gaps cheaply |
 | 3 | `lib` (20 files, 2,112 LOC) | Nearly pure logic — 3 shallow, 1 mount |
 | 4 | `elements` (42 files) | First real shorthand/subcomponent surface |
@@ -241,12 +241,52 @@ Two assertions did not survive the port, both deliberately:
   what `fireEvent` supports, and `onFocus`/`onBlur` are fired as
   `focusIn`/`focusOut` because React 17+ delegates through those.
 
+**Ported in PR 1b**: the five remaining helpers. `implementsShorthandProp` was
+the hard one — Enzyme compared the shorthand's *React element* against one built
+by `createShorthand` directly, which RTL cannot do. The behavioural equivalent
+asserts both routes produce the same markup, which is what consumers observe.
+Its `key` assertion is dropped outright: React keys are never rendered, so there
+is no DOM to assert against.
+
+`implementsMultipleProp`, `labelImplementsHtmlForProp`, `implementsHTMLIFrameProp`
+and `implementsHTMLLabelProp` have no call site outside `collections` and
+`modules`, so they are ported but first exercised in PRs 5 and 7.
+
 **`shallow()` has no RTL equivalent, by design.** The 93 shallow files cannot be
 ported mechanically: structural assertions (`should.have.descendants`) have to
 become behavioural ones against rendered output. Expect the assertion count to
 fall — 1,186 wrapper assertions will not map 1:1, and forcing them to would
 reproduce Enzyme's coupling to internals in a library that is about to change
 its internals in Phase 3.
+
+### Landmine 5 — circular imports break static subcomponents
+
+Found while porting `ButtonGroup-test.js`. `Button.js` imports `ButtonGroup.js`
+and back again — one of seven such cycles rollup reports — so
+`Button.Group = ButtonGroup` resolves only when the parent module initialises
+first. Deep-import the child before the parent and it breaks:
+
+```js
+// CommonJS: silent
+const ButtonGroup = require('react-fomantic-ui/dist/commonjs/elements/Button/ButtonGroup').default
+const Button = require('react-fomantic-ui/dist/commonjs/elements/Button/Button').default
+Button.Group // => undefined
+
+// ESM: hard failure
+import ButtonGroup from 'react-fomantic-ui/dist/es/elements/Button/ButtonGroup.js'
+import Button from 'react-fomantic-ui/dist/es/elements/Button/Button.js'
+// ReferenceError: Cannot access 'ButtonGroup' before initialization
+```
+
+**Pre-existing, not a build regression** — `3.0.0-beta.3` behaves identically in
+CommonJS. It went unnoticed because the Karma harness bundled all 203 specs into
+one module graph, so some other spec always loaded the parent first. Vitest gives
+each file its own graph, which exposes it.
+
+Deep-importing a subcomponent for tree-shaking is a normal thing to do, so this
+is worth a fix of its own — breaking the cycle in source, not papering over it.
+Until then `test/setup.js` imports `src/index` so specs see the load order a
+consumer importing the package gets.
 
 ### Phase 3 — React 19
 
