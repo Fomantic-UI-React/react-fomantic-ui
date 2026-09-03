@@ -71,6 +71,24 @@
       }
     },
     {
+      "files": ["test/support/**", "test/unit/**"],
+      "env": { "node": true, "browser": true },
+      "globals": {
+        "afterEach": "readonly",
+        "beforeEach": "readonly",
+        "describe": "readonly",
+        "expect": "readonly",
+        "it": "readonly",
+        "vi": "readonly"
+      },
+      "rules": {
+        "no-continue": "off",
+        "no-restricted-syntax": "off",
+        "react/forbid-foreign-prop-types": "off",
+        "react/prop-types": "off"
+      }
+    },
+    {
       "files": ["scripts/**"],
       "env": { "node": true, "browser": false },
       "rules": {

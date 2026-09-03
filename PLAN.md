@@ -205,7 +205,8 @@ remaining in `test/specs` — no growing include-list in the config.
 
 | PR | Scope | Why here |
 | -- | ----- | -------- |
-| 1 | Harness: vitest + jsdom + RTL, `commonTests`, `test/utils`, 2–3 proving components | Make-or-break. Decides viability of the whole phase |
+| 1 | Harness: vitest + jsdom + RTL, `componentInfo`, conformance core, 3 proving components | ✅ Make-or-break, and it holds — 124 tests green on Button/Card/Divider |
+| 1b | Remaining `commonTests`: `rendersChildren`, `classNameHelpers`, `implementsClassNameProps`, `implementsShorthandProp`, `implementsCommonProps` | 5 helpers, ~790 LOC, all Enzyme-bearing. Needed before any area port |
 | 2 | `views` (38 files, 964 LOC) | Smallest and simplest; shakes out harness gaps cheaply |
 | 3 | `lib` (20 files, 2,112 LOC) | Nearly pure logic — 3 shallow, 1 mount |
 | 4 | `elements` (42 files) | First real shorthand/subcomponent surface |
@@ -220,6 +221,25 @@ so those two files currently import a module that does not exist. They need
 and `repoPath`, all of which can be derived by walking `src/` and reading
 `src/index.js` at test time. Deriving it any other way reintroduces the docs
 build that landmine 4 exists to prevent.
+
+**Ported in PR 1**: `isConformant`, `hasValidTypings`, `tsHelpers`, `forwardsRef`,
+`hasUIClassName`, `hasSubcomponents`, `implementsCreateMethod`, `commonHelpers`.
+New harness lives in `test/support/**`; `test/specs/**` and `test/utils/**` stay
+frozen. `sinon` became `vi`, `chai` became `expect`, and `faker` became fixed
+strings — random test data was never worth the nondeterminism.
+
+Two assertions did not survive the port, both deliberately:
+
+- **`componentClassName`** — `isConformant` asserted each component's Semantic
+  UI class name from a value react-docgen produced. It cannot be derived from
+  source without guessing (`ButtonGroup` renders `buttons`, not `button-group`),
+  and a wrong derivation would fail across 162 components. `hasUIClassName` and
+  `implementsClassNameProps` carry the specific per-component coverage.
+- **Undispatchable events** — Enzyme's `simulate()` called React's handler
+  directly, so it could exercise listeners for events jsdom cannot raise. RTL
+  dispatches real DOM events, so the listener list is filtered at run time to
+  what `fireEvent` supports, and `onFocus`/`onBlur` are fired as
+  `focusIn`/`focusOut` because React 17+ delegates through those.
 
 **`shallow()` has no RTL equivalent, by design.** The 93 shallow files cannot be
 ported mechanically: structural assertions (`should.have.descendants`) have to

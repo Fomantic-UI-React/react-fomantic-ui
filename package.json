@@ -20,8 +20,10 @@
     "lint:fix": "yarn lint --fix",
     "prettier": "prettier --list-different \"**/*.{js,jsx,ts,tsx}\"",
     "prettier:fix": "prettier --write \"**/*.{js,jsx,ts,tsx}\"",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "tsd:test": "node scripts/postbuild.mjs && tsc -p ./ --noEmit",
-    "ci": "yarn prettier && yarn tsd:test && yarn lint",
+    "ci": "yarn prettier && yarn tsd:test && yarn lint && yarn test",
     "prerelease": "yarn ci && yarn build",
     "release": "release-it"
   },
@@ -68,6 +70,10 @@
     "@rollup/plugin-node-resolve": "^16.0.3",
     "@rollup/plugin-replace": "^6.0.3",
     "@rollup/plugin-terser": "^1.0.0",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.7",
     "@types/react": "18.0.5",
     "@typescript-eslint/eslint-plugin": "^3.7.1",
     "@typescript-eslint/parser": "^3.7.1",
@@ -83,20 +89,23 @@
     "eslint-plugin-react": "^7.20.4",
     "eslint-plugin-react-hooks": "^4.0.8",
     "husky": "^4.2.5",
+    "jsdom": "^30.0.1",
     "lint-staged": "^10.2.11",
     "magic-string": "^1.2.3",
     "prettier": "^2.0.5",
-    "react": "^17.0.0",
-    "react-dom": "^17.0.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
     "release-it": "^15.5.1",
     "rimraf": "^3.0.2",
     "rollup": "^4.63.1",
     "rollup-plugin-esbuild": "^6.2.1",
-    "typescript": "^4.5.5"
+    "typescript": "^4.5.5",
+    "vite": "^7",
+    "vitest": "^5.0.0"
   },
   "peerDependencies": {
-    "react": "^16.8.0 || ^17.0.0 || ^18.0.0",
-    "react-dom": "^16.8.0 || ^17.0.0 || ^18.0.0"
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
   },
   "resolutions": {
     "babel-plugin-universal-import": "^2.0.2",
