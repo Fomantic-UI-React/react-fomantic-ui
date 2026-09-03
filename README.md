@@ -51,6 +51,104 @@ import { Button } from 'react-fomantic-ui'
 const App = () => <Button primary>Click me</Button>
 ```
 
+## Migrating from `semantic-ui-react`
+
+`3.0.0-beta.3` is upstream's `3.0.0-beta.2` plus this fork's tooling work. **No
+component API changed**, and the change was verified against a production
+Next.js application: 1,206 unit tests, 3 snapshots and 9 accessibility tests
+all stayed green with no source changes, alongside a clean typecheck and a
+successful production build.
+
+### Recommended: alias the old name
+
+Keep every `import { Button } from 'semantic-ui-react'` exactly as it is and
+repoint the name in `package.json`:
+
+```sh
+npm install semantic-ui-react@npm:react-fomantic-ui@3.0.0-beta.3
+# yarn add semantic-ui-react@npm:react-fomantic-ui@3.0.0-beta.3
+# pnpm add semantic-ui-react@npm:react-fomantic-ui@3.0.0-beta.3
+```
+
+which records:
+
+```json
+{
+  "dependencies": {
+    "semantic-ui-react": "npm:react-fomantic-ui@3.0.0-beta.3"
+  }
+}
+```
+
+No code changes, one copy on disk, and — importantly — third-party packages
+keep working. See below.
+
+### Why the alias matters
+
+Companion libraries declare `semantic-ui-react` as a **peer dependency**:
+
+| Package                      | Peer requirement              |
+| ---------------------------- | ----------------------------- |
+| `react-semantic-toasts`      | `semantic-ui-react: *`        |
+| `semantic-ui-calendar-react` | `semantic-ui-react: >=0.84.0` |
+
+A peer dependency is a contract with the host application, and a package
+published under a different name cannot satisfy it. Installing
+`react-fomantic-ui` under its own name leaves those peers unmet and the
+libraries unable to resolve their imports. The alias satisfies them, because
+the dependency really is called `semantic-ui-react` — it just resolves here.
+
+> **`resolutions` / `overrides` will not fix this.** They override the version
+> of a package already in the dependency graph, and an unmet peer is not in the
+> graph. The dependency has to be declared.
+
+### Alternative: rename your imports
+
+If you would rather your imports name the package you are actually using:
+
+```sh
+npm install react-fomantic-ui@3.0.0-beta.3
+```
+
+```diff
+-import { Button } from 'semantic-ui-react'
++import { Button } from 'react-fomantic-ui'
+```
+
+Deep imports move across unchanged, since the internal layout is identical:
+
+```diff
+-import { ButtonProps } from 'semantic-ui-react/dist/commonjs/elements/Button/Button'
++import { ButtonProps } from 'react-fomantic-ui/dist/commonjs/elements/Button/Button'
+```
+
+If you use any companion library, you still need the alias **as well**, so that
+their peer dependency resolves. Declaring both installs the code twice, which
+risks duplicate module instances and split React context — so prefer the alias
+alone unless you have a reason not to.
+
+### If you load the UMD build
+
+The global and the filename follow the package name:
+
+```diff
+-<script src="https://cdn.jsdelivr.net/npm/semantic-ui-react/dist/umd/semantic-ui-react.min.js"></script>
++<script src="https://cdn.jsdelivr.net/npm/react-fomantic-ui/dist/umd/react-fomantic-ui.min.js"></script>
+```
+
+```diff
+-const { Button } = semanticUIReact
++const { Button } = reactFomanticUI
+```
+
+The `debug` namespace changed from `semanticUIReact:` to `reactFomanticUI:`
+too, if you filter on it.
+
+### CSS
+
+Nothing to do. This package ships no CSS, so whatever stylesheet you already
+load — `semantic-ui-css`, `fomantic-ui-css` or a custom theme — keeps working.
+
 ## Documentation
 
 This fork does not host its own documentation site yet. Upstream's
