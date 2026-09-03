@@ -30,6 +30,9 @@ jobs:
       - name: TypeScript definitions
         run: yarn tsd:test
 
+      - name: Test
+        run: yarn test
+
       - name: Build
         run: yarn build:dist
 
