@@ -1,57 +1,35 @@
+/**
+ * Copies the hand-written `.d.ts` declarations alongside the compiled output.
+ *
+ * `index.d.ts` re-exports from `./dist/commonjs/...`, so `tsd:test` needs the
+ * commonjs copies before `tsc` can resolve anything; `dist/es` gets them too so
+ * that deep imports through the `module` entry are typed as well.
+ */
 import fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
-import { execSync } from 'child_process'
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const srcDir = path.join(root, 'src')
 const distDir = path.join(root, 'dist')
 
-const esbuildBin = path.join(root, 'node_modules', '.bin', 'esbuild')
-
 function walk(dir) {
-  const out = []
-  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+  return fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
     const full = path.join(dir, entry.name)
-    if (entry.isDirectory()) {
-      out.push(...walk(full))
-    } else {
-      out.push(full)
-    }
-  }
-  return out
+    return entry.isDirectory() ? walk(full) : [full]
+  })
 }
 
-// 1. Copy .d.ts declarations to both commonjs and es, preserving src structure.
-for (const dts of walk(srcDir).filter((f) => f.endsWith('.d.ts'))) {
-  const rel = path.relative(srcDir, dts)
+const declarations = walk(srcDir).filter((file) => file.endsWith('.d.ts'))
+
+for (const declaration of declarations) {
+  const rel = path.relative(srcDir, declaration)
+
   for (const target of ['commonjs', 'es']) {
     const dest = path.join(distDir, target, rel)
     fs.mkdirSync(path.dirname(dest), { recursive: true })
-    fs.copyFileSync(dts, dest)
+    fs.copyFileSync(declaration, dest)
   }
 }
 
-// 2. Rollup drops index.js modules that only re-export a component with the
-//    same name in the same folder (e.g. Accordion/index.js -> Accordion.js).
-//    Emit them via per-file esbuild transpile so deep imports keep working.
-for (const indexSrc of walk(srcDir).filter((f) => f.endsWith('/index.js'))) {
-  const rel = path.relative(srcDir, indexSrc)
-  for (const [format, flag] of [
-    ['commonjs', 'cjs'],
-    ['es', 'esm'],
-  ]) {
-    const dest = path.join(distDir, format, rel)
-    if (fs.existsSync(dest)) {
-      continue
-    }
-    fs.mkdirSync(path.dirname(dest), { recursive: true })
-    const out = execSync(
-      `"${esbuildBin}" "${indexSrc}" --format=${flag} --loader:.js=jsx --target=es2017 --jsx=transform`,
-      { encoding: 'utf8' },
-    )
-    fs.writeFileSync(dest, out)
-  }
-}
-
-console.log('postbuild: declaration copies and index.js re-exports complete')
+console.log(`postbuild: copied ${declarations.length} declarations to dist/commonjs and dist/es`)

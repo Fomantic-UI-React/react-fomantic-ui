@@ -1,1 +1,1 @@
-export { default } from './Statistic';
+export { default } from './Statistic'

@@ -1,1 +1,1 @@
-export { default } from './Sticky';
+export { default } from './Sticky'
