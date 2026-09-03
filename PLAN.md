@@ -121,28 +121,112 @@ passthrough props and shorthand factories.
 
 **`test/specs` is intentionally not runnable** between here and phase 2.
 
-### Phase 1 — rebrand + modern build
+### Phase 1 — rebrand + modern build ✅ done
 
-`handledProps` codemod ✅ done (PR #2): 163 arrays baked into source, Babel
-plugin dropped, verified against a pre-change baseline with 0 value mismatches.
+`handledProps` codemod (PR #2): 163 arrays baked into source, Babel plugin
+dropped, verified against a pre-change baseline with 0 value mismatches.
 
-- Re-run the identity sweep (a stash exists at `stash@{0}` but predates the
-  deletions; re-run rather than pop). Covers `package.json`, the UMD global
-  `semanticUIReact` → `reactFomanticUI`, the `unpkg` path, the debug
-  namespace, and remaining module specifiers.
-- `LICENSE.md`: **retain the existing `Copyright (c) 2016 TechnologyAdvice`
-  notice** as MIT requires, and add ours alongside. (Levi Thomason is the
-  package `author`, not the copyright holder.)
-- README: community fork of an unmaintained project, not affiliated with
-  Semantic-Org or Fomantic-UI. Do not reuse the logo or `react.semantic-ui.com`.
-- Replace gulp + webpack 4 with tsup/rollup. **Unblocked** — the
-  `handledProps` constraint is resolved.
-- Port CircleCI → GitHub Actions on Node 22.
-- Decide the first published version (continuing the v3 line vs starting fresh).
+Identity sweep, `LICENSE.md`, README and CircleCI → GitHub Actions on Node 22
+landed in PR #3. Migration guide in PR #4.
+
+Build swap (PR #5): gulp + webpack 4 → rollup + esbuild.
+
+**`.babel-preset.js` was doing five jobs, not one.** Dropping Babel dropped
+four behaviours silently and shipped a fifth broken. Each is reimplemented in
+`build/plugins.mjs` against the ESTree AST `this.parse()` returns, and each is
+asserted by `scripts/verify-build.js`:
+
+| Old Babel plugin                         | Replacement                       |
+| ---------------------------------------- | --------------------------------- |
+| `babel-plugin-lodash`                    | `lodashCherryPick()`              |
+| `babel-plugin-transform-rename-import`   | `lodashCherryPick({ moduleName })` |
+| `transform-react-remove-prop-types`      | `guardPropTypes()`                |
+| `babel-plugin-filter-imports`            | `stripDebug()`                    |
+| `babel-plugin-transform-next-use-client` | `useClientDirective()`            |
+
+The UMD build also lost webpack's `DefinePlugin`, leaving 33 unguarded
+`process.env.NODE_ENV` references. A `<script>` tag has no `process`, so the
+bundle threw `ReferenceError: process is not defined` before exporting
+anything; `@rollup/plugin-replace` restores the substitution.
+
+**This shipped.** `3.0.0-beta.4` went to npm from the unfixed pipeline with a
+UMD bundle that could not load, zero `'use client'` directives, lodash
+namespace imports in 83 files and unguarded propTypes in 163. It remains
+published but unreferenced; `3.0.0-beta.5` supersedes it and holds `latest`.
+The lesson is in `scripts/verify-build.js` — none of the four regressions
+produced a build error, and `yarn ci` was green throughout.
+
+Also fixed: `dist/es` emitted extensionless `lodash-es/invoke` specifiers,
+which bundlers resolve and node does not. Present since beta.3, so `dist/es`
+had never been loadable outside a bundler. Only an install of the packed
+tarball surfaced it, which is why verification now imports `dist/es` through
+node rather than testing against the repo.
+
+Open follow-ups, neither blocking:
+
+- `dist/es` has no `"type": "module"`, so node reparses it via a fallback
+  heuristic and warns. The canonical fix is a `dist/es/package.json`
+  containing `{"type":"module"}`, unverified against webpack and vite.
+- Bundle is ~12–14% above the beta.3 baseline (UMD gzip 83.3KB vs 73.1KB),
+  from esbuild inlining helpers per-file where Babel imported them from
+  `@babel/runtime` — no longer a dependency, so roughly a wash for consumers.
+- `target: 'es2017'` replaces the old browserslist (`safari > 8`,
+  `not ie < 11`). Deliberate, but it is a change in published output for
+  anyone excluding `node_modules` from their own transpile.
 
 ### Phase 2 — Vitest + @testing-library/react
 
-Port `test/specs` component by component. The long pole; see landmine 3.
+The long pole; see landmine 3. Delivered as a sequence of PRs, each one green
+on its own — never a single mega-branch.
+
+**Measured shape of the corpus** (203 files, 18,833 LOC):
+
+| Area          | files | shallow | mount | both |    LOC |
+| ------------- | ----- | ------- | ----- | ---- | ------ |
+| `lib`         |    20 |       3 |     1 |    0 |  2,112 |
+| `views`       |    38 |      13 |     3 |    1 |    964 |
+| `collections` |    32 |      26 |     7 |    7 |  1,580 |
+| `elements`    |    42 |      21 |     8 |    8 |  2,062 |
+| `addons`      |    10 |       6 |     6 |    3 |  1,647 |
+| `modules`     |    46 |      20 |    21 |   13 |  8,820 |
+| `commonTests` |    14 |       — |     — |    — |  1,627 |
+
+Two numbers reframe the job. **163 of 203 files import `commonTests`** and 162
+call `isConformant`, so the shared harness is the keystone — porting it unblocks
+everything. And **85 of 189 component specs never call `shallow()` or `mount()`
+at all**; they are conformance or pure logic, and port mechanically once the
+harness lands. The genuinely hard rewrites are concentrated in `modules`, which
+is 47% of the corpus by LOC.
+
+**Mechanics.** Ported specs move to `test/unit/**`, mirroring the source tree;
+`test/specs/**` stays frozen and untouched until it is empty. Vitest only ever
+globs `test/unit`, so every PR is green and progress is legible as files
+remaining in `test/specs` — no growing include-list in the config.
+
+| PR | Scope | Why here |
+| -- | ----- | -------- |
+| 1 | Harness: vitest + jsdom + RTL, `commonTests`, `test/utils`, 2–3 proving components | Make-or-break. Decides viability of the whole phase |
+| 2 | `views` (38 files, 964 LOC) | Smallest and simplest; shakes out harness gaps cheaply |
+| 3 | `lib` (20 files, 2,112 LOC) | Nearly pure logic — 3 shallow, 1 mount |
+| 4 | `elements` (42 files) | First real shorthand/subcomponent surface |
+| 5 | `collections` (32 files) | 26 shallow files; structural assertions become behavioural |
+| 6 | `addons` (10 files) | Small but hard — Portal alone is 806 LOC |
+| 7+ | `modules`, split further | 8,820 LOC. Dropdown-test.js is 2,903 of them and gets its own PR |
+
+**`componentInfoContext` must be replaced first.** `isConformant.js` and
+`hasValidTypings.js` import it from `docs/src/utils`, which Phase 0 deleted —
+so those two files currently import a module that does not exist. They need
+`filenameWithoutExt`, `apiPath`, `displayName`, `isChild`, `parentDisplayName`
+and `repoPath`, all of which can be derived by walking `src/` and reading
+`src/index.js` at test time. Deriving it any other way reintroduces the docs
+build that landmine 4 exists to prevent.
+
+**`shallow()` has no RTL equivalent, by design.** The 93 shallow files cannot be
+ported mechanically: structural assertions (`should.have.descendants`) have to
+become behavioural ones against rendered output. Expect the assertion count to
+fall — 1,186 wrapper assertions will not map 1:1, and forcing them to would
+reproduce Enzyme's coupling to internals in a library that is about to change
+its internals in Phase 3.
 
 ### Phase 3 — React 19
 
@@ -164,9 +248,13 @@ this lands in tooling the team knows.
    personal account `aphenine`. Repo at
    `github.com/Fomantic-UI-React/react-fomantic-ui`.
 3. **npm org/scope** — even publishing unscoped, reserving a scope is cheap.
-4. **First version number.**
+4. ~~**First version number.**~~ — **resolved**: continue the v3 beta line.
+   `3.0.0-beta.5` is the first release off the new pipeline and holds `latest`.
+   Prereleases take `latest` because no stable release of this package name
+   exists; revisit when 3.0.0 ships.
 5. **Which components you actually use.** If it is eight of ~50, extracting
    those into your own design system may beat maintaining 22,340 LOC.
+   Still open, and phase 2 is where it starts to cost real money — see below.
 
 ## Upstream backlog worth harvesting
 
