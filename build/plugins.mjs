@@ -65,8 +65,14 @@ const renderImport = (specifiers, source) => {
  *
  * `moduleName` selects the package: `lodash` for CommonJS, `lodash-es` for the
  * ES and UMD builds, replacing `babel-plugin-transform-rename-import`.
+ *
+ * `lodash-es` specifiers carry an explicit `.js`: bundlers resolve the
+ * extensionless form, but native Node ESM does not, which left dist/es
+ * unloadable outside a bundler.
  */
 export function lodashCherryPick({ moduleName = 'lodash' } = {}) {
+  const extension = moduleName.endsWith('-es') ? '.js' : ''
+
   return {
     name: 'lodash-cherry-pick',
 
@@ -131,7 +137,7 @@ export function lodashCherryPick({ moduleName = 'lodash' } = {}) {
 
       const names = [...methods].sort()
       const imports = names
-        .map((name) => `import ${LODASH_PREFIX}${name} from '${moduleName}/${name}'`)
+        .map((name) => `import ${LODASH_PREFIX}${name} from '${moduleName}/${name}${extension}'`)
         .join('\n')
       const namespace = `const ${local} = { ${names
         .map((name) => `${name}: ${LODASH_PREFIX}${name}`)

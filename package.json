@@ -1,6 +1,6 @@
 {
   "name": "react-fomantic-ui",
-  "version": "3.0.0-beta.4",
+  "version": "3.0.0-beta.5",
   "description": "React components for Semantic UI / Fomantic-UI markup. Community-maintained fork of semantic-ui-react.",
   "jsnext:main": "dist/es/index.js",
   "main": "dist/commonjs/index.js",

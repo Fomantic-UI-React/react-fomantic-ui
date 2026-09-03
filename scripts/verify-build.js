@@ -13,6 +13,7 @@
 const assert = require('assert')
 const fs = require('fs')
 const path = require('path')
+const url = require('url')
 const vm = require('vm')
 
 const React = require('react')
@@ -161,4 +162,25 @@ for (const format of ['commonjs', 'es']) {
   assert.ok(declarations.length > 200, `dist/${format}: expected the .d.ts copies`)
 }
 
-console.log('build verification passed')
+// ----------------------------------------
+// Native ESM
+// ----------------------------------------
+
+// Bundlers resolve extensionless deep specifiers; node does not. Importing the
+// es build through node is the only check that catches a missing extension,
+// which is how `lodash-es/invoke` shipped unloadable for the whole 2.x line.
+import(url.pathToFileURL(dist('es', 'index.js')).href)
+  .then((es) => {
+    assert.ok(Object.keys(es).length > 150, 'dist/es did not export the component set')
+    assert.strictEqual(
+      render(React.createElement(es.Button, { primary: true }, 'Go')),
+      '<button class="ui primary button">Go</button>',
+      'dist/es did not render',
+    )
+
+    console.log('build verification passed')
+  })
+  .catch((error) => {
+    console.error(`dist/es is not loadable by node: ${error.message}`)
+    process.exit(1)
+  })
