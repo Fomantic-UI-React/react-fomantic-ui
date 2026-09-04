@@ -216,8 +216,9 @@ remaining in `test/specs` — no growing include-list in the config.
 | 6b | `addons` — Portal, TransitionablePortal | ✅ Portal is 806 LOC and was the hardest file in the corpus |
 | 7a | `modules` — 24 of 46 files | ✅ The half that needed no structural rewriting |
 | 7b | `modules` — Dimmer, DimmerInner, ModalActions, RatingIcon, TransitionGroup, Embed | ✅ 6 files, plus three harness fixes |
-| 7c | `modules` — AccordionAccordion, Checkbox, Modal, ModalDimmer, Progress, Rating, Sidebar, Sticky, Tab, Transition | 10 files of state and timing behaviour |
-| 7d | `modules` — Dropdown (2,903 LOC), Search, Popup | The three largest and most interactive |
+| 7c | `modules` — Sidebar, plus the stale `resolutions` fix | ✅ |
+| 7d | `modules` — AccordionAccordion, Checkbox, Modal, ModalDimmer, Progress, Rating, Sticky, Tab, Transition | 9 files of state and timing behaviour |
+| 7e | `modules` — Dropdown (2,903 LOC), Search, Popup | The three largest and most interactive |
 | 8 | Delete the frozen `commonTests` and `docs` originals | Phase 2 done when `test/specs` is empty |
 
 **`componentInfoContext` must be replaced first.** `isConformant.js` and
@@ -410,6 +411,27 @@ area forced out:
 silently ignored by the provider. Tracked as **issue #19**; the ported spec
 keeps the escaped expectations, with a comment, because they describe what the
 component actually does today.
+
+**Ported in PR 7c**: `Sidebar` — and a dependency bug it exposed that mattered
+far more than the file.
+
+`package.json` carried a `resolutions` block pinning `react`, `react-dom`,
+`react-is` and `react-test-renderer` to 17, alongside `react-router` and
+`react-universal-component` entries left over from the docs app Phase 0 deleted.
+Narrowing devDependencies to React 18 did not touch it, so yarn kept forcing 17
+for transitive dependents — and `@fluentui/react-component-event-listener` ended
+up with its own nested copy of React 17.
+
+Two copies of React means hooks resolve against the wrong dispatcher:
+
+```
+Invalid hook call. Hooks can only be called inside of the body of a function component.
+  at resolveDispatcher (@fluentui/react-component-event-listener/node_modules/react/...)
+```
+
+`Sidebar` is the only component that uses that package, which is why nothing
+caught it until now. The whole block is dead and is removed; `react-is` now
+resolves to 18 alongside React itself.
 
 **`shallow()` has no RTL equivalent, by design.** The 93 shallow files cannot be
 ported mechanically: structural assertions (`should.have.descendants`) have to
