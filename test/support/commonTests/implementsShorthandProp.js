@@ -28,8 +28,9 @@ const markupOf = (element) => {
 const signatureOf = (element) => {
   const { container, unmount } = render(element)
   const root = container.firstElementChild
+  const escape = (name) => (window.CSS && CSS.escape ? CSS.escape(name) : name)
   const selector = root
-    ? [root.tagName.toLowerCase(), ...Array.from(root.classList)].join('.')
+    ? [root.tagName.toLowerCase(), ...Array.from(root.classList).map(escape)].join('.')
     : null
   unmount()
 
@@ -49,6 +50,11 @@ export default (Component, options = {}) => {
   const {
     alwaysPresent,
     defaultValue,
+    // When false the component adds props of its own on top of the shorthand,
+    // so the rendered markup is a superset rather than a match. Enzyme switched
+    // from equals() to matchesElement(); here it means asserting the shorthand's
+    // element is present rather than that the markup is identical.
+    assertExactMatch = true,
     autoGenerateKey = true,
     mapValueToProps,
     parentIsFragment = false,
@@ -80,19 +86,30 @@ export default (Component, options = {}) => {
         autoGenerateKey,
       })
 
-      const expectedMarkup = markupOf(expected)
       const { container } = render(
         React.createElement(Component, { ...requiredProps, [propKey]: value }),
       )
       // A portal renders outside its container, so the whole document is the
-      // only place the markup is guaranteed to appear.
-      const actualMarkup = rendersPortal ? document.body.innerHTML : container.innerHTML
+      // only place the output is guaranteed to appear.
+      const scope = rendersPortal ? document.body : container
+
+      if (!assertExactMatch) {
+        const selector = signatureOf(expected)
+
+        expect(
+          selector && scope.querySelector(selector),
+          `<${getComponentName(Component)} ${propKey}={...} /> did not render a ${name} ` +
+            `matching "${selector}"`,
+        ).not.toBeNull()
+
+        return
+      }
 
       expect(
-        actualMarkup,
+        scope.innerHTML,
         `<${getComponentName(Component)} ${propKey}={...} /> did not render the same markup as ` +
           `createShorthand(${name}, ...) produced on its own`,
-      ).toContain(expectedMarkup)
+      ).toContain(markupOf(expected))
     }
 
     if (alwaysPresent) {

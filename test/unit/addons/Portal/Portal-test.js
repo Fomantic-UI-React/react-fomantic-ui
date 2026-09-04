@@ -392,8 +392,9 @@ describe('Portal', () => {
      *          ^: final validation
      */
     it('does not open the portal when leave before delay', async () => {
-      const DELAY = 20
-      const BEFORE_DELAY = 10
+      // Real timers: wide margins so a loaded CI runner cannot overshoot.
+      const DELAY = 200
+      const BEFORE_DELAY = 20
 
       const { container } = render(
         <Portal trigger={<button />} openOnTriggerMouseEnter mouseEnterDelay={DELAY}>
@@ -451,8 +452,9 @@ describe('Portal', () => {
      *             ^: final validation
      */
     it('does not close the portal when reenter before delay', async () => {
-      const DELAY = 20
-      const BEFORE_DELAY = 10
+      // Real timers: wide margins so a loaded CI runner cannot overshoot.
+      const DELAY = 200
+      const BEFORE_DELAY = 20
 
       const { container } = render(
         <Portal
@@ -527,7 +529,11 @@ describe('Portal', () => {
 
   describe('closeOnTriggerMouseLeave + closeOnPortalMouseLeave', () => {
     it('closes the portal on trigger mouseleave even when portal receives mouseenter within limit', async () => {
-      const delay = 10
+      // Heads up! These delays are real timers, so the margins have to be wide
+      // enough to survive a loaded CI runner. `delay - 1` against a 10ms timer
+      // is a coin flip.
+      const delay = 200
+      const withinDelay = 20
       const { container } = render(
         <Portal trigger={<button />} defaultOpen closeOnTriggerMouseLeave mouseLeaveDelay={delay}>
           {portalChild({ id: 'inner' })}
@@ -539,16 +545,19 @@ describe('Portal', () => {
 
       // Enter the portal inside the delay. Without closeOnPortalMouseLeave that
       // does not cancel the pending close.
-      await wait(delay - 1)
-      fireEvent.mouseEnter(document.getElementById('inner'))
+      await wait(withinDelay)
+      const inner = document.getElementById('inner')
+      expect(inner, 'the portal closed before the mouseenter could be fired').not.toBeNull()
+      fireEvent.mouseEnter(inner)
 
-      await wait(delay + 5)
+      await wait(delay)
 
       expect(isOpen()).toBe(false)
     })
 
     it('does not close the portal on trigger mouseleave when portal receives mouseenter within limit', async () => {
-      const delay = 10
+      const delay = 200
+      const withinDelay = 20
       const { container } = render(
         <Portal
           trigger={<button />}
@@ -564,10 +573,12 @@ describe('Portal', () => {
 
       fireEvent.mouseLeave(container.querySelector('button'))
 
-      await wait(delay - 1)
-      fireEvent.mouseEnter(document.getElementById('inner'))
+      await wait(withinDelay)
+      const inner = document.getElementById('inner')
+      expect(inner, 'the portal closed before the mouseenter could be fired').not.toBeNull()
+      fireEvent.mouseEnter(inner)
 
-      await wait(delay + 5)
+      await wait(delay)
 
       expect(isOpen()).toBe(true)
     })
