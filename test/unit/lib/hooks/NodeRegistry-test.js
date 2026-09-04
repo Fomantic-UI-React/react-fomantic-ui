@@ -1,26 +1,28 @@
 import { NodeRegistry } from 'src/lib/hooks/useClassNamesOnNode'
-import { sandbox } from 'test/utils'
 
 describe('NodeRegistry', () => {
   it('is a class', () => {
-    expect(NodeRegistry).to.be.a('function')
+    expect(NodeRegistry).toBeTypeOf('function')
   })
 
   describe('add', () => {
     it('adds different components to same node', () => {
-      const handler = sandbox.spy()
+      const handler = vi.fn()
       const registry = new NodeRegistry()
 
       registry.add('foo', 'FooComponent')
       registry.add('foo', 'BarComponent')
 
       registry.emit('foo', handler)
-      handler.should.have.been.calledOnce()
-      handler.should.have.been.calledWithMatch('foo', new Set(['FooComponent', 'BarComponent']))
+      expect(handler).toHaveBeenCalledTimes(1)
+      expect(handler).toHaveBeenCalledWith(
+        expect.stringContaining('foo'),
+        new Set(['FooComponent', 'BarComponent']),
+      )
     })
 
     it('adds components to different nodes node', () => {
-      const handler = sandbox.spy()
+      const handler = vi.fn()
       const registry = new NodeRegistry()
 
       registry.add('foo', 'FooComponent')
@@ -29,19 +31,25 @@ describe('NodeRegistry', () => {
       registry.add('bar', 'QuxComponent')
 
       registry.emit('foo', handler)
-      handler.should.have.been.calledOnce()
-      handler.should.have.been.calledWithMatch('foo', new Set(['FooComponent', 'BarComponent']))
-      handler.resetHistory()
+      expect(handler).toHaveBeenCalledTimes(1)
+      expect(handler).toHaveBeenCalledWith(
+        expect.stringContaining('foo'),
+        new Set(['FooComponent', 'BarComponent']),
+      )
+      handler.mockClear()
 
       registry.emit('bar', handler)
-      handler.should.have.been.calledOnce()
-      handler.should.have.been.calledWithMatch('bar', new Set(['BazComponent', 'QuxComponent']))
+      expect(handler).toHaveBeenCalledTimes(1)
+      expect(handler).toHaveBeenCalledWith(
+        expect.stringContaining('bar'),
+        new Set(['BazComponent', 'QuxComponent']),
+      )
     })
   })
 
   describe('del', () => {
     it('deletes only specified component', () => {
-      const handler = sandbox.spy()
+      const handler = vi.fn()
       const registry = new NodeRegistry()
 
       registry.add('foo', 'FooComponent')
@@ -49,12 +57,15 @@ describe('NodeRegistry', () => {
       registry.del('foo', 'FooComponent')
 
       registry.emit('foo', handler)
-      handler.should.have.been.calledOnce()
-      handler.should.have.been.calledWithMatch('foo', new Set(['BarComponent']))
+      expect(handler).toHaveBeenCalledTimes(1)
+      expect(handler).toHaveBeenCalledWith(
+        expect.stringContaining('foo'),
+        new Set(['BarComponent']),
+      )
     })
 
     it('deletes node when all components are deleted', () => {
-      const handler = sandbox.spy()
+      const handler = vi.fn()
       const registry = new NodeRegistry()
 
       registry.add('foo', 'FooComponent')
@@ -63,19 +74,19 @@ describe('NodeRegistry', () => {
       registry.del('foo', 'BarComponent')
 
       registry.emit('foo', handler)
-      handler.should.have.been.calledOnce()
-      handler.should.have.been.calledWithMatch('foo', undefined)
+      expect(handler).toHaveBeenCalledTimes(1)
+      expect(handler).toHaveBeenCalledWith(expect.stringContaining('foo'), undefined)
     })
 
     it('passes when unexisting nodeRef is passed', () => {
-      const handler = sandbox.spy()
+      const handler = vi.fn()
       const registry = new NodeRegistry()
 
       registry.del('foo', 'FooComponent')
       registry.emit('foo', handler)
 
-      handler.should.have.been.calledOnce()
-      handler.should.have.been.calledWithMatch('foo', undefined)
+      expect(handler).toHaveBeenCalledTimes(1)
+      expect(handler).toHaveBeenCalledWith(expect.stringContaining('foo'), undefined)
     })
   })
 })
