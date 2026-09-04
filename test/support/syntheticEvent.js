@@ -67,8 +67,16 @@ export const fireEventName = (listenerName) => {
  */
 const VALUE_DRIVEN = new Set(['onChange', 'onInput'])
 
-export const fireEventInit = (listenerName) =>
-  VALUE_DRIVEN.has(listenerName) ? { target: { value: 'conformance' } } : undefined
+const HAS_VALUE = new Set(['INPUT', 'TEXTAREA', 'SELECT'])
+
+export const fireEventInit = (listenerName, target) => {
+  if (!VALUE_DRIVEN.has(listenerName)) return undefined
+  // Only form controls have a value setter; firing `change` with a value on a
+  // wrapper element throws in testing-library.
+  if (!target || !HAS_VALUE.has(target.tagName)) return undefined
+
+  return { target: { value: 'conformance' } }
+}
 
 /** Every listener whose event testing-library can actually dispatch. */
 export const dispatchableListeners = _.flatMap(types, ({ listeners }) => listeners).filter(
