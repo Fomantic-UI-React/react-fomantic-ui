@@ -1,7 +1,8 @@
+import { root } from 'test/support/rtl'
 import React from 'react'
 
 import TabPane from 'src/modules/Tab/TabPane'
-import * as common from 'test/specs/commonTests'
+import * as common from 'test/support/commonTests'
 
 describe('TabPane', () => {
   common.isConformant(TabPane)
@@ -13,6 +14,6 @@ describe('TabPane', () => {
   common.propKeyOnlyToClassName(TabPane, 'loading')
 
   it('renders a Segment by default', () => {
-    shallow(<TabPane />).should.match('Segment')
+    expect(root(<TabPane />)).toHaveClass('segment')
   })
 })

@@ -1,5 +1,5 @@
 import AccordionContent from 'src/modules/Accordion/AccordionContent'
-import * as common from 'test/specs/commonTests'
+import * as common from 'test/support/commonTests'
 
 describe('AccordionContent', () => {
   common.isConformant(AccordionContent)

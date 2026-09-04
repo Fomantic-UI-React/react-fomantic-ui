@@ -1,5 +1,5 @@
 import SidebarPusher from 'src/modules/Sidebar/SidebarPusher'
-import * as common from 'test/specs/commonTests'
+import * as common from 'test/support/commonTests'
 
 describe('SidebarPusher', () => {
   common.isConformant(SidebarPusher)

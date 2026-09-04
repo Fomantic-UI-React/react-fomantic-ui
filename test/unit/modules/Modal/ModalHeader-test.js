@@ -1,5 +1,5 @@
 import ModalHeader from 'src/modules/Modal/ModalHeader'
-import * as common from 'test/specs/commonTests'
+import * as common from 'test/support/commonTests'
 
 describe('ModalHeader', () => {
   common.isConformant(ModalHeader)

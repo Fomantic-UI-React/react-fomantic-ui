@@ -1,7 +1,8 @@
+import { root } from 'test/support/rtl'
 import React from 'react'
 
 import SearchCategory from 'src/modules/Search/SearchCategory'
-import * as common from 'test/specs/commonTests'
+import * as common from 'test/support/commonTests'
 
 describe('SearchCategory', () => {
   common.isConformant(SearchCategory)
@@ -10,15 +11,11 @@ describe('SearchCategory', () => {
 
   describe('children', () => {
     it('should be a child with a "name" className', () => {
-      shallow(<SearchCategory />)
-        .childAt(0)
-        .should.have.className('name')
+      expect(root(<SearchCategory />).children[0]).toHaveClass('name')
     })
 
     it('should be wrapped with a "results" className', () => {
-      shallow(<SearchCategory />)
-        .childAt(1)
-        .should.have.className('results')
+      expect(root(<SearchCategory />).children[1]).toHaveClass('results')
     })
   })
 })

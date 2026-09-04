@@ -12,7 +12,7 @@ describe('getLegacyStyles', () => {
       { centered: false, fitted: true, result: { marginTop: 0, marginLeft: -50 } },
       { centered: true, fitted: true, result: { marginTop: -100, marginLeft: -50 } },
     ].forEach(({ centered, fitted, result }) => {
-      getLegacyStyles(centered, fitted, rectMock).should.be.deep.equal(result)
+      expect(getLegacyStyles(centered, fitted, rectMock)).toEqual(result)
     })
   })
 })

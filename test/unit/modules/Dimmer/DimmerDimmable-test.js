@@ -1,5 +1,5 @@
 import DimmerDimmable from 'src/modules/Dimmer/DimmerDimmable'
-import * as common from 'test/specs/commonTests'
+import * as common from 'test/support/commonTests'
 
 describe('DimmerDimmable', () => {
   common.isConformant(DimmerDimmable)
