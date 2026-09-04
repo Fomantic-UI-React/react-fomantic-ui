@@ -129,7 +129,10 @@ export default function isConformant(Component, options = {}) {
       })
 
       it('renders as a function component', () => {
-        const MyComponent = vi.fn(() => <div data-my-component />)
+        // The fixture renders its children: a component given to `as` is
+        // standing in for the element the component would have rendered, and
+        // some components (Sticky) measure the children they put inside it.
+        const MyComponent = vi.fn(({ children }) => <div data-my-component>{children}</div>)
         const { container } = render(<Component {...requiredProps} as={MyComponent} />)
 
         expect(MyComponent).toHaveBeenCalled()
@@ -140,7 +143,7 @@ export default function isConformant(Component, options = {}) {
         // eslint-disable-next-line react/prefer-stateless-function
         class MyComponent extends React.Component {
           render() {
-            return <div data-my-react-class />
+            return <div data-my-react-class>{this.props.children}</div>
           }
         }
 

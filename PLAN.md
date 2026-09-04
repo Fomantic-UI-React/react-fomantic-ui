@@ -220,8 +220,9 @@ remaining in `test/specs` — no growing include-list in the config.
 | 7d | `modules` — AccordionAccordion, ModalDimmer, Progress | ✅ |
 | 7e | `modules` — Checkbox, Rating | ✅ |
 | 7f | `modules` — Modal | ✅ |
-| 7g | `modules` — Sticky, Tab, Transition | 3 files of state and timing behaviour |
-| 7h | `modules` — Dropdown (2,903 LOC), Search, Popup | The three largest and most interactive |
+| 7g | `modules` — Sticky | ✅ |
+| 7h | `modules` — Tab, Transition | 2 files of state and timing behaviour |
+| 7i | `modules` — Dropdown (2,903 LOC), Search, Popup | The three largest and most interactive |
 | 8 | Delete the frozen `commonTests` and `docs` originals | Phase 2 done when `test/specs` is empty |
 
 **`componentInfoContext` must be replaced first.** `isConformant.js` and
@@ -477,6 +478,19 @@ unmounts explicitly rather than relying on a stale wrapper. And `ModalDimmer`'s
 `blurring`, `inverted` and `scrolling` are props that become *classes* — some on
 the dimmer, some on the mount node — so asserting them as attributes was wrong
 in three places.
+
+**Ported in PR 7g** (`Sticky`): the hardest kind of file so far, because the
+behaviour under test is driven entirely by layout measurements that jsdom does
+not compute. The frozen spec already stubbed `getBoundingClientRect` on the
+trigger and sticky elements; the port keeps that approach and reaches those
+elements through the DOM rather than through an Enzyme wrapper.
+
+It also forced a fix in `isConformant`. The `as`-prop fixtures rendered
+`<div data-my-component />` and **dropped their children**, which is fine for a
+component that only spreads props but not for one that measures what it puts
+inside. Enzyme's `shallow()` never rendered deeply enough to notice. The
+fixtures now render `children`, which is both what an `as` component should do
+and what the assertion is really about.
 
 **`shallow()` has no RTL equivalent, by design.** The 93 shallow files cannot be
 ported mechanically: structural assertions (`should.have.descendants`) have to
