@@ -1,8 +1,9 @@
+import { root } from 'test/support/rtl'
+import { fireEvent } from '@testing-library/react'
 import React from 'react'
 
 import SearchResult from 'src/modules/Search/SearchResult'
-import * as common from 'test/specs/commonTests'
-import { sandbox } from 'test/utils'
+import * as common from 'test/support/commonTests'
 
 const requiredProps = { title: '' }
 
@@ -13,11 +14,12 @@ describe('SearchResult', () => {
 
   describe('onClick', () => {
     it('is called with (e, data) when clicked', () => {
-      const onClick = sandbox.spy()
-      mount(<SearchResult onClick={onClick} {...requiredProps} />).simulate('click')
+      const onClick = vi.fn()
+      fireEvent.click(root(<SearchResult onClick={onClick} {...requiredProps} />))
 
-      onClick.should.have.been.calledOnce()
-      onClick.should.have.been.calledWithMatch({ type: 'click' }, requiredProps)
+      expect(onClick).toHaveBeenCalledTimes(1)
+      expect(onClick.mock.calls[0][0]).toMatchObject({ type: 'click' })
+      expect(onClick.mock.calls[0][1]).toMatchObject(requiredProps)
     })
   })
 })

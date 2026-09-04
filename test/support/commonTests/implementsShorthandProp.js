@@ -98,13 +98,10 @@ export default (Component, options = {}) => {
     if (alwaysPresent) {
       it(`has default ${name} when not defined`, () => {
         consoleUtil.disableOnce()
-        const selector = signatureOf(
-          createShorthand(ShorthandComponent, mapValueToProps, 'x', {
-            defaultProps: shorthandDefaultProps,
-            overrideProps: shorthandOverrideProps,
-            autoGenerateKey,
-          }),
-        )
+        // The default is whatever the component chooses, so the selector has to
+        // come from the bare shorthand component rather than from one built
+        // around an arbitrary value.
+        const selector = signatureOf(React.createElement(ShorthandComponent, shorthandDefaultProps))
         const { container } = render(React.createElement(Component, requiredProps))
 
         expect(selector && container.querySelector(selector)).not.toBeNull()

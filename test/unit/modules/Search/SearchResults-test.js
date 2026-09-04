@@ -1,5 +1,5 @@
 import SearchResults from 'src/modules/Search/SearchResults'
-import * as common from 'test/specs/commonTests'
+import * as common from 'test/support/commonTests'
 
 describe('SearchResults', () => {
   common.isConformant(SearchResults)

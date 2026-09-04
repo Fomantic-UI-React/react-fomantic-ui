@@ -1,5 +1,5 @@
 import PopupContent from 'src/modules/Popup/PopupContent'
-import * as common from 'test/specs/commonTests'
+import * as common from 'test/support/commonTests'
 
 describe('PopupContent', () => {
   common.isConformant(PopupContent)

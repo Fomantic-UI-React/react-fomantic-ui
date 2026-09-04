@@ -1,5 +1,5 @@
 import ModalContent from 'src/modules/Modal/ModalContent'
-import * as common from 'test/specs/commonTests'
+import * as common from 'test/support/commonTests'
 
 describe('ModalContent', () => {
   common.isConformant(ModalContent)

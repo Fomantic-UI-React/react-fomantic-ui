@@ -1,5 +1,5 @@
 import DropdownMenu from 'src/modules/Dropdown/DropdownMenu'
-import * as common from 'test/specs/commonTests'
+import * as common from 'test/support/commonTests'
 
 describe('DropdownMenu', () => {
   common.isConformant(DropdownMenu)

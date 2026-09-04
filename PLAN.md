@@ -214,7 +214,10 @@ remaining in `test/specs` — no growing include-list in the config.
 | 5 | `collections` (32 files) | ✅ 26 shallow files; structural assertions become behavioural |
 | 6 | `addons` — 8 of 10 files | ✅ Small but hard |
 | 6b | `addons` — Portal, TransitionablePortal | ✅ Portal is 806 LOC and was the hardest file in the corpus |
-| 7+ | `modules`, split further | 8,820 LOC. Dropdown-test.js is 2,903 of them and gets its own PR |
+| 7a | `modules` — 24 of 46 files | ✅ The half that needed no structural rewriting |
+| 7b | `modules` — Accordion, Checkbox, Dimmer, Embed, Modal, Progress, Rating, Sidebar, Sticky, Tab, Transition | 20 files, all with real Enzyme state or timing behaviour |
+| 7c | `modules` — Dropdown (2,903 LOC), Search, Popup | The three largest and most interactive |
+| 8 | Delete the frozen `commonTests` and `docs` originals | Phase 2 done when `test/specs` is empty |
 
 **`componentInfoContext` must be replaced first.** `isConformant.js` and
 `hasValidTypings.js` import it from `docs/src/utils`, which Phase 0 deleted —
@@ -378,6 +381,17 @@ Its unhandled props go to `Portal`, which renders no element of its own. The
 Enzyme check passed because it read the element tree, where the prop sits
 plainly on the `Portal` element. Tracked as **issue #16**; `isConformant` gained
 a `spreadsUserProps` option so the exception is explicit rather than silent.
+
+**Ported in PR 7a** (`modules`, 24 of 46): 18 files came through the codemod
+untouched and six needed small rewrites. The remainder are held back because
+they test state machines and timing — Dropdown's keyboard navigation, Transition's
+animation lifecycle, Sticky's scroll handling — rather than rendered output.
+
+One harness bug surfaced: `implementsShorthandProp`'s `alwaysPresent` check built
+its selector from a shorthand carrying an arbitrary value, so it looked for
+`i.x.icon` when `AccordionTitle` renders `i.dropdown.icon` by default. It now
+takes the signature from the bare shorthand component, which is what "has a
+default" actually means.
 
 **`shallow()` has no RTL equivalent, by design.** The 93 shallow files cannot be
 ported mechanically: structural assertions (`should.have.descendants`) have to

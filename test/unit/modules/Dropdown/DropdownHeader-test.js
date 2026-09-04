@@ -1,5 +1,5 @@
 import DropdownHeader from 'src/modules/Dropdown/DropdownHeader'
-import * as common from 'test/specs/commonTests'
+import * as common from 'test/support/commonTests'
 
 describe('DropdownHeader', () => {
   common.isConformant(DropdownHeader)

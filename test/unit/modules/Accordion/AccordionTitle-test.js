@@ -1,8 +1,9 @@
+import { root } from 'test/support/rtl'
+import { fireEvent } from '@testing-library/react'
 import React from 'react'
 
 import AccordionTitle from 'src/modules/Accordion/AccordionTitle'
-import * as common from 'test/specs/commonTests'
-import { sandbox } from 'test/utils'
+import * as common from 'test/support/commonTests'
 
 describe('AccordionTitle', () => {
   common.isConformant(AccordionTitle)
@@ -19,14 +20,14 @@ describe('AccordionTitle', () => {
 
   describe('onClick', () => {
     it('is called with (e, { name, index }) when clicked', () => {
-      const onClick = sandbox.spy()
-      const event = { target: null }
+      const onClick = vi.fn()
       const props = { content: 'title', index: 0 }
 
-      mount(<AccordionTitle onClick={onClick} {...props} />).simulate('click', event)
+      fireEvent.click(root(<AccordionTitle onClick={onClick} {...props} />))
 
-      onClick.should.have.been.calledOnce()
-      onClick.should.have.been.calledWithMatch(event, props)
+      expect(onClick).toHaveBeenCalledTimes(1)
+      expect(onClick.mock.calls[0][0]).toMatchObject({ type: 'click' })
+      expect(onClick.mock.calls[0][1]).toMatchObject(props)
     })
   })
 })

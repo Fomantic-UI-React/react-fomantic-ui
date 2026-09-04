@@ -6,7 +6,7 @@ describe('createReferenceProxy', () => {
     const node = document.createElement('div')
     const proxy = createReferenceProxy(node)
 
-    expect(proxy.getBoundingClientRect()).to.include({ height: 0, width: 0 })
+    expect(proxy.getBoundingClientRect()).toMatchObject({ height: 0, width: 0 })
   })
 
   it('handles ref objects', () => {
@@ -14,6 +14,6 @@ describe('createReferenceProxy', () => {
     const proxy = createReferenceProxy(ref)
 
     ref.current = document.createElement('div')
-    expect(proxy.getBoundingClientRect()).to.include({ height: 0, width: 0 })
+    expect(proxy.getBoundingClientRect()).toMatchObject({ height: 0, width: 0 })
   })
 })
