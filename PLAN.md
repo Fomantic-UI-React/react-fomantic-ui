@@ -211,7 +211,7 @@ remaining in `test/specs` — no growing include-list in the config.
 | 3 | `lib` (20 files, 2,112 LOC) | ✅ Nearly pure logic — and where the port tooling got built |
 | 4 | `elements` — 37 of 42 files | ✅ First real shorthand/subcomponent surface |
 | 4b | `elements` — Button, Input, List, ListItem, Label | ✅ The five heaviest: 94 Enzyme call sites between them |
-| 5 | `collections` (32 files) | 26 shallow files; structural assertions become behavioural |
+| 5 | `collections` (32 files) | ✅ 26 shallow files; structural assertions become behavioural |
 | 6 | `addons` (10 files) | Small but hard — Portal alone is 806 LOC |
 | 7+ | `modules`, split further | 8,820 LOC. Dropdown-test.js is 2,903 of them and gets its own PR |
 
@@ -332,6 +332,21 @@ change a value, so the conformance check reported every form component's
 Two jsdom differences to remember: `window.getSelection()` does not reflect an
 input's selection (assert `selectionStart`/`selectionEnd`), and React writes
 `defaultValue` out as the `value` attribute.
+
+**Ported in PR 5** (`collections`): the pre-pass did most of it — only 17 of 32
+files needed a hand, and 7 of those shared one pattern (`FormButton` and
+friends asserting `control={X}` on the FormField they render, which becomes the
+markup that control produces).
+
+Two things were dropped rather than translated, both deliberately:
+
+- **`Form`'s "passes all args to onSubmit".** Enzyme's `simulate(event, ...args)`
+  could inject extra arguments into a handler. React never passes more than the
+  event to a DOM handler, so the test asserted something unreachable in a
+  browser.
+- **`Menu`'s shared wrapper.** The `items` block mounted once outside its tests
+  and shared the result, so the click assertions depended on execution order.
+  Each test renders its own now, which is why there are two more of them.
 
 **`shallow()` has no RTL equivalent, by design.** The 93 shallow files cannot be
 ported mechanically: structural assertions (`should.have.descendants`) have to
