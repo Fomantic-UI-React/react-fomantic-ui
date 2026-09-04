@@ -39,6 +39,9 @@ export default function isConformant(Component, options = {}) {
 
   const constructorName = getComponentName(Component)
   const asProp = rendersFragmentByDefault ? 'div' : undefined
+  // A portal renders nothing until it is open. The Enzyme harness opened these
+  // with setProps({ open: true }); rendering them open is the same thing.
+  const portalProps = rendersPortal ? { open: true } : {}
 
   it('is a valid component', () => {
     expect(ReactIs.isValidElementType(Component)).toBe(true)
@@ -91,10 +94,12 @@ export default function isConformant(Component, options = {}) {
     it('spreads user props', () => {
       const propName = 'data-is-conformant-spread-props'
       const { container } = render(
-        <Component as={asProp} {...requiredProps} {...{ [propName]: true }} />,
+        <Component as={asProp} {...requiredProps} {...portalProps} {...{ [propName]: true }} />,
       )
+      // Portal-powered components render outside their container.
+      const scope = rendersPortal ? document.body : container
 
-      expect(container.querySelector(`[${propName}]`)).not.toBeNull()
+      expect(scope.querySelector(`[${propName}]`)).not.toBeNull()
     })
   }
 

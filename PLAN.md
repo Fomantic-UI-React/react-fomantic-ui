@@ -212,7 +212,8 @@ remaining in `test/specs` — no growing include-list in the config.
 | 4 | `elements` — 37 of 42 files | ✅ First real shorthand/subcomponent surface |
 | 4b | `elements` — Button, Input, List, ListItem, Label | ✅ The five heaviest: 94 Enzyme call sites between them |
 | 5 | `collections` (32 files) | ✅ 26 shallow files; structural assertions become behavioural |
-| 6 | `addons` (10 files) | Small but hard — Portal alone is 806 LOC |
+| 6 | `addons` — 8 of 10 files | ✅ Small but hard |
+| 6b | `addons` — Portal, TransitionablePortal | Portal is 806 LOC and the hardest file in the corpus: portal rendering, document-level event handling, escape and scroll behaviour |
 | 7+ | `modules`, split further | 8,820 LOC. Dropdown-test.js is 2,903 of them and gets its own PR |
 
 **`componentInfoContext` must be replaced first.** `isConformant.js` and
@@ -347,6 +348,18 @@ Two things were dropped rather than translated, both deliberately:
 - **`Menu`'s shared wrapper.** The `items` block mounted once outside its tests
   and shared the result, so the click assertions depended on execution order.
   Each test renders its own now, which is why there are two more of them.
+
+**Ported in PR 6** (`addons`, 8 of 10): the harness learned about portals here.
+`isConformant` and `implementsShorthandProp` both assumed a component renders
+inside its own container; a portal renders into `document.body` and renders
+nothing at all until it is open. Both now take `rendersPortal` seriously —
+querying the document, and rendering with `open` — which the Enzyme harness did
+via `setProps({ open: true })` and the first port had quietly dropped.
+
+`Confirm` is the clearest example of what that changes: its tests `shallow()`d a
+Modal and asserted on the element tree, so nothing was ever rendered. They now
+open the Confirm and assert against the modal in the document, which is what a
+user sees.
 
 **`shallow()` has no RTL equivalent, by design.** The 93 shallow files cannot be
 ported mechanically: structural assertions (`should.have.descendants`) have to
