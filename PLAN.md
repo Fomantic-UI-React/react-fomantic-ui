@@ -213,7 +213,7 @@ remaining in `test/specs` — no growing include-list in the config.
 | 4b | `elements` — Button, Input, List, ListItem, Label | ✅ The five heaviest: 94 Enzyme call sites between them |
 | 5 | `collections` (32 files) | ✅ 26 shallow files; structural assertions become behavioural |
 | 6 | `addons` — 8 of 10 files | ✅ Small but hard |
-| 6b | `addons` — Portal, TransitionablePortal | Portal is 806 LOC and the hardest file in the corpus: portal rendering, document-level event handling, escape and scroll behaviour |
+| 6b | `addons` — Portal, TransitionablePortal | ✅ Portal is 806 LOC and was the hardest file in the corpus |
 | 7+ | `modules`, split further | 8,820 LOC. Dropdown-test.js is 2,903 of them and gets its own PR |
 
 **`componentInfoContext` must be replaced first.** `isConformant.js` and
@@ -360,6 +360,24 @@ via `setProps({ open: true })` and the first port had quietly dropped.
 Modal and asserted on the element tree, so nothing was ever rendered. They now
 open the Confirm and assert against the modal in the document, which is what a
 user sees.
+
+**Ported in PR 6b**: `Portal` asked `wrapper.should.have.descendants(PortalInner)`
+59 times — a question about the element tree. The DOM equivalent is whether the
+portal's child is in the document, so the ported spec marks its children and
+asks that instead. Everything else falls out of it: `setProps` becomes
+`rerender`, `domEvent.click(document)` becomes `fireEvent.click(document)`, and
+the mouse-delay tests keep real timers because that is what they are testing.
+
+One assertion changed shape rather than target. "does not call this.setState()
+if portal is unmounted" spied on the Enzyme wrapper's `setState`; there is no
+wrapper now, so it asserts the observable symptom instead — React's warning
+about updating an unmounted component.
+
+**Third bug found**: `TransitionablePortal` never spreads user props to the DOM.
+Its unhandled props go to `Portal`, which renders no element of its own. The
+Enzyme check passed because it read the element tree, where the prop sits
+plainly on the `Portal` element. Tracked as **issue #16**; `isConformant` gained
+a `spreadsUserProps` option so the exception is explicit rather than silent.
 
 **`shallow()` has no RTL equivalent, by design.** The 93 shallow files cannot be
 ported mechanically: structural assertions (`should.have.descendants`) have to
