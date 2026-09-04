@@ -215,8 +215,9 @@ remaining in `test/specs` — no growing include-list in the config.
 | 6 | `addons` — 8 of 10 files | ✅ Small but hard |
 | 6b | `addons` — Portal, TransitionablePortal | ✅ Portal is 806 LOC and was the hardest file in the corpus |
 | 7a | `modules` — 24 of 46 files | ✅ The half that needed no structural rewriting |
-| 7b | `modules` — Accordion, Checkbox, Dimmer, Embed, Modal, Progress, Rating, Sidebar, Sticky, Tab, Transition | 20 files, all with real Enzyme state or timing behaviour |
-| 7c | `modules` — Dropdown (2,903 LOC), Search, Popup | The three largest and most interactive |
+| 7b | `modules` — Dimmer, DimmerInner, ModalActions, RatingIcon, TransitionGroup, Embed | ✅ 6 files, plus three harness fixes |
+| 7c | `modules` — AccordionAccordion, Checkbox, Modal, ModalDimmer, Progress, Rating, Sidebar, Sticky, Tab, Transition | 10 files of state and timing behaviour |
+| 7d | `modules` — Dropdown (2,903 LOC), Search, Popup | The three largest and most interactive |
 | 8 | Delete the frozen `commonTests` and `docs` originals | Phase 2 done when `test/specs` is empty |
 
 **`componentInfoContext` must be replaced first.** `isConformant.js` and
@@ -392,6 +393,23 @@ its selector from a shorthand carrying an arbitrary value, so it looked for
 `i.x.icon` when `AccordionTitle` renders `i.dropdown.icon` by default. It now
 takes the signature from the bare shorthand component, which is what "has a
 default" actually means.
+
+**Ported in PR 7b**: six files, and three fixes to the shared harness that the
+area forced out:
+
+- `implementsShorthandProp` ignored `assertExactMatch`. Where a component adds
+  props of its own on top of the shorthand — `Embed` does — the rendered markup
+  is a superset, not a match, and the exact comparison was wrong.
+- Its `alwaysPresent` check built a selector from an arbitrary value.
+- `signatureOf` produced invalid CSS when a class name starts with a digit
+  (`<Icon name={123} />`), which the selector now escapes.
+
+**Fourth bug found**: `Embed` builds its iframe URL with `&amp;` rather than
+`&`. React sets attributes verbatim, so the parameters come out named
+`amp;autoplay`, `amp;color` and so on, and every option after the first is
+silently ignored by the provider. Tracked as **issue #19**; the ported spec
+keeps the escaped expectations, with a comment, because they describe what the
+component actually does today.
 
 **`shallow()` has no RTL equivalent, by design.** The 93 shallow files cannot be
 ported mechanically: structural assertions (`should.have.descendants`) have to

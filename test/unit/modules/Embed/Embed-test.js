@@ -1,15 +1,20 @@
+import { dom, root } from 'test/support/rtl'
+import { fireEvent } from '@testing-library/react'
 import React from 'react'
 
 import Embed from 'src/modules/Embed/Embed'
-import * as common from 'test/specs/commonTests'
+import * as common from 'test/support/commonTests'
 
 const assertIframeSrc = (props, srcPart) => {
   const { id = 'default-test-id', source = 'youtube', ...rest } = props
 
-  shallow(<Embed active id={id} source={source} {...rest} />)
-    .find('iframe')
-    .should.have.attr('src')
-    .which.contains(srcPart)
+  const iframe = dom(<Embed active id={id} source={source} {...rest} />).querySelector('iframe')
+
+  // Heads up! These expectations contain `&amp;` because Embed really does
+  // build its URL that way, which means every parameter after the first is
+  // named "amp;autoplay" and is ignored by the provider. See issue #19 —
+  // change these to `&` as part of the fix, they are the regression test.
+  expect(iframe.getAttribute('src')).toContain(srcPart)
 }
 
 describe('Embed', () => {
@@ -47,21 +52,21 @@ describe('Embed', () => {
 
   describe('active', () => {
     it('defaults to false', () => {
-      mount(<Embed />).should.have.not.className('active')
+      expect(root(<Embed />)).not.toHaveClass('active')
     })
 
     it('applies className', () => {
-      mount(<Embed active />).should.have.className('active')
+      expect(root(<Embed active />)).toHaveClass('active')
     })
 
     it('renders nothing when false', () => {
-      const wrapper = mount(
+      const container = dom(
         <Embed>
           <p id='foo' />
         </Embed>,
       )
 
-      wrapper.should.not.have.descendants('#foo')
+      expect(container.querySelector('#foo')).toBeNull()
     })
   })
 
@@ -93,8 +98,8 @@ describe('Embed', () => {
 
   describe('defaultActive', () => {
     it('sets the initial active state', () => {
-      mount(<Embed defaultActive />).should.have.className('active')
-      mount(<Embed defaultActive={false} />).should.have.not.className('active')
+      expect(root(<Embed defaultActive />)).toHaveClass('active')
+      expect(root(<Embed defaultActive={false} />)).not.toHaveClass('active')
     })
   })
 
@@ -107,31 +112,34 @@ describe('Embed', () => {
 
   describe('placeholder', () => {
     it('omitted by default', () => {
-      shallow(<Embed />)
-        .find('img.placeholder')
-        .should.have.length(0)
+      expect(dom(<Embed />).querySelectorAll('img.placeholder')).toHaveLength(0)
     })
 
     it('renders img when defined', () => {
       const url = '/images/wireframe/image.png'
 
-      shallow(<Embed placeholder={url} />).should.contain(<img className='placeholder' src={url} />)
+      expect(dom(<Embed placeholder={url} />).querySelector('img.placeholder')).toHaveAttribute(
+        'src',
+        url,
+      )
     })
   })
 
   describe('onClick', () => {
     it('sets to active state', () => {
-      const wrapper = mount(<Embed />)
+      const embed = root(<Embed />)
 
-      wrapper.simulate('click')
-      wrapper.should.have.className('active')
+      fireEvent.click(embed)
+
+      expect(embed).toHaveClass('active')
     })
 
     it('skips state update if active', () => {
-      const wrapper = mount(<Embed active />)
+      const embed = root(<Embed active />)
 
-      wrapper.simulate('click')
-      wrapper.should.have.className('active')
+      fireEvent.click(embed)
+
+      expect(embed).toHaveClass('active')
     })
   })
 
@@ -152,10 +160,9 @@ describe('Embed', () => {
       const sources = ['youtube', 'vimeo']
 
       sources.forEach((source) => {
-        shallow(<Embed active id='foo' source={source} />)
-          .find('iframe')
-          .should.have.attr('title')
-          .which.equals(`Embedded content from ${source}.`)
+        expect(
+          dom(<Embed active id='foo' source={source} />).querySelector('iframe'),
+        ).toHaveAttribute('title', `Embedded content from ${source}.`)
       })
     })
   })
@@ -164,9 +171,7 @@ describe('Embed', () => {
     it('passes url to iframe', () => {
       const url = 'https://example.com'
 
-      shallow(<Embed active url={url} />)
-        .find('iframe')
-        .should.have.attr('src', url)
+      expect(dom(<Embed active url={url} />).querySelector('iframe')).toHaveAttribute('src', url)
     })
   })
 })
