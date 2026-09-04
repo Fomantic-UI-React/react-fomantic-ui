@@ -71,7 +71,7 @@
       }
     },
     {
-      "files": ["test/support/**", "test/unit/**"],
+      "files": ["test/setup.js", "test/support/**", "test/unit/**"],
       "env": { "node": true, "browser": true },
       "globals": {
         "afterAll": "readonly",

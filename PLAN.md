@@ -209,7 +209,8 @@ remaining in `test/specs` — no growing include-list in the config.
 | 1b | Remaining `commonTests`: `rendersChildren`, `classNameHelpers`, `implementsClassNameProps`, `implementsShorthandProp`, `implementsCommonProps` | ✅ 5 helpers, ~790 LOC, all Enzyme-bearing. 482 tests green across 7 components |
 | 2 | `views` (38 files, 964 LOC) | ✅ Smallest and simplest; shook out two harness gaps cheaply |
 | 3 | `lib` (20 files, 2,112 LOC) | ✅ Nearly pure logic — and where the port tooling got built |
-| 4 | `elements` (42 files) | First real shorthand/subcomponent surface |
+| 4 | `elements` — 37 of 42 files | ✅ First real shorthand/subcomponent surface |
+| 4b | `elements` — Button, Input, List, ListItem, Label | The five heaviest: 94 Enzyme call sites between them. Input also needs `isConformant` to fire `change`/`input` with a value, which React ignores otherwise |
 | 5 | `collections` (32 files) | 26 shallow files; structural assertions become behavioural |
 | 6 | `addons` (10 files) | Small but hard — Portal alone is 806 LOC |
 | 7+ | `modules`, split further | 8,820 LOC. Dropdown-test.js is 2,903 of them and gets its own PR |
@@ -291,6 +292,27 @@ Three patterns came out of it that the remaining areas will hit:
 The codemod is deliberately loud rather than clever: anything it cannot map is
 left with an `__UNMAPPED_*__` marker, so a bad translation fails the build
 instead of silently asserting nothing.
+
+**Ported in PR 4** (`elements`, 37 of 42): this is where the port tooling grew a
+second stage. `scripts/phase2/enzyme2rtl.mjs` rewrites the mechanical Enzyme
+wrapper reads — `tagName`, `className`, `attr`, `descendants`, and `prop` where
+the prop is really a DOM attribute — onto two thin helpers in
+`test/support/rtl`. It deliberately refuses anything needing the React element
+tree, so component-prop assertions are left for a human rather than guessed at.
+
+The five files held back are the ones where Enzyme was doing real work:
+Button, Input, List, ListItem and Label have 94 call sites between them.
+
+**It found a shipped bug.** `<Image content='...' />` throws — `content` is
+rendered into a void `<img>` because `getComponentType` switches to a `div` for
+`children` and `wrapped` but not for `content`. `common.rendersChildren(Image)`
+covered exactly this and passed for years, because Enzyme's `shallow()` builds
+the element tree without ever rendering it. Tracked as **issue #11**; the port
+passes `rendersContent: false` with a pointer, and that option is the
+regression test to remove with the fix.
+
+That is now twice the port has surfaced something the old suite structurally
+could not see — see also issue #8.
 
 **`shallow()` has no RTL equivalent, by design.** The 93 shallow files cannot be
 ported mechanically: structural assertions (`should.have.descendants`) have to
