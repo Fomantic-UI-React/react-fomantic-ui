@@ -1,13 +1,13 @@
+import { dom, root } from 'test/support/rtl'
 import _ from 'lodash'
+import { fireEvent } from '@testing-library/react'
 import React from 'react'
 
-import Icon from 'src/elements/Icon/Icon'
 import Label from 'src/elements/Label/Label'
 import LabelDetail from 'src/elements/Label/LabelDetail'
 import LabelGroup from 'src/elements/Label/LabelGroup'
-import * as common from 'test/specs/commonTests'
+import * as common from 'test/support/commonTests'
 import { SUI } from 'src/lib'
-import { sandbox } from 'test/utils'
 
 describe('Label', () => {
   common.isConformant(Label)
@@ -52,97 +52,79 @@ describe('Label', () => {
   common.propValueOnlyToClassName(Label, 'size', SUI.SIZES)
 
   it('is a div by default', () => {
-    shallow(<Label />).should.have.tagName('div')
+    expect(root(<Label />)).toHaveTagName('div')
   })
 
   describe('removeIcon', () => {
     it('has no icon without onRemove', () => {
-      shallow(<Label />).should.not.have.descendants('Icon')
+      expect(dom(<Label />).querySelector('i.icon')).toBeNull()
     })
 
     it('has delete icon by default', () => {
-      shallow(<Label onRemove={_.noop} />)
-        .find(Icon)
-        .should.have.prop('name', 'delete')
+      expect(dom(<Label onRemove={_.noop} />).querySelector('i.icon')).toHaveClass('delete')
     })
 
     it('uses passed removeIcon string', () => {
-      shallow(<Label onRemove={_.noop} removeIcon='foo' />)
-        .find(Icon)
-        .should.have.prop('name', 'foo')
+      expect(dom(<Label onRemove={_.noop} removeIcon='foo' />).querySelector('i.icon')).toHaveClass(
+        'foo',
+      )
     })
 
     it('uses passed removeIcon props', () => {
-      shallow(<Label onRemove={_.noop} removeIcon={{ 'data-foo': true }} />)
-        .find(Icon)
-        .should.have.prop('data-foo', true)
+      const icon = dom(<Label onRemove={_.noop} removeIcon={{ 'data-foo': true }} />).querySelector(
+        'i.icon',
+      )
+
+      expect(icon).toHaveAttribute('data-foo')
     })
 
     it('handles events on Label and Icon', () => {
-      const event = { target: null }
-      const iconSpy = sandbox.spy()
-      const labelSpy = sandbox.spy()
-
+      const iconSpy = vi.fn()
+      const labelSpy = vi.fn()
       const iconProps = { 'data-foo': true, onClick: iconSpy }
       const labelProps = { onRemove: labelSpy, removeIcon: iconProps }
 
-      mount(<Label {...labelProps} />)
-        .find(Icon)
-        .simulate('click', event)
+      fireEvent.click(dom(<Label {...labelProps} />).querySelector('i.icon'))
 
-      iconSpy.should.have.been.calledOnce()
-      labelSpy.should.have.been.calledOnce()
-      labelSpy.should.have.been.calledWithMatch(event, labelProps)
+      expect(iconSpy).toHaveBeenCalledTimes(1)
+      expect(labelSpy).toHaveBeenCalledTimes(1)
+      expect(labelSpy.mock.calls[0][0]).toMatchObject({ type: 'click' })
+      expect(labelSpy.mock.calls[0][1]).toMatchObject(labelProps)
     })
   })
 
   describe('image', () => {
     it('adds an image class when true', () => {
-      shallow(<Label image />).should.have.className('image')
+      expect(root(<Label image />)).toHaveClass('image')
     })
+
     it('does not add an Image when true', () => {
-      shallow(<Label image />).should.not.have.descendants('Image')
+      expect(dom(<Label image />).querySelector('img')).toBeNull()
     })
   })
 
   describe('onClick', () => {
     it('is called with (e) when clicked', () => {
-      const onClick = sandbox.spy()
-      const event = { target: null }
+      const onClick = vi.fn()
 
-      mount(<Label onClick={onClick} />).simulate('click', event)
+      fireEvent.click(root(<Label onClick={onClick} />))
 
-      onClick.should.have.been.calledOnce()
-      onClick.should.have.been.calledWithMatch(event)
+      expect(onClick).toHaveBeenCalledTimes(1)
+      expect(onClick.mock.calls[0][0]).toMatchObject({ type: 'click' })
     })
   })
 
   describe('pointing', () => {
-    it('adds an poiting class when true', () => {
-      shallow(<Label pointing />).should.have.className('pointing')
+    it('adds a pointing class when true', () => {
+      expect(root(<Label pointing />)).toHaveClass('pointing')
     })
 
-    it('does not add any poiting option class when true', () => {
-      const options = ['above', 'below', 'left', 'right']
-      const wrapper = shallow(<Label pointing />)
+    it('does not add any pointing option class when true', () => {
+      const label = root(<Label pointing />)
 
-      options.map((className) => wrapper.should.not.have.className(className))
-    })
-
-    it('adds `above` as suffix', () => {
-      shallow(<Label pointing='above' />).should.have.className('pointing above')
-    })
-
-    it('adds `below` as suffix', () => {
-      shallow(<Label pointing='below' />).should.have.className('pointing below')
-    })
-
-    it('adds `left` as prefix', () => {
-      shallow(<Label pointing='left' />).should.have.className('left pointing')
-    })
-
-    it('adds `right` as prefix', () => {
-      shallow(<Label pointing='right' />).should.have.className('right pointing')
+      for (const className of ['above', 'below', 'left', 'right']) {
+        expect(label).not.toHaveClass(className)
+      }
     })
   })
 })

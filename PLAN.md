@@ -210,7 +210,7 @@ remaining in `test/specs` — no growing include-list in the config.
 | 2 | `views` (38 files, 964 LOC) | ✅ Smallest and simplest; shook out two harness gaps cheaply |
 | 3 | `lib` (20 files, 2,112 LOC) | ✅ Nearly pure logic — and where the port tooling got built |
 | 4 | `elements` — 37 of 42 files | ✅ First real shorthand/subcomponent surface |
-| 4b | `elements` — Button, Input, List, ListItem, Label | The five heaviest: 94 Enzyme call sites between them. Input also needs `isConformant` to fire `change`/`input` with a value, which React ignores otherwise |
+| 4b | `elements` — Button, Input, List, ListItem, Label | ✅ The five heaviest: 94 Enzyme call sites between them |
 | 5 | `collections` (32 files) | 26 shallow files; structural assertions become behavioural |
 | 6 | `addons` (10 files) | Small but hard — Portal alone is 806 LOC |
 | 7+ | `modules`, split further | 8,820 LOC. Dropdown-test.js is 2,903 of them and gets its own PR |
@@ -313,6 +313,25 @@ regression test to remove with the fix.
 
 That is now twice the port has surfaced something the old suite structurally
 could not see — see also issue #8.
+
+**Ported in PR 4b**: the five files where Enzyme was doing real work. Three
+translations are worth knowing because they recur:
+
+- **Ordering.** `wrapper.childAt(0).childAt(1)` becomes the root's element
+  children in document order — Button's `labelPosition`, Input's icon index.
+- **Handler props.** Enzyme read `onKeyDown` straight off the element. RTL
+  cannot, so a spy is passed and the event dispatched instead. Input's
+  `htmlInputProps` loop splits into handlers and value props for this reason.
+- **Spying on a static.** `sandbox.spy(ListContent, 'create')` becomes
+  `vi.spyOn`, which still works because the shorthand factory is a real static.
+
+`isConformant` also gained an event init: React ignores a `change` that does not
+change a value, so the conformance check reported every form component's
+`onChange` as never called.
+
+Two jsdom differences to remember: `window.getSelection()` does not reflect an
+input's selection (assert `selectionStart`/`selectionEnd`), and React writes
+`defaultValue` out as the `value` attribute.
 
 **`shallow()` has no RTL equivalent, by design.** The 93 shallow files cannot be
 ported mechanically: structural assertions (`should.have.descendants`) have to

@@ -60,6 +60,16 @@ export const fireEventName = (listenerName) => {
   return FIRE_EVENT_ALIASES[name] || name
 }
 
+/**
+ * React only calls `onChange`/`onInput` when the value actually changes, so a
+ * bare `fireEvent.change(el)` looks to the conformance test like the handler
+ * was never called. These listeners need an init that moves the value.
+ */
+const VALUE_DRIVEN = new Set(['onChange', 'onInput'])
+
+export const fireEventInit = (listenerName) =>
+  VALUE_DRIVEN.has(listenerName) ? { target: { value: 'conformance' } } : undefined
+
 /** Every listener whose event testing-library can actually dispatch. */
 export const dispatchableListeners = _.flatMap(types, ({ listeners }) => listeners).filter(
   (listenerName) => typeof fireEvent[fireEventName(listenerName)] === 'function',
