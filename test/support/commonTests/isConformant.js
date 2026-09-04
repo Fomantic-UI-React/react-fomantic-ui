@@ -35,6 +35,9 @@ export default function isConformant(Component, options = {}) {
     rendersChildren = true,
     rendersFragmentByDefault = false,
     rendersPortal = false,
+    // Off only where a component genuinely has no DOM node to spread onto;
+    // see TransitionablePortal and issue #16.
+    spreadsUserProps = true,
   } = options
 
   const constructorName = getComponentName(Component)
@@ -90,7 +93,7 @@ export default function isConformant(Component, options = {}) {
   // Props
   // ----------------------------------------
 
-  if (rendersChildren) {
+  if (rendersChildren && spreadsUserProps) {
     it('spreads user props', () => {
       const propName = 'data-is-conformant-spread-props'
       const { container } = render(
