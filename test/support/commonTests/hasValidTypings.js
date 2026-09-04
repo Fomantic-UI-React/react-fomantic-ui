@@ -133,16 +133,20 @@ export default function hasValidTypings(Component, options = {}) {
       })
     })
 
-    describe('shorthands', () => {
-      const componentShorthands = _.pickBy(_.get(Component, 'propTypes'), isShorthand)
+    const componentShorthands = _.pickBy(_.get(Component, 'propTypes'), isShorthand)
 
-      _.forEach(componentShorthands, (propType, propName) => {
-        it(`"${propName}" has the correct shorthand type`, () => {
-          const { type } = _.find(strictInterfaceObject.shorthands, ['name', propName])
+    // Only declare the suite when there is something in it: vitest fails an
+    // empty describe, where mocha quietly allowed one.
+    if (!_.isEmpty(componentShorthands)) {
+      describe('shorthands', () => {
+        _.forEach(componentShorthands, (propType, propName) => {
+          it(`"${propName}" has the correct shorthand type`, () => {
+            const { type } = _.find(strictInterfaceObject.shorthands, ['name', propName])
 
-          expect(shorthandMap[type]).toBe(propType)
+            expect(shorthandMap[type]).toBe(propType)
+          })
         })
       })
-    })
+    }
   })
 }
