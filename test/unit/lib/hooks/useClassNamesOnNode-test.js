@@ -1,5 +1,5 @@
+import { render } from '@testing-library/react'
 import React from 'react'
-import { act } from 'react-dom/test-utils'
 
 import useClassNamesOnNode from 'src/lib/hooks/useClassNamesOnNode'
 
@@ -12,53 +12,54 @@ describe('useClassNamesOnNode', () => {
   describe('node', () => {
     it('will add className to specified node', () => {
       const node = document.createElement('div')
-      mount(<TestComponent className='foo' node={node} />)
+      render(<TestComponent className='foo' node={node} />)
 
-      node.classList.contains('foo').should.be.equal(true)
+      expect(node.classList.contains('foo')).toBe(true)
     })
 
     it('will update className on specified node', () => {
       const node = document.createElement('div')
-      const wrapper = mount(<TestComponent className='foo' node={node} />)
+      const { rerender } = render(<TestComponent className='foo' node={node} />)
 
-      wrapper.setProps({ className: 'bar' })
-      node.classList.contains('foo').should.be.equal(false)
-      node.classList.contains('bar').should.be.equal(true)
+      rerender(<TestComponent className='bar' node={node} />)
+
+      expect(node.classList.contains('foo')).toBe(false)
+      expect(node.classList.contains('bar')).toBe(true)
     })
 
     it('will add multiple classNames', () => {
       const node = document.createElement('div')
 
-      mount(
+      render(
         <>
           <TestComponent className='foo' node={node} />
           <TestComponent className='bar baz' node={node} />
         </>,
       )
 
-      node.classList.contains('bar').should.be.equal(true)
-      node.classList.contains('bar').should.be.equal(true)
-      node.classList.contains('baz').should.be.equal(true)
+      expect(node.classList.contains('foo')).toBe(true)
+      expect(node.classList.contains('bar')).toBe(true)
+      expect(node.classList.contains('baz')).toBe(true)
     })
 
     it('will remove className on specified node', () => {
       const node = document.createElement('div')
-      const wrapper = mount(<TestComponent className='foo' node={node} />)
+      const { unmount } = render(<TestComponent className='foo' node={node} />)
 
-      node.classList.contains('foo').should.be.equal(true)
+      expect(node.classList.contains('foo')).toBe(true)
 
-      act(() => {
-        wrapper.unmount()
-      })
-      node.classList.contains('foo').should.be.equal(false)
+      unmount()
+
+      expect(node.classList.contains('foo')).toBe(false)
     })
 
     it('supports React ref objects', () => {
       const nodeRef = React.createRef()
       nodeRef.current = document.createElement('div')
 
-      mount(<TestComponent className='foo' node={nodeRef} />)
-      nodeRef.current.classList.contains('foo').should.be.equal(true)
+      render(<TestComponent className='foo' node={nodeRef} />)
+
+      expect(nodeRef.current.classList.contains('foo')).toBe(true)
     })
   })
 })

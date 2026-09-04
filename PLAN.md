@@ -208,7 +208,7 @@ remaining in `test/specs` — no growing include-list in the config.
 | 1 | Harness: vitest + jsdom + RTL, `componentInfo`, conformance core, 3 proving components | ✅ Make-or-break, and it holds — 124 tests green on Button/Card/Divider |
 | 1b | Remaining `commonTests`: `rendersChildren`, `classNameHelpers`, `implementsClassNameProps`, `implementsShorthandProp`, `implementsCommonProps` | ✅ 5 helpers, ~790 LOC, all Enzyme-bearing. 482 tests green across 7 components |
 | 2 | `views` (38 files, 964 LOC) | ✅ Smallest and simplest; shook out two harness gaps cheaply |
-| 3 | `lib` (20 files, 2,112 LOC) | Nearly pure logic — 3 shallow, 1 mount |
+| 3 | `lib` (20 files, 2,112 LOC) | ✅ Nearly pure logic — and where the port tooling got built |
 | 4 | `elements` (42 files) | First real shorthand/subcomponent surface |
 | 5 | `collections` (32 files) | 26 shallow files; structural assertions become behavioural |
 | 6 | `addons` (10 files) | Small but hard — Portal alone is 806 LOC |
@@ -269,6 +269,28 @@ Assertions on element props rather than output are where the translation has to
 be judged, not mechanical. `ItemImage` asserted the `wrapped` and `ui` props
 that `Image` received; what those produce is a wrapper that carries `ui` only
 once a size is given, so that is what the port asserts.
+**Ported in PR 3** (`lib`): 15 of 20 by codemod, 5 by hand. This is where the
+tooling in `scripts/phase2/` was built, because `lib` is the first area whose
+specs carry real assertion bodies rather than lists of `common.*` calls —
+`.should.equal`, `.should.have.property`, sinon spies — none of which the
+`views` port had to touch.
+
+Three patterns came out of it that the remaining areas will hit:
+
+- **`shallow()` used only to reach `.props()`.** `factories-test.js` asserts on
+  the element `createShorthand` returns, and an element carries its props
+  directly, so the renderer drops out entirely and the assertion gets stronger.
+- **Enzyme reading class state.** `ModernAutoControlledComponent-test.js`
+  asserts internal state 29 times. The fixture is defined in the spec and is a
+  real class, so a ref gives the instance and its actual state — lossless,
+  unlike serialising state into the DOM.
+- **Webpack loaders in test code.** `isBrowser-test.js` used `imports-loader` to
+  inject `document = undefined` before the module evaluated. There is no bundler
+  in the test path now, so it stubs the global and re-imports.
+
+The codemod is deliberately loud rather than clever: anything it cannot map is
+left with an `__UNMAPPED_*__` marker, so a bad translation fails the build
+instead of silently asserting nothing.
 
 **`shallow()` has no RTL equivalent, by design.** The 93 shallow files cannot be
 ported mechanically: structural assertions (`should.have.descendants`) have to

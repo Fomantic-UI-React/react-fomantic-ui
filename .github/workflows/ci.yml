@@ -3,8 +3,9 @@ name: CI
 on:
   push:
     branches: [main]
+  # No branch filter: the Phase 2 ports are a stacked sequence, and a PR based
+  # on another PR's branch got no checks at all while this was limited to main.
   pull_request:
-    branches: [main]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}

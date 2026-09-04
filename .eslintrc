@@ -74,7 +74,9 @@
       "files": ["test/support/**", "test/unit/**"],
       "env": { "node": true, "browser": true },
       "globals": {
+        "afterAll": "readonly",
         "afterEach": "readonly",
+        "beforeAll": "readonly",
         "beforeEach": "readonly",
         "describe": "readonly",
         "expect": "readonly",

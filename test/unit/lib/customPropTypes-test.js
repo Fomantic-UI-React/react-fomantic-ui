@@ -1,14 +1,14 @@
 import PropTypes from 'prop-types'
 import { customPropTypes } from 'src/lib'
 
-import { consoleUtil, sandbox } from 'test/utils'
+import { consoleUtil } from 'test/support'
 
 /* eslint-disable no-console */
 
 describe('customPropTypes', () => {
   beforeEach(() => {
     consoleUtil.disable()
-    sandbox.spy(console, 'error')
+    vi.spyOn(console, 'error')
   })
 
   describe('every', () => {
@@ -22,8 +22,8 @@ describe('customPropTypes', () => {
         'FooComponent',
       )
 
-      console.error.should.have.been.calledWithMatch(
-        /Invalid argument supplied to every, expected an instance of array/,
+      expect(console.error).toHaveBeenCalledWith(
+        expect.stringMatching(/Invalid argument supplied to every, expected an instance of array/),
       )
     })
 
@@ -37,8 +37,8 @@ describe('customPropTypes', () => {
         'FooComponent',
       )
 
-      console.error.should.have.been.calledWithMatch(
-        /argument "validators" should contain functions/,
+      expect(console.error).toHaveBeenCalledWith(
+        expect.stringMatching(/argument "validators" should contain functions/),
       )
     })
 
@@ -52,8 +52,8 @@ describe('customPropTypes', () => {
         'FooComponent',
       )
 
-      console.error.should.have.been.calledWithMatch(
-        /Invalid name `name` of type `number` supplied/,
+      expect(console.error).toHaveBeenCalledWith(
+        expect.stringMatching(/Invalid name `name` of type `number` supplied/),
       )
     })
 
@@ -67,13 +67,15 @@ describe('customPropTypes', () => {
         'FooComponent',
       )
 
-      console.error.should.have.been.calledWithMatch(/Instead of `bar`, did you mean:/)
+      expect(console.error).toHaveBeenCalledWith(
+        expect.stringMatching(/Instead of `bar`, did you mean:/),
+      )
     })
   })
 
   describe('suggest', () => {
     it('should throw error when non-array argument given', () => {
-      expect(() => customPropTypes.suggest('foo')).to.throw(
+      expect(() => customPropTypes.suggest('foo')).toThrow(
         Error,
         /Invalid argument supplied to suggest, expected an instance of array./,
       )
@@ -89,7 +91,7 @@ describe('customPropTypes', () => {
         'FooComponent',
       )
 
-      console.error.should.have.not.been.called()
+      expect(console.error).not.toHaveBeenCalled()
     })
 
     it('should return Error with suggestions when prop is invalid', () => {
@@ -102,14 +104,15 @@ describe('customPropTypes', () => {
         'FooComponent',
       )
 
-      console.error.should.have.been
-        .calledWithMatch(`Invalid prop \`name\` of value \`bad\` supplied to \`FooComponent\`.
+      expect(console.error).toHaveBeenCalledWith(
+        expect.stringContaining(`Invalid prop \`name\` of value \`bad\` supplied to \`FooComponent\`.
 
 Instead of \`bad\`, did you mean:
   - bar
   - baz
   - foo
-`)
+`),
+      )
     })
 
     it('should return Error with suggestions when prop contains multiple words and is invalid', () => {
@@ -122,14 +125,15 @@ Instead of \`bad\`, did you mean:
         'FooComponent',
       )
 
-      console.error.should.have.been
-        .calledWithMatch(`Invalid prop \`name\` of value \`bat words\` supplied to \`FooComponent\`.
+      expect(console.error).toHaveBeenCalledWith(
+        expect.stringContaining(`Invalid prop \`name\` of value \`bat words\` supplied to \`FooComponent\`.
 
 Instead of \`bat words\`, did you mean:
   - bar
   - baz
   - foo
-`)
+`),
+      )
     })
   })
 })
