@@ -522,9 +522,14 @@ describe('Modal', () => {
         </Modal>,
       )
 
-      requestAnimationFrame(() => {
-        expect(document.body).not.toHaveClass('scrolling')
+      // Modal measures on the next frame, so wait for one before asserting.
+      // Asserting inside the callback lets the test finish first and the
+      // failure then escapes the test entirely.
+      await new Promise((resolve) => {
+        requestAnimationFrame(resolve)
       })
+
+      expect(document.body).not.toHaveClass('scrolling')
     })
 
     it('passes "scrolling" when taller than the window', async () => {
