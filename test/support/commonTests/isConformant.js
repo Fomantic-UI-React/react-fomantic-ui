@@ -9,7 +9,7 @@ import { componentInfoContext } from '../componentInfo'
 import consoleUtil from '../consoleUtil'
 import getComponentName from '../getComponentName'
 import getComponentProps from '../getComponentProps'
-import { dispatchableListeners, fireEventName } from '../syntheticEvent'
+import { dispatchableListeners, fireEventInit, fireEventName } from '../syntheticEvent'
 import hasValidTypings from './hasValidTypings'
 
 // Enzyme's `render`/`shallow` asserted on the element a component returned.
@@ -204,7 +204,7 @@ export default function isConformant(Component, options = {}) {
 
         expect(target, `Could not find an element to fire "${listenerName}" on`).not.toBeNull()
 
-        fireEvent[fireEventName(listenerName)](target)
+        fireEvent[fireEventName(listenerName)](target, fireEventInit(listenerName))
 
         expect(
           handlerSpy,
