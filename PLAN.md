@@ -217,8 +217,9 @@ remaining in `test/specs` — no growing include-list in the config.
 | 7a | `modules` — 24 of 46 files | ✅ The half that needed no structural rewriting |
 | 7b | `modules` — Dimmer, DimmerInner, ModalActions, RatingIcon, TransitionGroup, Embed | ✅ 6 files, plus three harness fixes |
 | 7c | `modules` — Sidebar, plus the stale `resolutions` fix | ✅ |
-| 7d | `modules` — AccordionAccordion, Checkbox, Modal, ModalDimmer, Progress, Rating, Sticky, Tab, Transition | 9 files of state and timing behaviour |
-| 7e | `modules` — Dropdown (2,903 LOC), Search, Popup | The three largest and most interactive |
+| 7d | `modules` — AccordionAccordion, ModalDimmer, Progress | ✅ |
+| 7e | `modules` — Checkbox, Modal, Rating, Sticky, Tab, Transition | 6 files of state and timing behaviour |
+| 7f | `modules` — Dropdown (2,903 LOC), Search, Popup | The three largest and most interactive |
 | 8 | Delete the frozen `commonTests` and `docs` originals | Phase 2 done when `test/specs` is empty |
 
 **`componentInfoContext` must be replaced first.** `isConformant.js` and
@@ -432,6 +433,15 @@ Invalid hook call. Hooks can only be called inside of the body of a function com
 `Sidebar` is the only component that uses that package, which is why nothing
 caught it until now. The whole block is dead and is removed; `react-is` now
 resolves to 18 alongside React itself.
+
+**Ported in PR 7d**: AccordionAccordion, ModalDimmer and Progress — the three
+that turned out to be mechanical once the Enzyme wrapper reads were rewritten as
+DOM queries.
+
+`AccordionAccordion` is the **third** spec found rendering once *outside* its
+tests and sharing the result, after `Menu` and `ModalActions`. In all three the
+click assertions depended on execution order. It is worth assuming this pattern
+exists in the remaining files rather than discovering it each time.
 
 **`shallow()` has no RTL equivalent, by design.** The 93 shallow files cannot be
 ported mechanically: structural assertions (`should.have.descendants`) have to
