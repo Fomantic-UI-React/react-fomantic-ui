@@ -207,7 +207,7 @@ remaining in `test/specs` — no growing include-list in the config.
 | -- | ----- | -------- |
 | 1 | Harness: vitest + jsdom + RTL, `componentInfo`, conformance core, 3 proving components | ✅ Make-or-break, and it holds — 124 tests green on Button/Card/Divider |
 | 1b | Remaining `commonTests`: `rendersChildren`, `classNameHelpers`, `implementsClassNameProps`, `implementsShorthandProp`, `implementsCommonProps` | ✅ 5 helpers, ~790 LOC, all Enzyme-bearing. 482 tests green across 7 components |
-| 2 | `views` (38 files, 964 LOC) | Smallest and simplest; shakes out harness gaps cheaply |
+| 2 | `views` (38 files, 964 LOC) | ✅ Smallest and simplest; shook out two harness gaps cheaply |
 | 3 | `lib` (20 files, 2,112 LOC) | Nearly pure logic — 3 shallow, 1 mount |
 | 4 | `elements` (42 files) | First real shorthand/subcomponent surface |
 | 5 | `collections` (32 files) | 26 shallow files; structural assertions become behavioural |
@@ -252,6 +252,24 @@ is no DOM to assert against.
 and `implementsHTMLLabelProp` have no call site outside `collections` and
 `modules`, so they are ported but first exercised in PRs 5 and 7.
 
+**Ported in PR 2** (`views`): 23 of the 38 specs never rendered with Enzyme and
+were codemodded mechanically — rewrite the `commonTests` import, drop `faker`
+for fixed strings, move the file. The other 15 were rewritten by hand against
+the markup the components actually produce, checked by rendering each one first
+rather than guessing at class names.
+
+Two harness gaps surfaced, both fixed here:
+
+- `hasValidTypings` declared an empty `describe('shorthands')` for components
+  with no shorthand props. Mocha allowed that; vitest fails it.
+- The upstream directory was misspelt `test/specs/views/Stastistic`. Corrected
+  to `Statistic` on the way across.
+
+Assertions on element props rather than output are where the translation has to
+be judged, not mechanical. `ItemImage` asserted the `wrapped` and `ui` props
+that `Image` received; what those produce is a wrapper that carries `ui` only
+once a size is given, so that is what the port asserts.
+
 **`shallow()` has no RTL equivalent, by design.** The 93 shallow files cannot be
 ported mechanically: structural assertions (`should.have.descendants`) have to
 become behavioural ones against rendered output. Expect the assertion count to
@@ -283,10 +301,21 @@ CommonJS. It went unnoticed because the Karma harness bundled all 203 specs into
 one module graph, so some other spec always loaded the parent first. Vitest gives
 each file its own graph, which exposes it.
 
-Deep-importing a subcomponent for tree-shaking is a normal thing to do, so this
-is worth a fix of its own — breaking the cycle in source, not papering over it.
-Until then `test/setup.js` imports `src/index` so specs see the load order a
-consumer importing the package gets.
+`src` has **7 cycles**; **5 break a static assignment**, all the same shape —
+`Button.Group`, `Step.Group`, `Card.Group`, `Item.Group`, `Statistic.Group`, each
+confirmed broken at runtime. The other two (`Label` ↔ `Image`, and
+`Transition` → `TransitionGroup` → `wrapChild`) break no static and are lower
+priority.
+
+Tracked as **issue #8**. Until then `test/setup.js` imports `src/index` so specs
+see the load order a consumer importing the package gets — that makes the suite
+correct, it does not fix the shipped bug.
+
+> **Working rule: no source changes until Phase 2 and Phase 4 are in place.**
+> Restructuring five components' modules is exactly the kind of change that
+> needs tests and Storybook underneath it. This is why the Phase ordering is
+> what it is, and it applies to the whole upstream backlog below as well —
+> those are unreviewed patches against code with no coverage yet.
 
 ### Phase 3 — React 19
 
