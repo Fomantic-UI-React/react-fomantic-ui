@@ -8,9 +8,14 @@
 import fs from 'fs'
 import path from 'path'
 import { joinWrappedChains, transform } from './chai2vitest.mjs'
+import { enzymeToRtl } from './enzyme2rtl.mjs'
 
 const root = '/Users/ela/Projects/Semantic-UI-React'
 const area = process.argv[2]
+// --all also ports the Enzyme-rendering files, applying the chai/sinon codemod
+// so only the render calls are left to rewrite by hand. Without it those files
+// are skipped and listed.
+const portAll = process.argv.includes('--all')
 const from = path.join(root, 'test/specs', area)
 const to = path.join(root, 'test/unit', area)
 
@@ -74,12 +79,16 @@ for (const file of files) {
   const rel = path.relative(from, file)
   const src = fs.readFileSync(file, 'utf8')
 
-  if (/\b(shallow|mount)\(/.test(src) || /imports-loader/.test(src)) {
+  const needsHand = /\b(shallow|mount)\(/.test(src) || /imports-loader/.test(src)
+  if (needsHand) {
     skipped.push(rel)
-    continue
+    if (!portAll) continue
   }
 
-  const { code: transformed, unmapped } = transform(joinWrappedChains(fixups(src)))
+  // Enzyme wrapper reads first: they must be rewritten before the chai pass
+  // sees the `.should.` chain that follows them.
+  const prepared = enzymeToRtl(joinWrappedChains(fixups(src)))
+  const { code: transformed, unmapped } = transform(prepared)
   const code = postFixups(transformed)
   if (unmapped.length) unmappedReport.push(`${rel}: ${[...new Set(unmapped)].join(', ')}`)
 
@@ -89,7 +98,11 @@ for (const file of files) {
 }
 
 console.log(`ported ${files.length - skipped.length} of ${files.length}`)
-if (skipped.length) console.log(`needs hand-porting (${skipped.length}):\n  ${skipped.join('\n  ')}`)
+if (skipped.length) {
+  console.log(
+    `${portAll ? 'ported, render calls still to rewrite' : 'needs hand-porting'} (${skipped.length}):\n  ${skipped.join('\n  ')}`,
+  )
+}
 console.log(
   unmappedReport.length
     ? `\nunmapped:\n  ${unmappedReport.join('\n  ')}`
