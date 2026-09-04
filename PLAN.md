@@ -219,8 +219,9 @@ remaining in `test/specs` — no growing include-list in the config.
 | 7c | `modules` — Sidebar, plus the stale `resolutions` fix | ✅ |
 | 7d | `modules` — AccordionAccordion, ModalDimmer, Progress | ✅ |
 | 7e | `modules` — Checkbox, Rating | ✅ |
-| 7f | `modules` — Modal, Sticky, Tab, Transition | 4 files of state and timing behaviour |
-| 7g | `modules` — Dropdown (2,903 LOC), Search, Popup | The three largest and most interactive |
+| 7f | `modules` — Modal | ✅ |
+| 7g | `modules` — Sticky, Tab, Transition | 3 files of state and timing behaviour |
+| 7h | `modules` — Dropdown (2,903 LOC), Search, Popup | The three largest and most interactive |
 | 8 | Delete the frozen `commonTests` and `docs` originals | Phase 2 done when `test/specs` is empty |
 
 **`componentInfoContext` must be replaced first.** `isConformant.js` and
@@ -463,6 +464,19 @@ a click rather than on a DOM change event, so the event-transparency check
 cannot exercise it. `fireEventInit` also now checks the target actually has a
 value setter before setting one, which firing `change` on a wrapper element does
 not.
+
+**Ported in PR 7f** (`Modal`): a portal component, so every assertion moves from
+the container to `document.body`. The frozen spec's helpers map cleanly —
+`assertBodyContains(sel)` is a query, `domEvent.click(sel)` is `fireEvent`, and
+`assertWithTimeout(fn, done)` is `await waitFor(fn)`, which is both shorter and
+not sensitive to CI load.
+
+Two things needed thought rather than translation. `Modal`'s `open` prop drives
+the Portal and must not appear on the modal element, so the test renders and
+unmounts explicitly rather than relying on a stale wrapper. And `ModalDimmer`'s
+`blurring`, `inverted` and `scrolling` are props that become *classes* — some on
+the dimmer, some on the mount node — so asserting them as attributes was wrong
+in three places.
 
 **`shallow()` has no RTL equivalent, by design.** The 93 shallow files cannot be
 ported mechanically: structural assertions (`should.have.descendants`) have to
