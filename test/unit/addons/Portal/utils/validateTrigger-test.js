@@ -4,10 +4,10 @@ import validateTrigger from 'src/addons/Portal/utils/validateTrigger'
 
 describe('validateTrigger', () => {
   it('throws on multiple elements passed', () => {
-    expect(() => validateTrigger([<button key='trigger1' />, <button key='trigger2' />])).to.throw()
+    expect(() => validateTrigger([<button key='trigger1' />, <button key='trigger2' />])).toThrow()
   })
 
   it('throws on React.Fragment passed', () => {
-    expect(() => validateTrigger(React.createElement(React.Fragment))).to.throw()
+    expect(() => validateTrigger(React.createElement(React.Fragment))).toThrow()
   })
 })

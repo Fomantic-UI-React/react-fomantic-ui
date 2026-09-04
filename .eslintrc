@@ -84,6 +84,7 @@
         "vi": "readonly"
       },
       "rules": {
+        "jsx-a11y/control-has-associated-label": "off",
         "jsx-a11y/tabindex-no-positive": "off",
         "no-continue": "off",
         "no-restricted-syntax": "off",

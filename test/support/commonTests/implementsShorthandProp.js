@@ -84,9 +84,12 @@ export default (Component, options = {}) => {
       const { container } = render(
         React.createElement(Component, { ...requiredProps, [propKey]: value }),
       )
+      // A portal renders outside its container, so the whole document is the
+      // only place the markup is guaranteed to appear.
+      const actualMarkup = rendersPortal ? document.body.innerHTML : container.innerHTML
 
       expect(
-        container.innerHTML,
+        actualMarkup,
         `<${getComponentName(Component)} ${propKey}={...} /> did not render the same markup as ` +
           `createShorthand(${name}, ...) produced on its own`,
       ).toContain(expectedMarkup)
@@ -116,7 +119,7 @@ export default (Component, options = {}) => {
           consoleUtil.disableOnce()
           const { container } = render(React.createElement(Component, requiredProps))
 
-          expect(container.innerHTML).not.toContain(
+          expect(rendersPortal ? document.body.innerHTML : container.innerHTML).not.toContain(
             markupOf(
               createShorthand(ShorthandComponent, mapValueToProps, 'x', {
                 defaultProps: shorthandDefaultProps,
@@ -136,7 +139,7 @@ export default (Component, options = {}) => {
           React.createElement(Component, { ...requiredProps, [propKey]: null }),
         )
 
-        expect(container.innerHTML).not.toContain(
+        expect(rendersPortal ? document.body.innerHTML : container.innerHTML).not.toContain(
           markupOf(
             createShorthand(ShorthandComponent, mapValueToProps, 'x', {
               defaultProps: shorthandDefaultProps,

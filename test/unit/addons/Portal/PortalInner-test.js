@@ -1,10 +1,10 @@
+import { dom } from 'test/support/rtl'
+import { render } from '@testing-library/react'
 import React from 'react'
-import { act } from 'react-dom/test-utils'
 
 import PortalInner from 'src/addons/Portal/PortalInner'
 import { isBrowser } from 'src/lib'
-import * as common from 'test/specs/commonTests'
-import { sandbox } from 'test/utils'
+import * as common from 'test/support/commonTests'
 
 describe('PortalInner', () => {
   common.isConformant(PortalInner, {
@@ -14,20 +14,24 @@ describe('PortalInner', () => {
   })
 
   describe('children', () => {
-    before(() => {
+    beforeAll(() => {
       isBrowser.override = false
     })
 
-    after(() => {
+    afterAll(() => {
       isBrowser.override = null
     })
 
     it('renders `null` when during Server-Side Rendering', () => {
-      mount(
+      const before = document.body.querySelectorAll('p').length
+
+      dom(
         <PortalInner>
           <p />
         </PortalInner>,
-      ).should.be.blank()
+      )
+
+      expect(document.body.querySelectorAll('p')).toHaveLength(before)
     })
   })
 
@@ -36,83 +40,76 @@ describe('PortalInner', () => {
       const portalRef = React.createRef()
       const elementRef = React.createRef()
 
-      const wrapper = mount(
+      dom(
         <PortalInner ref={portalRef}>
           <p ref={elementRef} />
         </PortalInner>,
       )
-      const domNode = wrapper.getDOMNode()
 
-      expect(elementRef.current).to.equal(domNode)
-      expect(portalRef.current).to.equal(domNode)
-      expect(domNode.tagName).to.equal('P')
+      expect(portalRef.current).toBe(elementRef.current)
+      expect(portalRef.current.tagName).toBe('P')
     })
 
     it('returns ref a elements that uses ref forwarding', () => {
-      const CustomComponent = React.forwardRef((props, ref) => {
-        return <p {...props} ref={ref} />
-      })
+      const CustomComponent = React.forwardRef((props, ref) => <p {...props} ref={ref} />)
 
       const portalRef = React.createRef()
       const elementRef = React.createRef()
 
-      const wrapper = mount(
+      dom(
         <PortalInner ref={portalRef}>
           <CustomComponent ref={elementRef} />
         </PortalInner>,
       )
-      const domNode = wrapper.getDOMNode()
 
-      expect(elementRef.current).to.equal(domNode)
-      expect(portalRef.current).to.equal(domNode)
-      expect(domNode.tagName).to.equal('P')
+      expect(portalRef.current).toBe(elementRef.current)
+      expect(portalRef.current.tagName).toBe('P')
     })
 
-    it('returns ref to a create element in other cases', () => {
+    it('returns ref to a created element in other cases', () => {
       function CustomComponent(props) {
         return <p {...props} />
       }
 
       const portalRef = React.createRef()
-      const wrapper = mount(
+
+      dom(
         <PortalInner ref={portalRef}>
           <CustomComponent />
         </PortalInner>,
       )
-      const domNode = wrapper.getDOMNode()
 
-      expect(portalRef.current).to.equal(domNode)
-      expect(domNode.tagName).to.equal('DIV')
-      expect(domNode.dataset.suirPortal).to.equal('true')
+      expect(portalRef.current.tagName).toBe('DIV')
+      expect(portalRef.current.dataset.suirPortal).toBe('true')
     })
   })
 
   describe('onMount', () => {
     it('called when mounting', () => {
-      const onMount = sandbox.spy()
-      mount(
+      const onMount = vi.fn()
+
+      dom(
         <PortalInner onMount={onMount}>
           <p />
         </PortalInner>,
       )
 
-      onMount.should.have.been.calledOnce()
+      expect(onMount).toHaveBeenCalledTimes(1)
     })
   })
 
   describe('onUnmount', () => {
     it('is called only once when unmounting', () => {
-      const onUnmount = sandbox.spy()
-      const wrapper = mount(
+      const onUnmount = vi.fn()
+      const { unmount } = render(
         <PortalInner onUnmount={onUnmount}>
           <p />
         </PortalInner>,
       )
 
-      act(() => {
-        wrapper.unmount()
-      })
-      onUnmount.should.have.been.calledOnce()
+      unmount()
+
+      expect(onUnmount).toHaveBeenCalledTimes(1)
     })
   })
 })
