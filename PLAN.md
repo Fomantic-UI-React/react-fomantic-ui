@@ -218,8 +218,9 @@ remaining in `test/specs` — no growing include-list in the config.
 | 7b | `modules` — Dimmer, DimmerInner, ModalActions, RatingIcon, TransitionGroup, Embed | ✅ 6 files, plus three harness fixes |
 | 7c | `modules` — Sidebar, plus the stale `resolutions` fix | ✅ |
 | 7d | `modules` — AccordionAccordion, ModalDimmer, Progress | ✅ |
-| 7e | `modules` — Checkbox, Modal, Rating, Sticky, Tab, Transition | 6 files of state and timing behaviour |
-| 7f | `modules` — Dropdown (2,903 LOC), Search, Popup | The three largest and most interactive |
+| 7e | `modules` — Checkbox, Rating | ✅ |
+| 7f | `modules` — Modal, Sticky, Tab, Transition | 4 files of state and timing behaviour |
+| 7g | `modules` — Dropdown (2,903 LOC), Search, Popup | The three largest and most interactive |
 | 8 | Delete the frozen `commonTests` and `docs` originals | Phase 2 done when `test/specs` is empty |
 
 **`componentInfoContext` must be replaced first.** `isConformant.js` and
@@ -442,6 +443,26 @@ DOM queries.
 tests and sharing the result, after `Menu` and `ModalActions`. In all three the
 click assertions depended on execution order. It is worth assuming this pattern
 exists in the remaining files rather than discovering it each time.
+
+**Ported in PR 7e** (`Checkbox`, `Rating`): the first files where the frozen
+tests asserted things that were true of Enzyme rather than of the component.
+
+- `Checkbox`'s "onClick is not called when id is passed" only held because
+  Enzyme's `simulate()` on a label does not forward the click to the associated
+  input. A real DOM does, and the component's `id` handling exists precisely so
+  the click is handled once rather than twice. The port asserts one call.
+- Its two controlled-component tests asserted the toggle had **not** happened,
+  contradicting their own names. The Enzyme wrapper was never re-rendered, so it
+  could not see the update; the DOM is live and the toggle is visible.
+
+Neither is a library bug — the component is right and the tests were wrong — so
+they are corrected in place with a comment rather than filed.
+
+`isConformant` gained `ignoredEvents` for `Checkbox`, whose `onChange` fires on
+a click rather than on a DOM change event, so the event-transparency check
+cannot exercise it. `fireEventInit` also now checks the target actually has a
+value setter before setting one, which firing `change` on a wrapper element does
+not.
 
 **`shallow()` has no RTL equivalent, by design.** The 93 shallow files cannot be
 ported mechanically: structural assertions (`should.have.descendants`) have to

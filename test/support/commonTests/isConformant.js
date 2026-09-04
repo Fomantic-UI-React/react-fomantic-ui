@@ -31,6 +31,10 @@ const rootOf = (container) => container.firstElementChild
 export default function isConformant(Component, options = {}) {
   const {
     eventTargets = {},
+    // Listeners that are not driven by the DOM event of the same name, so the
+    // transparency check below cannot exercise them. Checkbox's onChange is the
+    // example: it fires on a click, not on a change event.
+    ignoredEvents = [],
     requiredProps = {},
     rendersChildren = true,
     rendersFragmentByDefault = false,
@@ -195,6 +199,7 @@ export default function isConformant(Component, options = {}) {
       // to call the prop, or drops the synthetic event on the way back out.
       for (const listenerName of dispatchableListeners) {
         if (!_.has(Component.propTypes, listenerName)) continue
+        if (ignoredEvents.includes(listenerName)) continue
 
         const handlerSpy = vi.fn()
         const props = {
@@ -212,7 +217,7 @@ export default function isConformant(Component, options = {}) {
 
         expect(target, `Could not find an element to fire "${listenerName}" on`).not.toBeNull()
 
-        fireEvent[fireEventName(listenerName)](target, fireEventInit(listenerName))
+        fireEvent[fireEventName(listenerName)](target, fireEventInit(listenerName, target))
 
         expect(
           handlerSpy,
