@@ -925,8 +925,16 @@ Order of work:
 1. ✅ Storybook 10 + Vite builder + the pinned CSS, one component's stories by
    hand to prove the shape.
 2. ✅ The generator, and the other 900 — 162 story files, 893 stories.
-3. Chromatic in CI on pull requests and `main`, TurboSnap on.
+3. ✅ Chromatic in CI on pull requests and `main`, TurboSnap on.
 4. The Vitest addon, once the stories are stable.
+5. The walk: `2.4.4` → `2.6.4` → `2.7.8` → `2.8.8` → `2.9.4`, one PR each.
+
+**Chromatic authenticates from CI configuration, never from a committed file.**
+It runs as its own CI job rather than a step in `build`, so a
+snapshot diff — which is a question for a reviewer, not a failure — does not
+read as the test suite breaking. `exitZeroOnChanges` says the same thing to the
+action. `fetch-depth: 0` is required: TurboSnap diffs against the baseline's
+commit, which a shallow clone does not contain.
 
 Two gaps left open by steps 1–2, both worth closing before the first baseline:
 
