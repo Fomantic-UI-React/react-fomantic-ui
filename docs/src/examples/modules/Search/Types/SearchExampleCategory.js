@@ -1,29 +1,76 @@
 import _ from 'lodash'
-import faker from 'faker'
 import React, { Component } from 'react'
 import { GridColumn, Search, Grid, Header, Segment } from 'react-fomantic-ui'
 
 const initialState = { isLoading: false, results: [], value: '' }
 
-const getResults = () =>
-  _.times(5, () => ({
-    title: faker.company.companyName(),
-    description: faker.company.catchPhrase(),
-    image: faker.internet.avatar(),
-    price: faker.finance.amount(0, 100, 2, '$'),
-  }))
+const categories = {
+  bandwidth: [
+    {
+      title: 'Bergstrom Group',
+      description: 'Distributed hybrid infrastructure',
+    },
+    { title: 'Cassin and Sons', description: 'Front-line workflow automation' },
+    {
+      title: 'Dietrich Holdings',
+      description: 'Organic zero-administration knowledge base',
+    },
+    {
+      title: 'Kuhlman Partners',
+      description: 'Reactive object-oriented reporting',
+    },
+    {
+      title: 'Weimann Industries',
+      description: 'Seamless bi-directional analytics',
+    },
+  ],
+  firewall: [
+    {
+      title: 'Abbott Logistics',
+      description: 'Multi-layered client-server firmware',
+    },
+    {
+      title: 'Bosco Analytics',
+      description: 'Cross-platform intangible middleware',
+    },
+    { title: 'Grady Networks', description: 'Optional composite hierarchy' },
+    {
+      title: 'Hane Systems',
+      description: 'Streamlined bottom-line encryption',
+    },
+    {
+      title: 'Roob Communications',
+      description: 'Ergonomic mission-critical throughput',
+    },
+  ],
+  protocol: [
+    {
+      title: 'Beier and Daughters',
+      description: 'Persistent zero-defect protocol',
+    },
+    {
+      title: 'Emard Digital',
+      description: 'Assimilated coherent instruction set',
+    },
+    { title: 'Larson Group', description: 'Fundamental national attitude' },
+    { title: 'Rippin Consulting', description: 'Balanced dedicated matrix' },
+    {
+      title: 'Volkman Labs',
+      description: 'Universal well-modulated capability',
+    },
+  ],
+}
 
-const source = _.range(0, 3).reduce((memo) => {
-  const name = faker.hacker.noun()
+const avatars = ['elliot', 'jenny', 'matt', 'steve', 'tom']
 
-  // eslint-disable-next-line no-param-reassign
-  memo[name] = {
-    name,
-    results: getResults(),
-  }
-
-  return memo
-}, {})
+const source = _.mapValues(categories, (results, name) => ({
+  name,
+  results: _.map(results, (result, index) => ({
+    ...result,
+    image: `/images/avatar/small/${avatars[index]}.jpg`,
+    price: `$${(index + 1) * 17}.00`,
+  })),
+}))
 
 export default class SearchExampleCategory extends Component {
   state = initialState

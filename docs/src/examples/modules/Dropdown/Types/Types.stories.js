@@ -8,12 +8,14 @@ import DropdownExampleFloating from './DropdownExampleFloating'
 import DropdownExampleInline from './DropdownExampleInline'
 import DropdownExampleInlineTwo from './DropdownExampleInlineTwo'
 import DropdownExampleMultipleSearchInMenu from './DropdownExampleMultipleSearchInMenu'
+import DropdownExampleMultipleSearchSelection from './DropdownExampleMultipleSearchSelection'
 import DropdownExampleMultipleSelection from './DropdownExampleMultipleSelection'
 import DropdownExamplePointing from './DropdownExamplePointing'
 import DropdownExamplePointingTwo from './DropdownExamplePointingTwo'
 import DropdownExampleSearchDropdown from './DropdownExampleSearchDropdown'
 import DropdownExampleSearchInMenu from './DropdownExampleSearchInMenu'
 import DropdownExampleSearchSelection from './DropdownExampleSearchSelection'
+import DropdownExampleSearchSelectionTwo from './DropdownExampleSearchSelectionTwo'
 import DropdownExampleSelection from './DropdownExampleSelection'
 import DropdownExampleSimple from './DropdownExampleSimple'
 
@@ -30,6 +32,9 @@ export const InlineTwo = { render: () => <DropdownExampleInlineTwo /> }
 export const MultipleSearchInMenu = {
   render: () => <DropdownExampleMultipleSearchInMenu />,
 }
+export const MultipleSearchSelection = {
+  render: () => <DropdownExampleMultipleSearchSelection />,
+}
 export const MultipleSelection = {
   render: () => <DropdownExampleMultipleSelection />,
 }
@@ -41,6 +46,9 @@ export const SearchDropdown = {
 export const SearchInMenu = { render: () => <DropdownExampleSearchInMenu /> }
 export const SearchSelection = {
   render: () => <DropdownExampleSearchSelection />,
+}
+export const SearchSelectionTwo = {
+  render: () => <DropdownExampleSearchSelectionTwo />,
 }
 export const Selection = { render: () => <DropdownExampleSelection /> }
 export const Simple = { render: () => <DropdownExampleSimple /> }

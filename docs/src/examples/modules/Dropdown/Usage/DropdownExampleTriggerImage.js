@@ -1,10 +1,9 @@
-import faker from 'faker'
 import React from 'react'
 import { Dropdown, Image } from 'react-fomantic-ui'
 
 const trigger = (
   <span>
-    <Image avatar src={faker.internet.avatar()} /> {faker.name.findName()}
+    <Image avatar src='/images/avatar/small/elliot.jpg' /> Elliot Fu
   </span>
 )
 

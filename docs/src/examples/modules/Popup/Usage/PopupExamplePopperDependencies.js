@@ -1,4 +1,3 @@
-import faker from 'faker'
 import React from 'react'
 import {
   PlaceholderParagraph,
@@ -26,9 +25,10 @@ const PopupExamplePopperDependencies = () => {
 
         timer.current = setTimeout(() => {
           setData({
-            description: faker.lorem.sentences(5),
-            name: faker.name.firstName(),
-            title: faker.name.title(),
+            description:
+              'Joined in 2013. Maintains the design system and reviews most of the component work. Usually found in the Thursday office hours.',
+            name: 'Elliot',
+            title: 'Principal Engineer',
           })
         }, 2000)
       }}

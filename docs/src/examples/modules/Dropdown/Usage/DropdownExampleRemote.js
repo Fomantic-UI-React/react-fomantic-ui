@@ -1,13 +1,26 @@
 import _ from 'lodash'
-import faker from 'faker'
 import React, { Component } from 'react'
 import { GridColumn, Button, Dropdown, Grid, Header } from 'react-fomantic-ui'
 
-const getOptions = () =>
-  _.times(3, () => {
-    const name = faker.name.findName()
-    return { key: name, text: name, value: _.snakeCase(name) }
-  })
+// Rotates through fixed pages so "Fetch" visibly changes the options while
+// staying the same on every run.
+const pages = [
+  ['Elliot Fu', 'Jenny Hess', 'Stevie Feliciano'],
+  ['Christian Rocha', 'Matt Fitzgerald', 'Justen Kitsune'],
+  ['Helen Troy', 'Molly Fowler', 'Veronika Ossi'],
+]
+let page = 0
+
+const getOptions = () => {
+  const names = pages[page % pages.length]
+  page += 1
+
+  return _.map(names, (name) => ({
+    key: name,
+    text: name,
+    value: _.snakeCase(name),
+  }))
+}
 
 class DropdownExampleRemote extends Component {
   state = {
@@ -33,7 +46,7 @@ class DropdownExampleRemote extends Component {
 
   selectRandom = () => {
     const { multiple, options } = this.state
-    const value = _.sample(options).value
+    const value = _.head(options).value
     this.setState({ value: multiple ? [value] : value })
   }
 

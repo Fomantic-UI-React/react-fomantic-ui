@@ -1,5 +1,4 @@
 import _ from 'lodash'
-import faker from 'faker'
 import React from 'react'
 import {
   GridColumn,
@@ -10,12 +9,38 @@ import {
   Label,
 } from 'react-fomantic-ui'
 
-const source = _.times(5, () => ({
-  title: faker.company.companyName(),
-  description: faker.company.catchPhrase(),
-  image: faker.internet.avatar(),
-  price: faker.finance.amount(0, 100, 2, '$'),
-}))
+const source = [
+  {
+    title: 'Bergstrom Group',
+    description: 'Distributed hybrid infrastructure for growing teams',
+    image: '/images/avatar/small/elliot.jpg',
+    price: '$24.00',
+  },
+  {
+    title: 'Cassin and Sons',
+    description: 'Front-line encompassing workflow automation',
+    image: '/images/avatar/small/jenny.jpg',
+    price: '$48.50',
+  },
+  {
+    title: 'Dietrich Holdings',
+    description: 'Organic zero-administration knowledge base',
+    image: '/images/avatar/small/matt.jpg',
+    price: '$12.75',
+  },
+  {
+    title: 'Kuhlman Partners',
+    description: 'Reactive object-oriented reporting for the enterprise',
+    image: '/images/avatar/small/steve.jpg',
+    price: '$91.20',
+  },
+  {
+    title: 'Weimann Industries',
+    description: 'Seamless bi-directional analytics at any scale',
+    image: '/images/avatar/small/tom.jpg',
+    price: '$67.00',
+  },
+]
 
 const initialState = {
   loading: false,
