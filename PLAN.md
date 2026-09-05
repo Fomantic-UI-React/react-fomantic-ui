@@ -221,7 +221,7 @@ remaining in `test/specs` — no growing include-list in the config.
 | 7e | `modules` — Checkbox, Rating | ✅ |
 | 7f | `modules` — Modal | ✅ |
 | 7g | `modules` — Sticky | ✅ |
-| 7h | `modules` — Tab, Transition | 2 files of state and timing behaviour |
+| 7h | `modules` — Tab, Transition | ✅ |
 | 7i | `modules` — Dropdown (2,903 LOC), Search, Popup | The three largest and most interactive |
 | 8 | Delete the frozen `commonTests` and `docs` originals | Phase 2 done when `test/specs` is empty |
 
@@ -491,6 +491,53 @@ component that only spreads props but not for one that measures what it puts
 inside. Enzyme's `shallow()` never rendered deeply enough to notice. The
 fixtures now render `children`, which is both what an `as` component should do
 and what the assertion is really about.
+
+**Ported in PR 7h** (`Tab`, `Transition`): the first pair where the frozen
+assertions were mostly about *which component* was rendered where, and the two
+translations are worth separating.
+
+`Tab`'s structural tests walked the element tree — `childAt(0).should.match('Grid')`,
+`childAt(0).shallow().childAt(1).should.match('GridColumn')` — six levels deep in
+places. Every one of those components renders a class name of its own (`grid`,
+`column`, `menu`, `tab`), so the DOM equivalent is a class selector, and unlike
+the element tree it also proves the thing actually rendered. Its `activeIndex`
+"is passed to the Menu" becomes "the item at that index carries `active`", which
+is what passing it is for.
+
+`Transition` renders nothing of its own — it clones its child — so the Enzyme
+`wrapper` and its `wrapper.find('p')` were always the same node, and the port
+collapses to one `child()` accessor. `data-test-status` is emitted by the
+component outside production, so the status assertions carry over unchanged.
+
+**Fake timers appear for the first time here**, in three tests, and deliberately.
+The rest of the suite waits with `waitFor`, which is right when the assertion is
+"eventually". These three assert the opposite — that a 200ms transition has *not*
+completed at 100ms — and there is no non-flaky way to assert a negative against a
+real clock. Each one was mutation-checked by shortening the duration and
+confirming it fails.
+
+Two frozen tests asserted something other than their name, and are corrected in
+place with a comment rather than filed, following the `Checkbox` precedent:
+
+- **`children` "returns null when UNMOUNTED"** passed `mountOnShow={false}
+  unmountOnHide={false}`, which computes to `EXITED`, not `UNMOUNTED`. Its
+  `blank()` assertion passed anyway, because the `<p>` it rendered holds no text.
+  The port renders the props that actually produce `UNMOUNTED`.
+- **`duration` "applies numeric value to style when EXITING"** was a copy of the
+  ENTERING test — `transitionOnMount`, asserting `ENTERING` — so the exiting side
+  of `normalizeTransitionDuration` was never covered. It is now.
+
+One assertion was dropped: `onTabChange`'s frozen test injected a
+`{ fake: 'event' }` object through Enzyme's `simulate()` and asserted it arrived.
+React hands a DOM handler nothing but the event, so this is the same unreachable
+case as `Form`'s "passes all args to onSubmit" in PR 5.
+
+**Fifth bug found**: `Tab` mutates the caller's `menu` prop object —
+`renderMenu` writes `menu.tabular = 'right'` when inferring from `menuPosition`.
+Once written, the `tabular === true` guard never matches again, so a consumer
+holding the object across renders is stuck with `right tabular` even after
+switching `menuPosition` to `'left'`. Tracked as **issue #26**. Invisible to the
+frozen suite because every test built a fresh object literal inside itself.
 
 **`shallow()` has no RTL equivalent, by design.** The 93 shallow files cannot be
 ported mechanically: structural assertions (`should.have.descendants`) have to
