@@ -222,7 +222,8 @@ remaining in `test/specs` — no growing include-list in the config.
 | 7f | `modules` — Modal | ✅ |
 | 7g | `modules` — Sticky | ✅ |
 | 7h | `modules` — Tab, Transition | ✅ |
-| 7i | `modules` — Dropdown (2,903 LOC), Search, Popup | The three largest and most interactive |
+| 7i | `modules` — Popup, Search | ✅ Split from Dropdown: 1,293 LOC between them |
+| 7j | `modules` — Dropdown (2,903 LOC) | The largest file in the corpus |
 | 8 | Delete the frozen `commonTests` and `docs` originals | Phase 2 done when `test/specs` is empty |
 
 **`componentInfoContext` must be replaced first.** `isConformant.js` and
@@ -538,6 +539,72 @@ Once written, the `tabular === true` guard never matches again, so a consumer
 holding the object across renders is stuck with `right tabular` even after
 switching `menuPosition` to `'left'`. Tracked as **issue #26**. Invisible to the
 frozen suite because every test built a fresh object literal inside itself.
+**Ported in PR 7i** (`Popup`, `Search`): 7i was planned as one PR for all three
+of the remaining files. Dropdown alone is 2,903 LOC, so it is split out as 7j —
+the same reasoning that made 4b and 6b their own PRs.
+
+`Popup` is the first file whose assertions were about a *third party's*
+configuration: eleven of them read props off `react-popper`'s `Popper`. Three of
+those have a DOM trace and are asserted there — `position` resolves to a class
+on the popup, `positionFixed` to `position: fixed` on the div Popper positions,
+and `eventsEnabled` to a real `scroll`/`resize` subscription on `window`. The
+rest — `pinned`, `offset`, `popperModifiers` — do not, because jsdom computes no
+layout for Popper to act on. Those are read back through a probe modifier passed
+via `popperModifiers`, which is a public prop, and Popper's own documented
+modifier API. That is a different thing from reaching into Popup's internals,
+and it survives Phase 3.
+
+Two mechanics from `Popup` that the remaining interactive components will hit:
+
+- **Portal's content node is not the element you rendered.** `closeOnPortalMouseLeave`
+  only fires for a mouseleave whose target is Portal's own content root —
+  `[data-suir-portal]`, above both `.ui.popup` and Popper's wrapping div. Firing
+  on the popup itself does nothing, silently.
+- **A close on a timer needs an act() flush.** Portal closes through a
+  `setTimeout`, so the `setState` lands outside `act()` and the DOM does not
+  catch up until something flushes it. `waitFor` does; a bare `await wait(n)`
+  does not, and will report the popup still open however long it waits. This
+  cost an hour of chasing a test that appeared to prove the opposite of the
+  truth, because a later `fireEvent` was flushing the *previous* assertion's
+  pending update.
+
+`Search` came through almost mechanically once the class names were known —
+`SearchResults`, `SearchCategory` and `SearchResult` are `.results`, `.category`
+and `.result`, with the category query scoped to the menu because the root
+carries `category` too. Its scroll test is the `Sticky` pattern again: jsdom
+computes no layout, so `offsetTop` and `clientHeight` are stubbed and the
+assertion is on the scroll position the component derives from them.
+
+**Sixth bug found**: `popperModifiers` cannot re-enable a modifier `Popup`
+disables. `Popup` hard-codes `enabled: !!offset` for `offset` and
+`preventOverflow` and `enabled: false` for `arrow`, and Popper merges by name
+with an object spread — so a user modifier in the shape Popper's own docs use,
+`{ name, options }`, has its options merged in and stays disabled. Silently.
+Tracked as **issue #28**; the frozen assertion was `deep.include(modifierOffset)`
+against the raw array prop, where membership says nothing about effect, and its
+`modifierOffset` was exactly the shape that does not work.
+
+**Seventh bug found, and the most serious the port has turned up**: `Search`'s
+keyboard navigation is one keypress behind under React 18. `moveSelectionBy`
+calls `scrollSelectedItemIntoView()` and `handleSelectionChange()` synchronously
+after `setState`, and both read what that `setState` was about to change — the
+DOM's `.result.active` and `this.state.selectedIndex`. The keydown arrives on a
+**native** document listener via `eventStack`, so React 17 flushed the update
+before either ran. React 18 batches native listeners too, and now:
+
+- `onSelectionChange` is handed the *previously* selected result, every time;
+- the menu scrolls to the item you just left, so arrowing to an off-screen
+  result never brings it into view — `scrollSelectedItemIntoView` has no other
+  call site, `componentDidUpdate` does not call it.
+
+Tracked as **issue #29**. The frozen spec asserted the correct result and passed,
+on React 17 in Karma; its scroll assertion was
+`scrollTop + clientHeight === scrollHeight`, true in a real browser and vacuously
+true in jsdom where every measurement is 0. This is the clearest case yet of the
+port earning its cost: a shipped regression that the old suite could not see
+because it ran on the React version the bug predates.
+
+`Dropdown` should be checked for the same shape before #29 is closed.
 
 **`shallow()` has no RTL equivalent, by design.** The 93 shallow files cannot be
 ported mechanically: structural assertions (`should.have.descendants`) have to
