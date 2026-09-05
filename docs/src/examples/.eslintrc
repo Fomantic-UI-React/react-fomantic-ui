@@ -13,13 +13,18 @@
   },
   "overrides": [
     {
-      "files": ["index.js"],
+      "files": [
+        "index.js",
+        "*.stories.js"
+      ],
       "rules": {
         "no-restricted-imports": "off"
       }
     },
     {
-      "files": ["**/*Example*.js"],
+      "files": [
+        "**/*Example*.js"
+      ],
       "rules": {
         "react/prop-types": "off"
       }

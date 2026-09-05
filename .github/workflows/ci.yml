@@ -42,3 +42,9 @@ jobs:
       # those go missing, every declared prop silently leaks onto the DOM.
       - name: Verify built output
         run: node scripts/verify-build.js
+
+      # 162 story files are generated from the examples, so nothing else
+      # notices when one stops compiling. This is also the build Chromatic
+      # will take its snapshots from.
+      - name: Build Storybook
+        run: yarn build-storybook --quiet
