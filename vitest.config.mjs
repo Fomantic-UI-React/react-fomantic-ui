@@ -14,12 +14,14 @@ export default defineConfig({
     alias: {
       src: path.join(root, 'src'),
       test: path.join(root, 'test'),
+
+      // The documentation examples import the package by name, the way a
+      // consumer writes them. test/unit/docs renders all of them.
+      'react-fomantic-ui': path.join(root, 'src'),
     },
   },
 
   test: {
-    // Only the ported specs. test/specs stays frozen until it is empty —
-    // see "Phase 2" in PLAN.md.
     include: ['test/unit/**/*-test.js'],
     environment: 'jsdom',
     globals: true,
