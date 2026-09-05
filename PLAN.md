@@ -174,7 +174,7 @@ Open follow-ups, neither blocking:
   `not ie < 11`). Deliberate, but it is a change in published output for
   anyone excluding `node_modules` from their own transpile.
 
-### Phase 2 — Vitest + @testing-library/react
+### Phase 2 — Vitest + @testing-library/react ✅ done
 
 The long pole; see landmine 3. Delivered as a sequence of PRs, each one green
 on its own — never a single mega-branch.
@@ -224,7 +224,7 @@ remaining in `test/specs` — no growing include-list in the config.
 | 7h | `modules` — Tab, Transition | ✅ |
 | 7i | `modules` — Popup, Search | ✅ Split from Dropdown: 1,293 LOC between them |
 | 7j | `modules` — Dropdown (2,903 LOC) | ✅ The largest file in the corpus |
-| 8 | Delete the frozen `commonTests` and `docs` originals | Phase 2 done when `test/specs` is empty |
+| 8 | Delete the frozen `commonTests` and `docs` originals | ✅ `test/specs` is empty |
 
 **`componentInfoContext` must be replaced first.** `isConformant.js` and
 `hasValidTypings.js` import it from `docs/src/utils`, which Phase 0 deleted —
@@ -798,11 +798,70 @@ correct, it does not fix the shipped bug.
 > what it is, and it applies to the whole upstream backlog below as well —
 > those are unreviewed patches against code with no coverage yet.
 
+### Phase 2 closed (PR 8)
+
+`test/specs` and `test/utils` are gone — 15 frozen `commonTests` files, the docs
+spec, and 11 Enzyme/sinon/chai helpers that had been unrunnable since Phase 0
+took their packages out of `devDependencies`. `scripts/phase2/` goes with them,
+as its own README said it should.
+
+**The corpus, start to finish:** 203 files and ~19,000 LOC of Enzyme/mocha
+became 189 files and 10,603 passing tests. The assertion count went *up*, not
+down, which was not the expectation — landmine 3 predicted 1,186 wrapper
+assertions would not map 1:1 and that the count would fall. It rose because
+behavioural assertions are usually several DOM facts where a structural one was
+a single `should.have.descendants`, and because the port kept finding tests that
+asserted nothing.
+
+**Eight bugs found**, none of them visible to the suite that was replaced:
+
+| issue | what |
+| --- | --- |
+| #8 | circular imports leave `Parent.Group` undefined |
+| #11 | `<Image content='...' />` throws |
+| #16 | `TransitionablePortal` does not spread user props |
+| #19 | `Embed` builds its iframe URL with `&amp;` |
+| #26 | `Tab` mutates the caller's `menu` prop object |
+| #28 | `popperModifiers` cannot re-enable a modifier `Popup` disables |
+| #29 | `Search` keyboard navigation is a keypress behind on React 18 |
+| #31 | `DropdownText` renders the `divider` class |
+
+Plus **#35**, which the revived examples test found within a minute of running.
+
+**The docs examples test came back rather than being deleted.** The frozen
+version reached its fixtures through webpack's `require.context`, which is why
+it stopped working when the docs app went; `import.meta.glob` does the same job
+under Vite. It renders all 909 examples and asserts no console activity, in
+about six seconds — the whole public API exercised the way a consumer writes it,
+and the same files Phase 4 turns into stories. Sixteen are skipped because they
+still import `faker`, detected by reading their source rather than by a list, so
+the skips disappear when those examples are rewritten.
+
+That test immediately earned itself: `SidebarExampleVisible` is the only failure,
+and it is `@fluentui/react-component-event-listener` setting `defaultProps` on a
+function component. React 18 warns; **React 19 removes it**, so this is a Phase 3
+blocker sitting in a dependency rather than in our own code. Tracked as
+**issue #35**, and allow-listed narrowly enough in the test that any other
+warning still fails it.
+
+
 ### Phase 3 — React 19
 
 Convert `defaultProps` on the 21 function-component files (49 occurrences
 total across 26 files; the 5 remaining class components are unaffected).
-Resolve the propTypes/`handledProps` coupling. Needs phase 2 to verify safely.
+Resolve the propTypes/`handledProps` coupling. Phase 2 is now in place to verify
+against: 10,603 tests, and a smoke test over 909 examples that will catch a
+broken default the unit tests would not think to look for.
+
+Two known items waiting here, both found by the port:
+
+- **#35** — `@fluentui/react-component-event-listener` uses `defaultProps` on a
+  function component. It is a dependency, so the codemod cannot reach it, and
+  `Sidebar` is its only consumer. Dropping the package looks cheaper than
+  patching it, and would also close the transitive-React hazard from PR #21.
+- **#29** — `Search` reads state in the same tick as the `setState` that changes
+  it. That is already broken on React 18 and should be fixed before anything
+  else changes underneath it.
 
 ### Phase 4 — Storybook docs
 
