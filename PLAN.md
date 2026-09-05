@@ -921,11 +921,24 @@ writing the stories, independent of Chromatic.
 
 Order of work:
 
-1. Storybook 10 + Vite builder + the pinned CSS, one component's stories by hand
-   to prove the shape.
-2. The generator, and the other 900.
+1. ✅ Storybook 10 + Vite builder + the pinned CSS, one component's stories by
+   hand to prove the shape.
+2. ✅ The generator, and the other 900 — 162 story files, 893 stories.
 3. Chromatic in CI on pull requests and `main`, TurboSnap on.
 4. The Vitest addon, once the stories are stable.
+
+Two gaps left open by steps 1–2, both worth closing before the first baseline:
+
+- **Portal components snapshot closed.** `Modal`, `Popup`, `Dropdown` and
+  friends render their trigger and nothing else, so the interesting UI is not in
+  the picture. Storybook `play` functions open them and Chromatic waits for play
+  to finish, but which interaction to run is a per-component judgement across
+  162 files, not a generator rule.
+- **Sixteen examples are excluded because they import `faker`.** Random data and
+  visual regression are incompatible — a faker string differs on every run, so
+  every snapshot would differ. They cover `Search`, `Dropdown` search,
+  `Accordion` and `Popup`, which is real coverage to be missing. Rewriting them
+  with fixed data is the same treatment the ported specs got.
 
 #### Which Fomantic, and how we get to current
 

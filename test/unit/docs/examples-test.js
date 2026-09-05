@@ -34,7 +34,10 @@ const KNOWN_WARNINGS = [/Support for defaultProps will be removed from function 
 const isKnown = (call) => KNOWN_WARNINGS.some((pattern) => pattern.test(String(call[0])))
 
 describe('examples', () => {
-  const paths = Object.keys(modules)
+  // A section directory called `Examples` means its generated story file is
+  // `Examples.stories.js`, which the glob above matches. Stories are covered by
+  // Storybook, not here.
+  const paths = Object.keys(modules).filter((path) => !path.endsWith('.stories.js'))
 
   it('finds the examples', () => {
     expect(paths.length).toBeGreaterThan(800)

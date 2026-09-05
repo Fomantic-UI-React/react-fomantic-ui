@@ -1,9 +1,3 @@
 coverage/*
 dist/*
 tmp/*
-
-# Frozen reference corpus: the Enzyme-era specs and their helpers are kept
-# as the behavioural specification to port from, but are not linted or run
-# until the Vitest/@testing-library rewrite.
-test/specs/*
-test/utils/*
