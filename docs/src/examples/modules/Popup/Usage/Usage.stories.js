@@ -15,6 +15,7 @@ import PopupExampleNested from './PopupExampleNested'
 import PopupExampleOffset from './PopupExampleOffset'
 import PopupExampleOffsetFunction from './PopupExampleOffsetFunction'
 import PopupExamplePopper from './PopupExamplePopper'
+import PopupExamplePopperDependencies from './PopupExamplePopperDependencies'
 import PopupExamplePositionFixed from './PopupExamplePositionFixed'
 
 export default { title: 'Modules/Popup/Usage' }
@@ -35,4 +36,7 @@ export const Nested = { render: () => <PopupExampleNested /> }
 export const Offset = { render: () => <PopupExampleOffset /> }
 export const OffsetFunction = { render: () => <PopupExampleOffsetFunction /> }
 export const Popper = { render: () => <PopupExamplePopper /> }
+export const PopperDependencies = {
+  render: () => <PopupExamplePopperDependencies />,
+}
 export const PositionFixed = { render: () => <PopupExamplePositionFixed /> }

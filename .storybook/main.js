@@ -15,6 +15,13 @@ export default {
 
   addons: [],
 
+  // 214 of the examples reference /images/... — avatars, wireframes, the logo.
+  // Those files were deleted in phase 0 along with the react-static docs app
+  // that served them, and are restored here so the stories are not full of
+  // broken-image placeholders. Chromatic would otherwise bake 214 of them into
+  // the baseline.
+  staticDirs: ['../docs/public'],
+
   viteFinal: (config) => ({
     ...config,
 

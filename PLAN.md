@@ -833,9 +833,10 @@ version reached its fixtures through webpack's `require.context`, which is why
 it stopped working when the docs app went; `import.meta.glob` does the same job
 under Vite. It renders all 909 examples and asserts no console activity, in
 about six seconds — the whole public API exercised the way a consumer writes it,
-and the same files Phase 4 turns into stories. Sixteen are skipped because they
-still import `faker`, detected by reading their source rather than by a list, so
-the skips disappear when those examples are rewritten.
+and the same files Phase 4 turns into stories. Sixteen were skipped at the time
+because they still imported `faker`, detected by reading their source rather
+than from a list; they were rewritten with fixed data in phase 3 and the skips
+went with them.
 
 That test immediately earned itself: `SidebarExampleVisible` is the only failure,
 and it is `@fluentui/react-component-event-listener` setting `defaultProps` on a
@@ -934,11 +935,21 @@ Two gaps left open by steps 1–2, both worth closing before the first baseline:
   the picture. Storybook `play` functions open them and Chromatic waits for play
   to finish, but which interaction to run is a per-component judgement across
   162 files, not a generator rule.
-- **Sixteen examples are excluded because they import `faker`.** Random data and
-  visual regression are incompatible — a faker string differs on every run, so
-  every snapshot would differ. They cover `Search`, `Dropdown` search,
-  `Accordion` and `Popup`, which is real coverage to be missing. Rewriting them
-  with fixed data is the same treatment the ported specs got.
+- ✅ **Sixteen examples excluded because they imported `faker`** — rewritten with
+  fixed data, taking the corpus to 909 stories across 165 files.
+
+**A third gap, found while doing the second.** 214 of the 909 examples reference
+`/images/…` — avatars, wireframes, the logo — and none of those files existed:
+phase 0 deleted `docs/public/images` along with the react-static app that served
+them. Nothing noticed, because a broken `<img>` still renders and the smoke test
+only asks for console silence. Left alone, Chromatic would have baked 214
+broken-image placeholders into the baseline and every one would have looked
+correct forever after.
+
+The 82 files were recovered from the commit that removed them and are served by
+`staticDirs`, so the `/images/…` paths resolve unchanged and no example needed
+editing. Worth remembering as a shape: **phase 0 kept the examples but not the
+fixtures they render**, so anything else the docs app used to serve is suspect.
 
 #### Which Fomantic, and how we get to current
 

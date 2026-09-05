@@ -5,6 +5,7 @@ import AccordionExampleForm from './AccordionExampleForm'
 import AccordionExampleIconShorthand from './AccordionExampleIconShorthand'
 import AccordionExampleMenu from './AccordionExampleMenu'
 import AccordionExampleNested from './AccordionExampleNested'
+import AccordionExampleShorthand from './AccordionExampleShorthand'
 
 export default { title: 'Modules/Accordion/Advanced' }
 
@@ -12,3 +13,4 @@ export const Form = { render: () => <AccordionExampleForm /> }
 export const IconShorthand = { render: () => <AccordionExampleIconShorthand /> }
 export const Menu = { render: () => <AccordionExampleMenu /> }
 export const Nested = { render: () => <AccordionExampleNested /> }
+export const Shorthand = { render: () => <AccordionExampleShorthand /> }

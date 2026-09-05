@@ -15,10 +15,13 @@ import DropdownExampleItemContent from './DropdownExampleItemContent'
 import DropdownExampleMultipleAllowAdditions from './DropdownExampleMultipleAllowAdditions'
 import DropdownExampleMultipleCustomLabel from './DropdownExampleMultipleCustomLabel'
 import DropdownExampleOpenOnFocus from './DropdownExampleOpenOnFocus'
+import DropdownExampleRemote from './DropdownExampleRemote'
 import DropdownExampleRemoveNoResultsMessage from './DropdownExampleRemoveNoResultsMessage'
 import DropdownExampleSearchInput from './DropdownExampleSearchInput'
+import DropdownExampleSearchQuery from './DropdownExampleSearchQuery'
 import DropdownExampleSelectOnNavigation from './DropdownExampleSelectOnNavigation'
 import DropdownExampleTrigger from './DropdownExampleTrigger'
+import DropdownExampleTriggerImage from './DropdownExampleTriggerImage'
 import DropdownExampleUncontrolled from './DropdownExampleUncontrolled'
 import DropdownExampleUpward from './DropdownExampleUpward'
 import DropdownExampleUpwardInline from './DropdownExampleUpwardInline'
@@ -55,14 +58,17 @@ export const MultipleCustomLabel = {
   render: () => <DropdownExampleMultipleCustomLabel />,
 }
 export const OpenOnFocus = { render: () => <DropdownExampleOpenOnFocus /> }
+export const Remote = { render: () => <DropdownExampleRemote /> }
 export const RemoveNoResultsMessage = {
   render: () => <DropdownExampleRemoveNoResultsMessage />,
 }
 export const SearchInput = { render: () => <DropdownExampleSearchInput /> }
+export const SearchQuery = { render: () => <DropdownExampleSearchQuery /> }
 export const SelectOnNavigation = {
   render: () => <DropdownExampleSelectOnNavigation />,
 }
 export const Trigger = { render: () => <DropdownExampleTrigger /> }
+export const TriggerImage = { render: () => <DropdownExampleTriggerImage /> }
 export const Uncontrolled = { render: () => <DropdownExampleUncontrolled /> }
 export const Upward = { render: () => <DropdownExampleUpward /> }
 export const UpwardInline = { render: () => <DropdownExampleUpwardInline /> }
