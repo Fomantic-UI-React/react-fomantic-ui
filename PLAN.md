@@ -672,6 +672,56 @@ PR 1 as underivable.
 changes, not inline after `setState`, so it sees the item that is actually
 selected. The ported scroll test asserts the correct positions and passes.
 
+### `user-event`, not `fireEvent`, for anything a user does
+
+Applied across `Tab`, `Popup` and `Search` after the `modules` ports landed, and
+to `Dropdown` in 7j.
+
+`fireEvent` dispatches exactly one event, deliberately — `fireEvent.click` sends
+a `click` and nothing else. Components that read the events a browser sends
+*around* an interaction then behave differently under test than in a browser,
+and the difference reads as a component bug. `Dropdown` and `Search` both track
+an `isMouseDown` flag set from `mousedown`, and both gate an `openOnFocus`
+branch on it; under a bare click the focus that selection moves back to the
+control looks like a *fresh* focus, and the menu reopens the moment it closes.
+That was mistaken for a shipped React 18 regression twice before the cause was
+found, and the first fix — a helper sending mousedown, click and mouseup by
+hand — was `user-event` reinvented badly.
+
+`@testing-library/user-event` was already a devDependency and unused.
+`userEvent.setup()` is called per test in `beforeEach`, before anything renders,
+and every method is awaited. The frozen spec's constructions map onto real
+gestures:
+
+| frozen spec | user gesture |
+| --- | --- |
+| `simulate('click')` on an item | `await user.click(item)` |
+| `mousedown` + `focus`, to focus without opening | `user.pointer({ keys: '[MouseLeft>]' })` — the button held down |
+| `simulate('focus')` / `simulate('blur')` | `await user.tab()` in, and again out |
+| `simulate('change', { target: { value } })` | `await user.clear(input)` then `await user.type(input, value)` |
+| `domEvent.keyDown(document, { key })` | `await user.keyboard('{Escape}')` |
+| `.blur()` by hand, wrapped in `act()` | `await user.tab()` |
+
+Four things fell out of it:
+
+- **`user.click` focuses.** `fireEvent.click` never did, so assertions about
+  where focus ends up were only ever true by accident.
+- **The `act()` trap mostly disappears.** `user-event` wraps its own dispatches
+  and awaits them, so the pending-`setState` problem that cost an hour on
+  `Popup`'s hover tests does not arise for anything it drives. It remains for
+  timers, which is where `Transition` still needs it.
+- **`preventDefault` must be read after the interaction.** A listener on the
+  element runs before React's handler on the container, so it always sees
+  `defaultPrevented` as `false`. Keep the event, read it once the interaction
+  resolves.
+- **A real pointer hovers before it clicks.** `Popup`'s `on={['click','hover']}`
+  test only passed because `simulate('click')` sent no hover: with a real
+  pointer the hover opens the popup and the click that follows toggles it shut.
+  The port asserts that sequence instead, which is what a user gets.
+
+`fireEvent` is still right where there is no user gesture — `scroll` on `window`
+is the only use left in these files.
+
 **`shallow()` has no RTL equivalent, by design.** The 93 shallow files cannot be
 ported mechanically: structural assertions (`should.have.descendants`) have to
 become behavioural ones against rendered output. Expect the assertion count to

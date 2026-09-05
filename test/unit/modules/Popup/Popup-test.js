@@ -1,4 +1,5 @@
 import { act, fireEvent, render, waitFor } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import _ from 'lodash'
 import React from 'react'
 
@@ -59,11 +60,20 @@ const withPopperState = async (element, extraModifiers = []) => {
 }
 
 describe('Popup', () => {
+  // Interactions go through user-event, which sends the whole pointer, focus
+  // and keyboard sequence a browser does. `fireEvent` is kept only for `scroll`,
+  // which user-event has no gesture for and jsdom cannot produce by itself.
+  let user
+
+  beforeEach(() => {
+    user = userEvent.setup()
+  })
+
   common.isConformant(Popup, { rendersChildren: false, rendersPortal: true, forwardsRef: false })
   common.hasSubcomponents(Popup, [PopupHeader, PopupContent])
 
   describe('children', () => {
-    it('renders a Portal', () => {
+    it('renders a Portal', async () => {
       // Enzyme asked what element type Popup returned. The observable fact is
       // that its output lands outside the tree it was rendered into.
       const { container } = render(<Popup open />)
@@ -72,19 +82,19 @@ describe('Popup', () => {
       expect(inBody('[data-suir-portal] .ui.popup.visible')).toBe(true)
     })
 
-    it('renders to the document body', () => {
+    it('renders to the document body', async () => {
       render(<Popup open />)
 
       expect(inBody('.ui.popup.visible')).toBe(true)
     })
 
-    it('renders child text', () => {
+    it('renders child text', async () => {
       render(<Popup open>child text</Popup>)
 
       expect(popup()).toHaveTextContent('child text')
     })
 
-    it('renders child components', () => {
+    it('renders child components', async () => {
       const child = <div data-child />
       render(<Popup open>{child}</Popup>)
 
@@ -93,7 +103,7 @@ describe('Popup', () => {
   })
 
   describe('className', () => {
-    it('should add className to the wrapping node', () => {
+    it('should add className to the wrapping node', async () => {
       render(<Popup className='some-class' open />)
 
       expect(inBody('.ui.popup.visible.some-class')).toBe(true)
@@ -101,7 +111,7 @@ describe('Popup', () => {
   })
 
   describe('basic', () => {
-    it('adds basic to the popup className', () => {
+    it('adds basic to the popup className', async () => {
       render(<Popup basic open />)
 
       expect(inBody('.ui.basic.popup.visible')).toBe(true)
@@ -109,20 +119,20 @@ describe('Popup', () => {
   })
 
   describe('disabled', () => {
-    it('is not disabled by default', () => {
+    it('is not disabled by default', async () => {
       render(<Popup open trigger={<button />} />)
 
       expect(inBody('.ui.popup.visible')).toBe(true)
     })
 
-    it('does not render Portal if disabled', () => {
+    it('does not render Portal if disabled', async () => {
       const { container } = render(<Popup disabled trigger={<button />} />)
 
       expect(container.querySelector('button')).not.toBeNull()
       expect(inBody('.ui.popup')).toBe(false)
     })
 
-    it('does not render Portal even with open prop', () => {
+    it('does not render Portal even with open prop', async () => {
       render(<Popup open disabled trigger={<button />} />)
 
       expect(inBody('.ui.popup')).toBe(false)
@@ -159,7 +169,7 @@ describe('Popup', () => {
   })
 
   describe('flowing', () => {
-    it('adds flowing to the popup className', () => {
+    it('adds flowing to the popup className', async () => {
       render(<Popup flowing open />)
 
       expect(inBody('.ui.flowing.popup.visible')).toBe(true)
@@ -169,23 +179,23 @@ describe('Popup', () => {
   describe('hideOnScroll', () => {
     const trigger = <button>foo</button>
 
-    it('hides on window scroll', () => {
+    it('hides on window scroll', async () => {
       const { container } = render(<Popup content='foo' hideOnScroll trigger={trigger} />)
 
-      fireEvent.click(container.querySelector('button'))
+      await user.click(container.querySelector('button'))
       expect(inBody('.ui.popup.visible')).toBe(true)
 
       fireEvent.scroll(window)
       expect(inBody('.ui.popup.visible')).toBe(false)
     })
 
-    it('is called with (e, props) when scroll', () => {
+    it('is called with (e, props) when scroll', async () => {
       const onClose = vi.fn()
       const { container } = render(
         <Popup content='foo' hideOnScroll onClose={onClose} trigger={trigger} />,
       )
 
-      fireEvent.click(container.querySelector('button'))
+      await user.click(container.querySelector('button'))
       fireEvent.scroll(window)
 
       expect(onClose).toHaveBeenCalledTimes(1)
@@ -195,14 +205,14 @@ describe('Popup', () => {
       )
     })
 
-    it('not hide on scroll from inside a popup', () => {
+    it('not hide on scroll from inside a popup', async () => {
       const onClose = vi.fn()
       const { container } = render(
         <Popup hideOnScroll onClose={onClose} trigger={trigger}>
           <div data-child />
         </Popup>,
       )
-      fireEvent.click(container.querySelector('button'))
+      await user.click(container.querySelector('button'))
 
       fireEvent.scroll(document.querySelector('[data-child]'))
       expect(onClose).not.toHaveBeenCalled()
@@ -225,7 +235,8 @@ describe('Popup', () => {
     it('can be set to stay visible while hovering the popup', async () => {
       render(<Popup content='foo' defaultOpen mouseLeaveDelay={0} trigger={<button />} />)
 
-      fireEvent.mouseLeave(portalContent())
+      await user.hover(portalContent())
+      await user.unhover(portalContent())
       await act(() => wait(20))
 
       expect(inBody('.ui.popup')).toBe(true)
@@ -234,14 +245,15 @@ describe('Popup', () => {
     it('closes on mouse leave of the popup when set', async () => {
       render(<Popup content='foo' defaultOpen hoverable mouseLeaveDelay={0} trigger={<button />} />)
 
-      fireEvent.mouseLeave(portalContent())
+      await user.hover(portalContent())
+      await user.unhover(portalContent())
 
       await waitFor(() => expect(inBody('.ui.popup')).toBe(false))
     })
   })
 
   describe('inverted', () => {
-    it('adds inverted to the popup className', () => {
+    it('adds inverted to the popup className', async () => {
       render(<Popup inverted open />)
 
       expect(inBody('.ui.inverted.popup.visible')).toBe(true)
@@ -259,34 +271,34 @@ describe('Popup', () => {
   })
 
   describe('onClose', () => {
-    it('is not called on click inside of the popup', () => {
+    it('is not called on click inside of the popup', async () => {
       const onClose = vi.fn()
       render(<Popup defaultOpen onClose={onClose} />)
 
-      fireEvent.click(popup())
+      await user.click(popup())
 
       expect(onClose).not.toHaveBeenCalled()
     })
 
-    it('is called on body click', () => {
+    it('is called on body click', async () => {
       const onClose = vi.fn()
       render(<Popup defaultOpen onClose={onClose} />)
 
-      fireEvent.click(document.body)
+      await user.click(document.body)
 
       expect(onClose).toHaveBeenCalledTimes(1)
     })
 
-    it('is called when pressing escape', () => {
+    it('is called when pressing escape', async () => {
       const onClose = vi.fn()
       render(<Popup defaultOpen onClose={onClose} />)
 
-      fireEvent.keyDown(document, { key: 'Escape' })
+      await user.keyboard('{Escape}')
 
       expect(onClose).toHaveBeenCalledTimes(1)
     })
 
-    it('is not called when the open prop changes to false', () => {
+    it('is not called when the open prop changes to false', async () => {
       const onClose = vi.fn()
       const { rerender } = render(<Popup defaultOpen onClose={onClose} />)
 
@@ -295,7 +307,7 @@ describe('Popup', () => {
       expect(onClose).not.toHaveBeenCalled()
     })
 
-    it('is called with (e, props) on body click', () => {
+    it('is called with (e, props) on body click', async () => {
       const onClose = vi.fn()
       render(
         <Popup defaultOpen onClose={onClose} trigger={<div />}>
@@ -303,7 +315,7 @@ describe('Popup', () => {
         </Popup>,
       )
 
-      fireEvent.click(document.body)
+      await user.click(document.body)
 
       expect(onClose).toHaveBeenCalledWith(
         expect.anything(),
@@ -313,7 +325,7 @@ describe('Popup', () => {
   })
 
   describe('onOpen', () => {
-    it('is called on trigger click', () => {
+    it('is called on trigger click', async () => {
       const onOpen = vi.fn()
       const { container } = render(
         <Popup onOpen={onOpen} trigger={<div id='trigger' />}>
@@ -321,7 +333,7 @@ describe('Popup', () => {
         </Popup>,
       )
 
-      fireEvent.click(container.querySelector('#trigger'))
+      await user.click(container.querySelector('#trigger'))
 
       expect(onOpen).toHaveBeenCalledTimes(1)
       expect(onOpen).toHaveBeenCalledWith(
@@ -332,19 +344,19 @@ describe('Popup', () => {
   })
 
   describe('open', () => {
-    it('is not open by default', () => {
+    it('is not open by default', async () => {
       render(<Popup />)
 
       expect(inBody('.ui.popup.visible')).toBe(false)
     })
 
-    it('does not show the popup when false', () => {
+    it('does not show the popup when false', async () => {
       render(<Popup open={false} />)
 
       expect(inBody('.ui.popup.visible')).toBe(false)
     })
 
-    it('shows the popup on changing from false to true', () => {
+    it('shows the popup on changing from false to true', async () => {
       const { rerender } = render(<Popup open={false} />)
       expect(inBody('.ui.popup.visible')).toBe(false)
 
@@ -352,7 +364,7 @@ describe('Popup', () => {
       expect(inBody('.ui.popup.visible')).toBe(true)
     })
 
-    it('hides the popup on changing from true to false', () => {
+    it('hides the popup on changing from true to false', async () => {
       const { rerender } = render(<Popup open />)
       expect(inBody('.ui.popup.visible')).toBe(true)
 
@@ -394,13 +406,13 @@ describe('Popup', () => {
   })
 
   describe('positionFixed', () => {
-    it('is not defined by default', () => {
+    it('is not defined by default', async () => {
       render(<Popup open />)
 
       expect(popperElement()).toHaveStyle({ position: 'absolute' })
     })
 
-    it('can be set to "true"', () => {
+    it('can be set to "true"', async () => {
       render(<Popup positionFixed open />)
 
       expect(popperElement()).toHaveStyle({ position: 'fixed' })
@@ -421,14 +433,14 @@ describe('Popup', () => {
       await waitFor(() => expect(popperElement().style.zIndex).toBe('100'))
     })
 
-    it('additional props can be passed via shorthand', () => {
+    it('additional props can be passed via shorthand', async () => {
       render(<Popup open popper={{ className: 'foo', id: 'bar' }} />)
 
       expect(popperElement()).toHaveClass('foo')
       expect(popperElement()).toHaveAttribute('id', 'bar')
     })
 
-    it('"style" prop is merged', () => {
+    it('"style" prop is merged', async () => {
       render(<Popup open popper={{ style: { color: 'red', display: 'block' } }} />)
 
       // `display` is overridden by Popup, `color` is not.
@@ -483,10 +495,10 @@ describe('Popup', () => {
   })
 
   describe('trigger', () => {
-    it('opens Popup on click', () => {
+    it('opens Popup on click', async () => {
       const { container } = render(<Popup on='click' content='foo' trigger={<button />} />)
 
-      fireEvent.click(container.querySelector('button'))
+      await user.click(container.querySelector('button'))
 
       expect(inBody('.ui.popup.visible')).toBe(true)
     })
@@ -494,15 +506,18 @@ describe('Popup', () => {
     it('opens Popup on hover', async () => {
       const { container } = render(<Popup content='foo' mouseEnterDelay={0} trigger={<button />} />)
 
-      fireEvent.mouseEnter(container.querySelector('button'))
+      await user.hover(container.querySelector('button'))
 
       await waitFor(() => expect(inBody('.ui.popup.visible')).toBe(true))
     })
 
-    it('opens Popup on focus', () => {
+    it('opens Popup on focus', async () => {
       const { container } = render(<Popup on='focus' content='foo' trigger={<input />} />)
 
-      fireEvent.focus(container.querySelector('input'))
+      // Tab rather than click, so it is the focus opening the popup and not
+      // the click that would come with it.
+      await user.tab()
+      expect(document.activeElement).toBe(container.querySelector('input'))
 
       expect(inBody('.ui.popup.visible')).toBe(true)
     })
@@ -513,25 +528,30 @@ describe('Popup', () => {
       )
       const button = container.querySelector('button')
 
-      fireEvent.click(button)
-      expect(inBody('.ui.popup.visible')).toBe(true)
+      // Heads up! With both triggers on, a real pointer always hovers before it
+      // clicks, so the hover is what opens the popup and the click that follows
+      // toggles it shut — `closeOnTriggerClick` is set by the 'click' entry.
+      // The frozen spec's `simulate('click')` sent no hover, so it saw the
+      // click do the opening.
+      await user.hover(button)
+      await waitFor(() => expect(inBody('.ui.popup.visible')).toBe(true))
 
-      fireEvent.click(document.body)
+      await user.click(button)
       expect(inBody('.ui.popup.visible')).toBe(false)
 
-      fireEvent.mouseEnter(button)
-      await waitFor(() => expect(inBody('.ui.popup.visible')).toBe(true))
+      await user.click(button)
+      expect(inBody('.ui.popup.visible')).toBe(true)
     })
   })
 
   describe('wide', () => {
-    it('adds to the popup className', () => {
+    it('adds to the popup className', async () => {
       render(<Popup wide open />)
 
       expect(inBody('.ui.wide.popup.visible')).toBe(true)
     })
 
-    it('adds "very" to the popup className', () => {
+    it('adds "very" to the popup className', async () => {
       render(<Popup wide='very' open />)
 
       expect(inBody('.ui.very.wide.popup.visible')).toBe(true)
