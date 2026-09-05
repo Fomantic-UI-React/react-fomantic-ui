@@ -889,7 +889,8 @@ hand-edited where an example needs a decorator.
 
 **A CSS baseline has to be pinned.** The library ships no CSS, which is fine for
 unit tests and impossible for visual ones — every snapshot is of unstyled markup
-otherwise. See open decision 6.
+otherwise. **Resolved**: `fomantic-ui-css`, starting at the fork point and
+creeping forward — see "Which Fomantic, and how we get to current" below.
 
 **Snapshot budget.** Chromatic bills per snapshot per browser per viewport.
 909 stories, Chrome only, one viewport:
@@ -926,6 +927,59 @@ Order of work:
 3. Chromatic in CI on pull requests and `main`, TurboSnap on.
 4. The Vitest addon, once the stories are stable.
 
+#### Which Fomantic, and how we get to current
+
+Fomantic is the destination — it is the maintained fork, and the reason this
+project is called what it is. `semantic-ui-css` is frozen at 2.5.0 (Oct 2022)
+and is not where anything is going. But current Fomantic has diverged visually
+over seven years, so the baselines start at the split and walk forward one minor
+at a time, taking the diffs in reviewable pieces.
+
+**The split is `fomantic-ui-css@2.4.4`, 2018-08-18** — Fomantic's first npm
+release, continuing Semantic's 2.4.x numbering. `semantic-ui-css` published
+2.4.0 a month later and 2.4.1 after that, then nothing for four years until
+2.5.0. The lineages separate in mid-2018, and 2.4.4 is the closest point on the
+Fomantic side.
+
+**The class contract barely moves, which was not the expectation.** Rendering
+all 909 examples and collecting every class they produce gives 610 distinct
+names. Checked against each distribution:
+
+| distribution | emitted classes it does not style |
+| --- | --- |
+| `semantic-ui-css@2.5.0` | 12 — all inherently unstyleable tokens (`4:3`, `above`, `only`, `stay`…) |
+| `fomantic-ui-css@2.4.4` | those 12, plus `rectangular` and `short` (Embed aspect ratios) |
+| `fomantic-ui-css@2.9.4` | 11 — the same 12 minus `equal` and `reversed`, which it *gains*, plus `cs` |
+
+Separately, of the 244 country codes `Flag` accepts: Semantic 2.5.0 styles all
+of them, Fomantic 2.4.4 misses `uk` (it ships `gb`), 2.8.8 misses none, and
+2.9.4 misses `cs` — Czechoslovakia, dissolved in 1993 and dropped by Fomantic.
+
+So jumping straight to current Fomantic would cost exactly one dead flag and
+would *improve* two Embed classes. **The divergence is real, but it is visual —
+spacing, colour, radius, type — not structural.** That is the argument for doing
+this with pixels rather than by reading changelogs, and it means the walk is
+about reviewing diffs, not repairing breakage.
+
+The walk, five steps, each the last patch of its minor:
+
+| step | version | released |
+| --- | --- | --- |
+| baseline | `2.4.4` | 2018-08-18 |
+| 1 | `2.6.4` | 2018-11-15 |
+| 2 | `2.7.8` | 2019-09-02 |
+| 3 | `2.8.8` | 2021-06-24 |
+| 4 | `2.9.4` | 2025-02-23 |
+
+2.5.0 is skipped: a single release two weeks after 2.4.4.
+
+**This is the workload TurboSnap cannot help with.** A CSS bump changes every
+story, so each step is a full 909-snapshot build rather than the ~200 a code
+change costs. Five steps is 4,545 snapshots — most of a month on the free 5,000
+tier before any development happens. **The open-source sponsorship application
+is a prerequisite for this phase, not an optimisation.** Do it before the first
+baseline.
+
 ### Phase 4 — React 19
 
 Convert `defaultProps` on the 21 function-component files (49 occurrences
@@ -954,16 +1008,13 @@ Two known items waiting here, both found by the port:
    personal account `aphenine`. Repo at
    `github.com/Fomantic-UI-React/react-fomantic-ui`.
 3. **npm org/scope** — even publishing unscoped, reserving a scope is cheap.
-6. **Which CSS the visual baselines are taken against.** The library ships none
-   and works with either, so this picks itself once and then every snapshot is
-   relative to it. `semantic-ui-css` is frozen at 2.5.0 (Oct 2022) and is what
-   the ~370k weekly downloads actually have installed, so regressions caught
-   against it are the ones that reach real users. `fomantic-ui-css` is
-   maintained and matches the package name, but is a smaller install base and
-   its own releases would show up as diffs in ours. Recommendation:
-   **`semantic-ui-css` as the baseline**, pinned exactly, with Fomantic added as
-   a second Storybook theme later if it earns its snapshot cost. Not yet
-   decided.
+6. ~~**Which CSS the visual baselines are taken against.**~~ — **resolved**:
+   `fomantic-ui-css`, because it is the maintained fork and the destination;
+   `semantic-ui-css` is frozen and is not where this is going. Baselines start
+   at `2.4.4`, the fork point, and walk forward one minor at a time so the
+   visual diffs arrive in reviewable pieces. Measured first: the class contract
+   between Semantic 2.5.0 and current Fomantic differs by one dead flag, so what
+   has to be managed is visual divergence, not breakage. See Phase 3.
 4. ~~**First version number.**~~ — **resolved**: continue the v3 beta line.
    `3.0.0-beta.5` is the first release off the new pipeline and holds `latest`.
    Prereleases take `latest` because no stable release of this package name
