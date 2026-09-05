@@ -151,6 +151,22 @@ load — `semantic-ui-css`, `fomantic-ui-css` or a custom theme — keeps workin
 
 ## Documentation
 
+### Component explorer
+
+**[Browse every component and example →][storybook]**
+
+909 live examples covering the whole public API, published from `main` on
+every build — every component, in every documented variation, rendered rather
+than described. The source for each one is a single self-contained file under
+[`docs/src/examples`](./docs/src/examples), laid out to match the sidebar.
+
+It is styled with [`fomantic-ui-css`][fomanticcss] pinned at `2.4.4` — the
+first Fomantic release, and the closest point on the maintained lineage to
+where it split from Semantic-UI in 2018. That version is deliberate and moves
+forward one minor at a time; see [PLAN.md](./PLAN.md) for why.
+
+### Prose documentation
+
 This fork does not host its own documentation site yet. Upstream's
 [react.semantic-ui.com][upstreamdocs] still documents the same component API
 and remains broadly accurate — with the caveat that it describes the
@@ -211,6 +227,8 @@ MIT — see [LICENSE.md](./LICENSE.md).
 [fomantic]: https://fomantic-ui.com/
 [upstream]: https://github.com/Semantic-Org/Semantic-UI-React
 [upstreamdocs]: https://react.semantic-ui.com/
+[storybook]: https://main--6a9c61f6208335e5084aec99.chromatic.com
+[fomanticcss]: https://www.npmjs.com/package/fomantic-ui-css
 [suicss]: https://www.npmjs.com/package/semantic-ui-css
 [issues]: https://github.com/Fomantic-UI-React/react-fomantic-ui/issues
 [levi]: https://github.com/levithomason

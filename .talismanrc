@@ -11,6 +11,12 @@
 #
 # The "pass" entries cover test names: the detectors read "passed"/"passes" as
 # a password field, and the Phase 2 port adds a great many of them.
+#
+# The last entry is the Chromatic app id in the README's link to the published
+# component explorer. It is a public identifier in a public URL, not a
+# credential — but it is 24 hex characters, so the entropy detector reads it as
+# one. Allowed by its literal value rather than by ignoring README.md, which
+# would need a new checksum on every edit and would stop scanning the file.
 allowed_patterns:
   - key
   - Key
@@ -25,6 +31,7 @@ allowed_patterns:
   - passes
   - passed
   - passing
+  - 6a9c61f6208335e5084aec99
 version: ''
 scopeconfig:
   - scope: node
