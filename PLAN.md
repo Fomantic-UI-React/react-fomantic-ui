@@ -929,6 +929,11 @@ Order of work:
 4. The Vitest addon, once the stories are stable.
 5. The walk: `2.4.4` → `2.6.4` → `2.7.8` → `2.8.8` → `2.9.4`, one PR each.
 
+**Baseline taken.** Build 1 captured 909 snapshots across 165 components in
+1m49s and was auto-accepted — a first build has nothing to compare against, so
+it *is* the baseline. 909 of the month's 5,000 spent; the four remaining CSS
+steps need 3,636 more, which is why the sponsorship application matters.
+
 **Chromatic authenticates from CI configuration, never from a committed file.**
 It runs as its own CI job rather than a step in `build`, so a
 snapshot diff — which is a question for a reviewer, not a failure — does not
