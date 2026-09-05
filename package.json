@@ -22,7 +22,7 @@
     "prettier:fix": "prettier --write \"**/*.{js,jsx,ts,tsx}\"",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "stories": "node scripts/generate-stories.mjs",
+    "stories": "node scripts/generate-stories.mjs && prettier --write --log-level warn \"docs/src/examples/**/*.stories.js\"",
     "test": "vitest run",
     "test:watch": "vitest",
     "tsd:test": "node scripts/postbuild.mjs && tsc -p ./ --noEmit",

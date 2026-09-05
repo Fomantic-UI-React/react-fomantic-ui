@@ -930,11 +930,23 @@ Order of work:
 
 Two gaps left open by steps 1–2, both worth closing before the first baseline:
 
-- **Portal components snapshot closed.** `Modal`, `Popup`, `Dropdown` and
-  friends render their trigger and nothing else, so the interesting UI is not in
-  the picture. Storybook `play` functions open them and Chromatic waits for play
-  to finish, but which interaction to run is a per-component judgement across
-  162 files, not a generator rule.
+- ✅ **Portal components snapshotted closed** — three shared `play` functions
+  now open them, assigned per component by the generator.
+
+  There is no single interaction that works: measured across the 71 overlay
+  examples, clicking the first control opens Modal, Confirm and the Portals
+  (22 of 24) because their content appears in the body; Dimmer and Sidebar
+  toggle a *class* rather than adding nodes, so they need a different assertion
+  (9 of 19); and Popup triggers are rarely buttons at all — an icon, a header, a
+  word in a sentence — so it hovers each of the first few elements until a popup
+  appears (17 of 28).
+
+  The functions are deliberately **non-asserting**. A third of these examples
+  open by some route the three do not cover, and a play function that threw
+  would mark those stories broken rather than leaving them as they are today.
+  A story that does not open still snapshots its closed state, which is exactly
+  what it did before — and if a component *stops* opening, that shows up as a
+  diff rather than as silence.
 - ✅ **Sixteen examples excluded because they imported `faker`** — rewritten with
   fixed data, taking the corpus to 909 stories across 165 files.
 
