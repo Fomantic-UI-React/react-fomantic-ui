@@ -11,3 +11,7 @@ dist/
 node_modules/
 tmp/
 *.tgz
+
+# Written by the chromatic CLI when it builds Storybook.
+build-storybook.log
+chromatic.log

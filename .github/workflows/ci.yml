@@ -48,3 +48,33 @@ jobs:
       # will take its snapshots from.
       - name: Build Storybook
         run: yarn build-storybook --quiet
+
+  # Visual regression. Separate from `build` so a snapshot diff — which needs a
+  # human to accept or reject — does not read as the test suite failing.
+  chromatic:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # TurboSnap decides what to re-snapshot by diffing against the
+          # baseline's commit, which a shallow clone does not contain.
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: yarn
+
+      - name: Install
+        run: yarn install --frozen-lockfile
+
+      - name: Chromatic
+        uses: chromaui/action@v18
+        with:
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          # Only snapshot stories whose code actually changed. A CSS bump
+          # touches everything and costs a full build; a component change costs
+          # a fraction of one. See "Phase 3" in PLAN.md for the budget.
+          onlyChanged: true
+          # A visual diff is a question for a reviewer, not a broken build.
+          exitZeroOnChanges: true
