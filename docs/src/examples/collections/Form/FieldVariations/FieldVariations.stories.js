@@ -6,7 +6,7 @@ import FormExampleRequiredField from './FormExampleRequiredField'
 import FormExampleRequiredFieldShorthand from './FormExampleRequiredFieldShorthand'
 import FormExampleWidthField from './FormExampleWidthField'
 
-export default { title: 'Collections/Form/FieldVariations' }
+export default { title: 'Collections/Form/Field Variations' }
 
 export const InlineField = { render: () => <FormExampleInlineField /> }
 export const RequiredField = { render: () => <FormExampleRequiredField /> }

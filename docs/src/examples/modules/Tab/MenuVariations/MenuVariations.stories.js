@@ -11,7 +11,7 @@ import TabExampleTabularFalse from './TabExampleTabularFalse'
 import TabExampleVerticalTabular from './TabExampleVerticalTabular'
 import TabExampleVerticalTabularRight from './TabExampleVerticalTabularRight'
 
-export default { title: 'Modules/Tab/MenuVariations' }
+export default { title: 'Modules/Tab/Menu Variations' }
 
 export const AttachedBottom = { render: () => <TabExampleAttachedBottom /> }
 export const AttachedFalse = { render: () => <TabExampleAttachedFalse /> }

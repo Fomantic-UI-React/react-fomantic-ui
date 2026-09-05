@@ -5,7 +5,7 @@ import ListExampleFloated from './ListExampleFloated'
 import ListExampleFloatedHorizontal from './ListExampleFloatedHorizontal'
 import ListExampleVerticallyAligned from './ListExampleVerticallyAligned'
 
-export default { title: 'Elements/List/ContentVariations' }
+export default { title: 'Elements/List/Content Variations' }
 
 export const Floated = { render: () => <ListExampleFloated /> }
 export const FloatedHorizontal = {

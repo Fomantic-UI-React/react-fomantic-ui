@@ -15,7 +15,7 @@ import ButtonExampleGroupOrSize from './ButtonExampleGroupOrSize'
 import ButtonExampleGroupSize from './ButtonExampleGroupSize'
 import ButtonExampleGroupVertical from './ButtonExampleGroupVertical'
 
-export default { title: 'Elements/Button/GroupVariations' }
+export default { title: 'Elements/Button/Group Variations' }
 
 export const GroupBasic = { render: () => <ButtonExampleGroupBasic /> }
 export const GroupBasicColored = {

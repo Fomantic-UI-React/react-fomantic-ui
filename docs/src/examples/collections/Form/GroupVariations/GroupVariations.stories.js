@@ -5,7 +5,7 @@ import FormExampleEvenlyDividedGroup from './FormExampleEvenlyDividedGroup'
 import FormExampleInlineGroupedFields from './FormExampleInlineGroupedFields'
 import FormExampleUnstackableGroup from './FormExampleUnstackableGroup'
 
-export default { title: 'Collections/Form/GroupVariations' }
+export default { title: 'Collections/Form/Group Variations' }
 
 export const EvenlyDividedGroup = {
   render: () => <FormExampleEvenlyDividedGroup />,

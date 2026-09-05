@@ -15,7 +15,7 @@ import GridExampleReversedTablet from './GridExampleReversedTablet'
 import GridExampleReversedTabletVertically from './GridExampleReversedTabletVertically'
 import GridExampleStackable from './GridExampleStackable'
 
-export default { title: 'Collections/Grid/ResponsiveVariations' }
+export default { title: 'Collections/Grid/Responsive Variations' }
 
 export const Container = { render: () => <GridExampleContainer /> }
 export const Doubling = { render: () => <GridExampleDoubling /> }
