@@ -845,13 +845,148 @@ blocker sitting in a dependency rather than in our own code. Tracked as
 warning still fails it.
 
 
-### Phase 3 — React 19
+### Phases 3 and 4 are swapped — Storybook first
+
+**Decided.** Storybook and visual regression testing come before React 19.
+
+The reason is that Phase 3's central change is deleting `defaultProps` from 21
+function components, and a lost default is a *rendering* difference: a class
+that stops being applied, a shorthand that stops being built. Unit tests catch
+the ones somebody thought to assert. A visual diff catches the rest, and there
+is no way to diff against a baseline that was never taken. Baselines have to
+exist before the change that might move them, which puts Storybook first.
+
+The examples smoke test added in PR 8 is the weak version of this — it proves
+909 examples still render and say nothing on the console. It cannot see a
+button that lost its colour.
+
+Nothing in Storybook depends on React 19: Storybook 10 supports React 18 and 19
+both, so it is set up once on 18 and re-verified on 19 with baselines already
+in hand.
+
+### Phase 3 — Storybook + visual regression
+
+**The stories are already written.** `docs/src/examples` holds 909
+zero-prop default-exported components laid out as
+`area/Component/Section/ComponentExampleName.js`, which is Storybook's
+hierarchy with different punctuation:
+
+```
+docs/src/examples/elements/Button/Types/ButtonExampleEmphasis.js
+                  → Elements/Button/Types → "Emphasis"
+```
+
+So this phase generates story files, it does not author them. One `.stories.js`
+per component directory, re-exporting each example as a named story.
+
+**Generate static files; do not glob at run time.** `import.meta.glob` would be
+shorter and is how PR 8's smoke test reaches the same files, but Chromatic's
+TurboSnap decides what changed by walking the builder's dependency graph. A
+dynamic glob gives it one edge from every story to every example, so either
+everything looks changed or nothing does, and the snapshot budget below stops
+working. Committed files with real imports also stay greppable and can be
+hand-edited where an example needs a decorator.
+
+**A CSS baseline has to be pinned.** The library ships no CSS, which is fine for
+unit tests and impossible for visual ones — every snapshot is of unstyled markup
+otherwise. **Resolved**: `fomantic-ui-css`, starting at the fork point and
+creeping forward — see "Which Fomantic, and how we get to current" below.
+
+**Snapshot budget.** Chromatic bills per snapshot per browser per viewport.
+909 stories, Chrome only, one viewport:
+
+| | billed snapshots |
+| --- | --- |
+| first build (baselines) | 909 |
+| later build, TurboSnap on, one component touched | ~200 (changed stories at 1, the rest at 0.2) |
+
+Against the **free commercial tier of 5,000/month** that is the baseline build
+plus roughly 20 PR builds, with no overage — builds stop at the cap. Workable at
+this repo's velocity, but it is a real constraint, so: Chrome only, one viewport,
+TurboSnap on from the first build, and CI runs on pull requests and `main`
+rather than on every push.
+
+**Apply for the open-source sponsorship** — 35,000 snapshots/month, Chrome only,
+which removes the constraint entirely. Chromatic's community-led tier wants over
+100 contributors, over 40k weekly npm downloads, or over 10k GitHub stars.
+`react-fomantic-ui` has no downloads and no stars yet, but `git shortlog -sn`
+counts **352 contributors** in the history the fork deliberately kept — which is
+the one criterion it meets, and a good argument for having kept it. Applying is
+via in-app chat; worth doing before the first build rather than after.
+
+**Storybook 10 with the Vitest addon**, because this repo already runs Vitest and
+the addon turns stories into component tests in a real browser — interaction,
+accessibility and coverage from the same files. That is a second payoff for
+writing the stories, independent of Chromatic.
+
+Order of work:
+
+1. Storybook 10 + Vite builder + the pinned CSS, one component's stories by hand
+   to prove the shape.
+2. The generator, and the other 900.
+3. Chromatic in CI on pull requests and `main`, TurboSnap on.
+4. The Vitest addon, once the stories are stable.
+
+#### Which Fomantic, and how we get to current
+
+Fomantic is the destination — it is the maintained fork, and the reason this
+project is called what it is. `semantic-ui-css` is frozen at 2.5.0 (Oct 2022)
+and is not where anything is going. But current Fomantic has diverged visually
+over seven years, so the baselines start at the split and walk forward one minor
+at a time, taking the diffs in reviewable pieces.
+
+**The split is `fomantic-ui-css@2.4.4`, 2018-08-18** — Fomantic's first npm
+release, continuing Semantic's 2.4.x numbering. `semantic-ui-css` published
+2.4.0 a month later and 2.4.1 after that, then nothing for four years until
+2.5.0. The lineages separate in mid-2018, and 2.4.4 is the closest point on the
+Fomantic side.
+
+**The class contract barely moves, which was not the expectation.** Rendering
+all 909 examples and collecting every class they produce gives 610 distinct
+names. Checked against each distribution:
+
+| distribution | emitted classes it does not style |
+| --- | --- |
+| `semantic-ui-css@2.5.0` | 12 — all inherently unstyleable tokens (`4:3`, `above`, `only`, `stay`…) |
+| `fomantic-ui-css@2.4.4` | those 12, plus `rectangular` and `short` (Embed aspect ratios) |
+| `fomantic-ui-css@2.9.4` | 11 — the same 12 minus `equal` and `reversed`, which it *gains*, plus `cs` |
+
+Separately, of the 244 country codes `Flag` accepts: Semantic 2.5.0 styles all
+of them, Fomantic 2.4.4 misses `uk` (it ships `gb`), 2.8.8 misses none, and
+2.9.4 misses `cs` — Czechoslovakia, dissolved in 1993 and dropped by Fomantic.
+
+So jumping straight to current Fomantic would cost exactly one dead flag and
+would *improve* two Embed classes. **The divergence is real, but it is visual —
+spacing, colour, radius, type — not structural.** That is the argument for doing
+this with pixels rather than by reading changelogs, and it means the walk is
+about reviewing diffs, not repairing breakage.
+
+The walk, five steps, each the last patch of its minor:
+
+| step | version | released |
+| --- | --- | --- |
+| baseline | `2.4.4` | 2018-08-18 |
+| 1 | `2.6.4` | 2018-11-15 |
+| 2 | `2.7.8` | 2019-09-02 |
+| 3 | `2.8.8` | 2021-06-24 |
+| 4 | `2.9.4` | 2025-02-23 |
+
+2.5.0 is skipped: a single release two weeks after 2.4.4.
+
+**This is the workload TurboSnap cannot help with.** A CSS bump changes every
+story, so each step is a full 909-snapshot build rather than the ~200 a code
+change costs. Five steps is 4,545 snapshots — most of a month on the free 5,000
+tier before any development happens. **The open-source sponsorship application
+is a prerequisite for this phase, not an optimisation.** Do it before the first
+baseline.
+
+### Phase 4 — React 19
 
 Convert `defaultProps` on the 21 function-component files (49 occurrences
 total across 26 files; the 5 remaining class components are unaffected).
-Resolve the propTypes/`handledProps` coupling. Phase 2 is now in place to verify
-against: 10,603 tests, and a smoke test over 909 examples that will catch a
-broken default the unit tests would not think to look for.
+Resolve the propTypes/`handledProps` coupling. Verified against Phase 2's
+10,603 tests *and* Phase 3's visual baselines, which is the combination this
+reordering exists to produce.
 
 Two known items waiting here, both found by the port:
 
@@ -859,14 +994,10 @@ Two known items waiting here, both found by the port:
   function component. It is a dependency, so the codemod cannot reach it, and
   `Sidebar` is its only consumer. Dropping the package looks cheaper than
   patching it, and would also close the transitive-React hazard from PR #21.
+  Storybook first means `Sidebar` has a baseline before this is touched.
 - **#29** — `Search` reads state in the same tick as the `setState` that changes
   it. That is already broken on React 18 and should be fixed before anything
   else changes underneath it.
-
-### Phase 4 — Storybook docs
-
-The 961 retained examples become stories. `dt/site` already runs Storybook, so
-this lands in tooling the team knows.
 
 ## Open decisions
 
@@ -877,6 +1008,13 @@ this lands in tooling the team knows.
    personal account `aphenine`. Repo at
    `github.com/Fomantic-UI-React/react-fomantic-ui`.
 3. **npm org/scope** — even publishing unscoped, reserving a scope is cheap.
+6. ~~**Which CSS the visual baselines are taken against.**~~ — **resolved**:
+   `fomantic-ui-css`, because it is the maintained fork and the destination;
+   `semantic-ui-css` is frozen and is not where this is going. Baselines start
+   at `2.4.4`, the fork point, and walk forward one minor at a time so the
+   visual diffs arrive in reviewable pieces. Measured first: the class contract
+   between Semantic 2.5.0 and current Fomantic differs by one dead flag, so what
+   has to be managed is visual divergence, not breakage. See Phase 3.
 4. ~~**First version number.**~~ — **resolved**: continue the v3 beta line.
    `3.0.0-beta.5` is the first release off the new pipeline and holds `latest`.
    Prereleases take `latest` because no stable release of this package name
