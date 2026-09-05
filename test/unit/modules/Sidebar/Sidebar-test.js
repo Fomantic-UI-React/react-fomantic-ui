@@ -1,10 +1,20 @@
-import { fireEvent, render, waitFor } from '@testing-library/react'
+import { render, waitFor } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import React from 'react'
 
 import Sidebar from 'src/modules/Sidebar/Sidebar'
 import * as common from 'test/support/commonTests'
 
 describe('Sidebar', () => {
+  // Interactions go through user-event, which sends the pointer, focus and
+  // keyboard sequence a browser does rather than the single event `fireEvent`
+  // dispatches.
+  let user
+
+  beforeEach(() => {
+    user = userEvent.setup()
+  })
+
   common.isConformant(Sidebar)
   common.forwardsRef(Sidebar)
   common.hasUIClassName(Sidebar)
@@ -42,7 +52,7 @@ describe('Sidebar', () => {
   })
 
   describe('onHide', () => {
-    it('is called when the "visible" prop changes to "false"', () => {
+    it('is called when the "visible" prop changes to "false"', async () => {
       const onHide = vi.fn()
       const { rerender } = render(<Sidebar onHide={onHide} visible />)
       expect(onHide).not.toHaveBeenCalled()
@@ -54,28 +64,28 @@ describe('Sidebar', () => {
       expect(onHide.mock.calls[0][1]).toMatchObject({ visible: false })
     })
 
-    it('is called when a click on the document was done', () => {
+    it('is called when a click on the document was done', async () => {
       const onHide = vi.fn()
       render(<Sidebar onHide={onHide} visible />)
       expect(onHide).not.toHaveBeenCalled()
 
-      fireEvent.click(document)
+      await user.click(document.body)
 
       expect(onHide).toHaveBeenCalledTimes(1)
       expect(onHide.mock.calls[0][1]).toMatchObject({ visible: false })
     })
 
-    it('is called when a click on the document was done only once', () => {
+    it('is called when a click on the document was done only once', async () => {
       const onHide = vi.fn()
       const { rerender } = render(<Sidebar onHide={onHide} visible />)
 
-      fireEvent.click(document)
+      await user.click(document.body)
       rerender(<Sidebar onHide={onHide} visible={false} />)
 
       expect(onHide).toHaveBeenCalledTimes(1)
     })
 
-    it('is not called when a click was done inside the component', () => {
+    it('is not called when a click was done inside the component', async () => {
       const onHide = vi.fn()
       const { container } = render(
         <Sidebar onHide={onHide} visible>
@@ -83,7 +93,7 @@ describe('Sidebar', () => {
         </Sidebar>,
       )
 
-      fireEvent.click(container.querySelector('div#child'))
+      await user.click(container.querySelector('div#child'))
 
       expect(onHide).not.toHaveBeenCalled()
     })
@@ -124,7 +134,7 @@ describe('Sidebar', () => {
   })
 
   describe('onVisible', () => {
-    it('is called when the "visible" prop changes to "true"', () => {
+    it('is called when the "visible" prop changes to "true"', async () => {
       const onVisible = vi.fn()
       const { rerender } = render(<Sidebar onVisible={onVisible} />)
       expect(onVisible).not.toHaveBeenCalled()
@@ -140,14 +150,14 @@ describe('Sidebar', () => {
   describe('target', () => {
     // The EventListener is an implementation detail with no DOM presence; what
     // it does is observable, so assert that a click on the target hides.
-    it('listens for clicks on the given target', () => {
+    it('listens for clicks on the given target', async () => {
       const target = document.createElement('div')
       document.body.appendChild(target)
 
       const onHide = vi.fn()
       render(<Sidebar onHide={onHide} target={target} visible />)
 
-      fireEvent.click(target)
+      await user.click(target)
 
       expect(onHide).toHaveBeenCalledTimes(1)
       document.body.removeChild(target)

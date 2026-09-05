@@ -1,5 +1,6 @@
 import { dom, root } from 'test/support/rtl'
-import { fireEvent } from '@testing-library/react'
+
+import userEvent from '@testing-library/user-event'
 import React from 'react'
 
 import List from 'src/elements/List/List'
@@ -13,6 +14,15 @@ import { SUI } from 'src/lib'
 import * as common from 'test/support/commonTests'
 
 describe('List', () => {
+  // Interactions go through user-event, which sends the pointer, focus and
+  // keyboard sequence a browser does rather than the single event `fireEvent`
+  // dispatches.
+  let user
+
+  beforeEach(() => {
+    user = userEvent.setup()
+  })
+
   common.isConformant(List)
   common.forwardsRef(List)
   common.forwardsRef(List, { requiredProps: { children: <span /> } })
@@ -49,7 +59,7 @@ describe('List', () => {
   const items = ['Name', 'Status', 'Notes']
 
   describe('onItemClick', () => {
-    it('is called with (e, itemProps) when clicked', () => {
+    it('is called with (e, itemProps) when clicked', async () => {
       const onClick = vi.fn()
       const onItemClick = vi.fn()
 
@@ -57,7 +67,7 @@ describe('List', () => {
       const itemProps = { key: 'notes', content: 'Notes', 'data-foo': 'bar', onClick }
 
       const container = dom(<List items={[itemProps]} onItemClick={onItemClick} />)
-      fireEvent.click(container.querySelector('.item'))
+      await user.click(container.querySelector('.item'))
 
       expect(onClick).toHaveBeenCalledTimes(1)
       expect(onClick.mock.calls[0][0]).toMatchObject({ type: 'click' })
@@ -70,23 +80,23 @@ describe('List', () => {
   })
 
   describe('role', () => {
-    it('is accessible with no items', () => {
+    it('is accessible with no items', async () => {
       expect(root(<List />)).toHaveAttribute('role', 'list')
     })
 
-    it('is accessible with items', () => {
+    it('is accessible with items', async () => {
       expect(root(<List items={items} />)).toHaveAttribute('role', 'list')
     })
 
-    it('allows overriding with no items', () => {
+    it('allows overriding with no items', async () => {
       expect(root(<List role='listbox' />)).toHaveAttribute('role', 'listbox')
     })
 
-    it('allows overriding with items', () => {
+    it('allows overriding with items', async () => {
       expect(root(<List role='listbox' items={items} />)).toHaveAttribute('role', 'listbox')
     })
 
-    it('allows overriding with children', () => {
+    it('allows overriding with children', async () => {
       const list = root(
         <List role='listbox'>
           <ListItem />
@@ -98,11 +108,11 @@ describe('List', () => {
   })
 
   describe('shorthand', () => {
-    it('renders no items with no shorthand', () => {
+    it('renders no items with no shorthand', async () => {
       expect(dom(<List />).querySelectorAll('.item')).toHaveLength(0)
     })
 
-    it('renders the items', () => {
+    it('renders the items', async () => {
       expect(dom(<List items={items} />).querySelectorAll('.item')).toHaveLength(items.length)
     })
   })

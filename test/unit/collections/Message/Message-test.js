@@ -1,6 +1,7 @@
 import { dom } from 'test/support/rtl'
 import _ from 'lodash'
-import { fireEvent } from '@testing-library/react'
+
+import userEvent from '@testing-library/user-event'
 import React from 'react'
 
 import Message from 'src/collections/Message/Message'
@@ -11,6 +12,15 @@ import { SUI } from 'src/lib'
 import * as common from 'test/support/commonTests'
 
 describe('Message', () => {
+  // Interactions go through user-event, which sends the pointer, focus and
+  // keyboard sequence a browser does rather than the single event `fireEvent`
+  // dispatches.
+  let user
+
+  beforeEach(() => {
+    user = userEvent.setup()
+  })
+
   common.isConformant(Message)
   common.forwardsRef(Message)
   common.forwardsRef(Message, { requiredProps: { children: <span /> } })
@@ -58,16 +68,16 @@ describe('Message', () => {
   common.propValueOnlyToClassName(Message, 'size', _.without(SUI.SIZES, 'medium'))
 
   describe('header', () => {
-    it('adds MessageContent when defined', () => {
+    it('adds MessageContent when defined', async () => {
       expect(dom(<Message header='This is a message' />).querySelector('.content')).not.toBeNull()
     })
   })
 
   describe('icon', () => {
-    it('does not have MessageContent by default', () => {
+    it('does not have MessageContent by default', async () => {
       expect(dom(<Message />).querySelector('.content')).toBeNull()
     })
-    it('renders children when "true"', () => {
+    it('renders children when "true"', async () => {
       const text = 'child text'
       const node = <div id='foo' />
 
@@ -78,30 +88,30 @@ describe('Message', () => {
   })
 
   describe('list', () => {
-    it('adds MessageContent when defined', () => {
+    it('adds MessageContent when defined', async () => {
       expect(dom(<Message list={[]} />).querySelector('.content')).not.toBeNull()
     })
   })
 
   describe('onDismiss', () => {
-    it('has no close icon by default', () => {
+    it('has no close icon by default', async () => {
       expect(dom(<Message />).querySelector('.close.icon')).toBeNull()
     })
 
-    it('adds a close icon when defined', () => {
+    it('adds a close icon when defined', async () => {
       expect(
         dom(<Message onDismiss={() => undefined} />).querySelector('.close.icon'),
       ).not.toBeNull()
     })
 
-    it('is called with (event) on close icon click', () => {
+    it('is called with (event) on close icon click', async () => {
       const props = { icon: true }
       const spy = vi.fn()
       const container = dom(<Message {...props} onDismiss={spy} />)
       const close = container.querySelector('.close.icon')
 
       expect(close).not.toBeNull()
-      fireEvent.click(close)
+      await user.click(close)
 
       expect(spy).toHaveBeenCalledTimes(1)
       expect(spy.mock.calls[0][0]).toMatchObject({ type: 'click' })

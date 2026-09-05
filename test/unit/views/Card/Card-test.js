@@ -1,4 +1,5 @@
-import { fireEvent, render } from '@testing-library/react'
+import { render } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import React from 'react'
 
 import { SUI } from 'src/lib'
@@ -11,6 +12,15 @@ import CardMeta from 'src/views/Card/CardMeta'
 import * as common from 'test/support/commonTests'
 
 describe('Card', () => {
+  // Interactions go through user-event, which sends the pointer, focus and
+  // keyboard sequence a browser does rather than the single event `fireEvent`
+  // dispatches.
+  let user
+
+  beforeEach(() => {
+    user = userEvent.setup()
+  })
+
   common.isConformant(Card)
 
   common.forwardsRef(Card)
@@ -28,14 +38,14 @@ describe('Card', () => {
 
   common.propValueOnlyToClassName(Card, 'color', SUI.COLORS)
 
-  it('renders a <div> by default', () => {
+  it('renders a <div> by default', async () => {
     const { container } = render(<Card />)
 
     expect(container.firstElementChild.tagName).toBe('DIV')
   })
 
   describe('href', () => {
-    it('renders an <a> with an href attr', () => {
+    it('renders an <a> with an href attr', async () => {
       const url = 'https://example.com'
       const { container } = render(<Card href={url} />)
 
@@ -45,17 +55,17 @@ describe('Card', () => {
   })
 
   describe('onClick', () => {
-    it('renders <a> instead of <div>', () => {
+    it('renders <a> instead of <div>', async () => {
       const { container } = render(<Card onClick={vi.fn()} />)
 
       expect(container.firstElementChild.tagName).toBe('A')
     })
 
-    it('is called with (e, data) when clicked', () => {
+    it('is called with (e, data) when clicked', async () => {
       const onClick = vi.fn()
       const { container } = render(<Card onClick={onClick} />)
 
-      fireEvent.click(container.firstElementChild)
+      await user.click(container.firstElementChild)
 
       expect(onClick).toHaveBeenCalledTimes(1)
       expect(onClick.mock.calls[0][0]).toMatchObject({ type: 'click' })
@@ -64,7 +74,7 @@ describe('Card', () => {
   })
 
   describe('extra', () => {
-    it('renders a CardContent', () => {
+    it('renders a CardContent', async () => {
       const { container } = render(<Card extra='faker phrase text' />)
 
       expect(container.querySelector('.extra.content')).not.toBeNull()

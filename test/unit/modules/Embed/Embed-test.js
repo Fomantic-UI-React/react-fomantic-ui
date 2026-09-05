@@ -1,5 +1,6 @@
 import { dom, root } from 'test/support/rtl'
-import { fireEvent } from '@testing-library/react'
+
+import userEvent from '@testing-library/user-event'
 import React from 'react'
 
 import Embed from 'src/modules/Embed/Embed'
@@ -18,6 +19,15 @@ const assertIframeSrc = (props, srcPart) => {
 }
 
 describe('Embed', () => {
+  // Interactions go through user-event, which sends the pointer, focus and
+  // keyboard sequence a browser does rather than the single event `fireEvent`
+  // dispatches.
+  let user
+
+  beforeEach(() => {
+    user = userEvent.setup()
+  })
+
   common.isConformant(Embed)
   common.forwardsRef(Embed)
   common.hasUIClassName(Embed)
@@ -51,15 +61,15 @@ describe('Embed', () => {
   common.propValueOnlyToClassName(Embed, 'aspectRatio', ['4:3', '16:9', '21:9'])
 
   describe('active', () => {
-    it('defaults to false', () => {
+    it('defaults to false', async () => {
       expect(root(<Embed />)).not.toHaveClass('active')
     })
 
-    it('applies className', () => {
+    it('applies className', async () => {
       expect(root(<Embed active />)).toHaveClass('active')
     })
 
-    it('renders nothing when false', () => {
+    it('renders nothing when false', async () => {
       const container = dom(
         <Embed>
           <p id='foo' />
@@ -71,51 +81,51 @@ describe('Embed', () => {
   })
 
   describe('autoplay', () => {
-    it('generates url part for source', () => {
+    it('generates url part for source', async () => {
       assertIframeSrc({ autoplay: true }, '&amp;autoplay=true')
       assertIframeSrc({ autoplay: false }, '&amp;autoplay=false')
     })
   })
 
   describe('brandedUI', () => {
-    it('generates "modestbranding" url parameter', () => {
+    it('generates "modestbranding" url parameter', async () => {
       assertIframeSrc({ brandedUI: true }, '&amp;modestbranding=true')
       assertIframeSrc({ brandedUI: false }, '&amp;modestbranding=false')
     })
 
-    it('generates "rel" url parameter', () => {
+    it('generates "rel" url parameter', async () => {
       assertIframeSrc({ brandedUI: true }, '&amp;rel=0')
       assertIframeSrc({ brandedUI: false }, '&amp;rel=1')
     })
   })
 
   describe('color', () => {
-    it('generates url part for source', () => {
+    it('generates url part for source', async () => {
       const color = 'red'
       assertIframeSrc({ color }, `&amp;color=${encodeURIComponent(color)}`)
     })
   })
 
   describe('defaultActive', () => {
-    it('sets the initial active state', () => {
+    it('sets the initial active state', async () => {
       expect(root(<Embed defaultActive />)).toHaveClass('active')
       expect(root(<Embed defaultActive={false} />)).not.toHaveClass('active')
     })
   })
 
   describe('hd', () => {
-    it('generates url part for source', () => {
+    it('generates url part for source', async () => {
       assertIframeSrc({ hd: true }, '&amp;hq=true')
       assertIframeSrc({ hd: false }, '&amp;hq=false')
     })
   })
 
   describe('placeholder', () => {
-    it('omitted by default', () => {
+    it('omitted by default', async () => {
       expect(dom(<Embed />).querySelectorAll('img.placeholder')).toHaveLength(0)
     })
 
-    it('renders img when defined', () => {
+    it('renders img when defined', async () => {
       const url = '/images/wireframe/image.png'
 
       expect(dom(<Embed placeholder={url} />).querySelector('img.placeholder')).toHaveAttribute(
@@ -126,37 +136,37 @@ describe('Embed', () => {
   })
 
   describe('onClick', () => {
-    it('sets to active state', () => {
+    it('sets to active state', async () => {
       const embed = root(<Embed />)
 
-      fireEvent.click(embed)
+      await user.click(embed)
 
       expect(embed).toHaveClass('active')
     })
 
-    it('skips state update if active', () => {
+    it('skips state update if active', async () => {
       const embed = root(<Embed active />)
 
-      fireEvent.click(embed)
+      await user.click(embed)
 
       expect(embed).toHaveClass('active')
     })
   })
 
   describe('source', () => {
-    it('generates url for YouTube', () => {
+    it('generates url for YouTube', async () => {
       const id = 'foo'
 
       assertIframeSrc({ id }, `//www.youtube.com/embed/${id}`)
     })
 
-    it('generates url for Vimeo', () => {
+    it('generates url for Vimeo', async () => {
       const id = 'foo'
 
       assertIframeSrc({ source: 'vimeo', id }, `//player.vimeo.com/video/${id}`)
     })
 
-    it('sets the iframe title', () => {
+    it('sets the iframe title', async () => {
       const sources = ['youtube', 'vimeo']
 
       sources.forEach((source) => {
@@ -168,7 +178,7 @@ describe('Embed', () => {
   })
 
   describe('url', () => {
-    it('passes url to iframe', () => {
+    it('passes url to iframe', async () => {
       const url = 'https://example.com'
 
       expect(dom(<Embed active url={url} />).querySelector('iframe')).toHaveAttribute('src', url)

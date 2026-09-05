@@ -1,11 +1,21 @@
 import { dom } from 'test/support/rtl'
-import { fireEvent } from '@testing-library/react'
+
+import userEvent from '@testing-library/user-event'
 import React from 'react'
 
 import ModalActions from 'src/modules/Modal/ModalActions'
 import * as common from 'test/support/commonTests'
 
 describe('ModalActions', () => {
+  // Interactions go through user-event, which sends the pointer, focus and
+  // keyboard sequence a browser does rather than the single event `fireEvent`
+  // dispatches.
+  let user
+
+  beforeEach(() => {
+    user = userEvent.setup()
+  })
+
   common.isConformant(ModalActions)
   common.forwardsRef(ModalActions)
   common.forwardsRef(ModalActions, { requiredProps: { children: <span /> } })
@@ -23,14 +33,14 @@ describe('ModalActions', () => {
     // result. Each test renders its own now.
     const buttonsOf = (element) => [...dom(element).querySelectorAll('button')]
 
-    it('renders children', () => {
+    it('renders children', async () => {
       const buttons = buttonsOf(<ModalActions actions={actions} />)
 
       expect(buttons[0]).toHaveTextContent('Cancel')
       expect(buttons[1]).toHaveTextContent('OK')
     })
 
-    it('passes arbitrary props', () => {
+    it('passes arbitrary props', async () => {
       for (const button of buttonsOf(<ModalActions actions={actions} />)) {
         expect(button).toHaveAttribute('data-foo', 'something')
       }
@@ -40,13 +50,14 @@ describe('ModalActions', () => {
   describe('onActionClick', () => {
     const buttonsOf = (element) => [...dom(element).querySelectorAll('button')]
 
-    it('can be omitted', () => {
+    it('can be omitted', async () => {
       const buttons = buttonsOf(<ModalActions actions={actions} />)
 
-      expect(() => fireEvent.click(buttons[0])).not.toThrow()
+      // No handler to invoke — clicking must simply not throw.
+      await user.click(buttons[0])
     })
 
-    it('is called with (e, actionProps) when clicked', () => {
+    it('is called with (e, actionProps) when clicked', async () => {
       const onActionClick = vi.fn()
       const onButtonClick = vi.fn()
       const action = { key: 'users', content: 'Disable', onClick: onButtonClick }
@@ -54,7 +65,7 @@ describe('ModalActions', () => {
       const buttons = buttonsOf(
         <ModalActions actions={[...actions, action]} onActionClick={onActionClick} />,
       )
-      fireEvent.click(buttons[buttons.length - 1])
+      await user.click(buttons[buttons.length - 1])
 
       expect(onActionClick).toHaveBeenCalledTimes(1)
       expect(onActionClick.mock.calls[0][1]).toMatchObject({ content: 'Disable' })

@@ -1,6 +1,7 @@
 import { dom, root } from 'test/support/rtl'
 import _ from 'lodash'
-import { fireEvent } from '@testing-library/react'
+
+import userEvent from '@testing-library/user-event'
 import React from 'react'
 
 import Menu from 'src/collections/Menu/Menu'
@@ -11,6 +12,15 @@ import { SUI } from 'src/lib'
 import * as common from 'test/support/commonTests'
 
 describe('Menu', () => {
+  // Interactions go through user-event, which sends the pointer, focus and
+  // keyboard sequence a browser does rather than the single event `fireEvent`
+  // dispatches.
+  let user
+
+  beforeEach(() => {
+    user = userEvent.setup()
+  })
+
   common.isConformant(Menu)
   common.hasSubcomponents(Menu, [MenuHeader, MenuItem, MenuMenu])
   common.hasUIClassName(Menu)
@@ -44,7 +54,7 @@ describe('Menu', () => {
   common.propValueOnlyToClassName(Menu, 'color', SUI.COLORS)
   common.propValueOnlyToClassName(Menu, 'size', _.without(SUI.SIZES, 'medium', 'big'))
 
-  it('renders a `div` by default', () => {
+  it('renders a `div` by default', async () => {
     expect(root(<Menu />)).toHaveTagName('div')
   })
 
@@ -54,19 +64,19 @@ describe('Menu', () => {
       { key: 'users', name: 'users' },
     ]
 
-    it('is null by default', () => {
+    it('is null by default', async () => {
       expect(dom(<Menu items={items} />).querySelector('.active')).toBeNull()
     })
 
-    it('is set when clicking an item', () => {
+    it('is set when clicking an item', async () => {
       const container = dom(<Menu items={items} />)
 
-      fireEvent.click(container.querySelectorAll('.item')[1])
+      await user.click(container.querySelectorAll('.item')[1])
 
       expect(container.querySelectorAll('.item')[1]).toHaveClass('active')
     })
 
-    it('works as a string', () => {
+    it('works as a string', async () => {
       const container = dom(<Menu items={items} activeIndex={1} />)
 
       expect(container.querySelectorAll('.item')[1]).toHaveClass('active')
@@ -82,7 +92,7 @@ describe('Menu', () => {
       { key: 'users', name: 'users', active: true, 'data-foo': 'something' },
     ]
 
-    it('renders children', () => {
+    it('renders children', async () => {
       const rendered = dom(<Menu items={items} />).querySelectorAll('.item')
 
       expect(rendered).toHaveLength(2)
@@ -90,35 +100,36 @@ describe('Menu', () => {
       expect(rendered[1]).toHaveTextContent('Users')
     })
 
-    it('onClick can be omitted', () => {
+    it('onClick can be omitted', async () => {
       const rendered = dom(<Menu items={items} />).querySelectorAll('.item')
 
-      expect(() => fireEvent.click(rendered[1])).not.toThrow()
+      // No handler to invoke — clicking must simply not throw.
+      await user.click(rendered[1])
     })
 
-    it('passes onClick handler', () => {
+    it('passes onClick handler', async () => {
       const onClick = vi.fn()
       const withHandler = [{ ...items[0], onClick }, items[1]]
 
-      fireEvent.click(dom(<Menu items={withHandler} />).querySelectorAll('.item')[0])
+      await user.click(dom(<Menu items={withHandler} />).querySelectorAll('.item')[0])
 
       expect(onClick).toHaveBeenCalledTimes(1)
       expect(onClick.mock.calls[0][1]).toMatchObject({ name: 'home', index: 0 })
     })
 
-    it('passes arbitrary props', () => {
+    it('passes arbitrary props', async () => {
       for (const item of dom(<Menu items={items} />).querySelectorAll('.item')) {
         expect(item).toHaveAttribute('data-foo', 'something')
       }
     })
 
-    it('marks the active item', () => {
+    it('marks the active item', async () => {
       const rendered = dom(<Menu items={items} />).querySelectorAll('.item')
 
       expect(rendered[1]).toHaveClass('active')
     })
 
-    it('marks the item at activeIndex', () => {
+    it('marks the item at activeIndex', async () => {
       const plain = items.map(({ active, ...rest }) => rest)
       const rendered = dom(<Menu items={plain} activeIndex={1} />).querySelectorAll('.item')
 
@@ -127,7 +138,7 @@ describe('Menu', () => {
   })
 
   describe('onItemClick', () => {
-    it('is called with (e, { name, index }) when clicked', () => {
+    it('is called with (e, { name, index }) when clicked', async () => {
       const onClick = vi.fn()
       const onItemClick = vi.fn()
 
@@ -140,7 +151,7 @@ describe('Menu', () => {
       const rendered = dom(<Menu items={items} onItemClick={onItemClick} />).querySelectorAll(
         '.item',
       )
-      fireEvent.click(rendered[1])
+      await user.click(rendered[1])
 
       expect(onClick).toHaveBeenCalledTimes(1)
       expect(onClick.mock.calls[0][1]).toMatchObject(matchProps)

@@ -1,5 +1,6 @@
 import { dom } from 'test/support/rtl'
-import { fireEvent } from '@testing-library/react'
+
+import userEvent from '@testing-library/user-event'
 import React from 'react'
 
 import Pagination from 'src/addons/Pagination/Pagination'
@@ -11,6 +12,15 @@ const requiredProps = {
 }
 
 describe('Pagination', () => {
+  // Interactions go through user-event, which sends the pointer, focus and
+  // keyboard sequence a browser does rather than the single event `fireEvent`
+  // dispatches.
+  let user
+
+  beforeEach(() => {
+    user = userEvent.setup()
+  })
+
   common.isConformant(Pagination, { requiredProps })
   common.forwardsRef(Pagination, { requiredProps, tagName: 'div' })
   common.hasSubcomponents(Pagination, [PaginationItem])
@@ -20,7 +30,7 @@ describe('Pagination', () => {
   const itemsOf = (element) => [...dom(element).querySelectorAll('a.item')]
 
   describe('disabled', () => {
-    it('is passed to an each item', () => {
+    it('is passed to an each item', async () => {
       const items = itemsOf(<Pagination activePage={1} disabled totalPages={3} />)
 
       expect(items.length).toBeGreaterThan(0)
@@ -31,7 +41,7 @@ describe('Pagination', () => {
   })
 
   describe('onPageChange', () => {
-    it('is called with (e, data) when clicked on a pagination item', () => {
+    it('is called with (e, data) when clicked on a pagination item', async () => {
       const onPageChange = vi.fn()
       const onPageItemClick = vi.fn()
 
@@ -44,7 +54,7 @@ describe('Pagination', () => {
         />,
       )
 
-      fireEvent.click(items[4])
+      await user.click(items[4])
 
       expect(onPageChange).toHaveBeenCalledTimes(1)
       expect(onPageChange.mock.calls[0][1]).toMatchObject({ activePage: 3 })
@@ -52,7 +62,7 @@ describe('Pagination', () => {
       expect(onPageItemClick.mock.calls[0][1]).toMatchObject({ value: 3 })
     })
 
-    it('will be omitted if occurred for the same pagination item as the current', () => {
+    it('will be omitted if occurred for the same pagination item as the current', async () => {
       const onPageChange = vi.fn()
       const items = itemsOf(
         <Pagination
@@ -64,12 +74,12 @@ describe('Pagination', () => {
         />,
       )
 
-      fireEvent.click(items[0])
+      await user.click(items[0])
 
       expect(onPageChange).not.toHaveBeenCalled()
     })
 
-    it('will be omitted when item "type" is "ellipsisItem"', () => {
+    it('will be omitted when item "type" is "ellipsisItem"', async () => {
       const onPageChange = vi.fn()
       const items = itemsOf(
         <Pagination
@@ -81,25 +91,25 @@ describe('Pagination', () => {
         />,
       )
 
-      fireEvent.click(items[1])
+      await user.click(items[1])
 
       expect(onPageChange).not.toHaveBeenCalled()
     })
   })
 
   describe('activePage', () => {
-    it('defaults to "1"', () => {
+    it('defaults to "1"', async () => {
       const items = itemsOf(<Pagination totalPages={3} />)
 
       expect(items[1]).toHaveAttribute('value', '1')
       expect(items[5]).toHaveAttribute('value', '2')
     })
 
-    it('can be set via "defaultActivePage"', () => {
+    it('can be set via "defaultActivePage"', async () => {
       expect(itemsOf(<Pagination defaultActivePage={2} totalPages={3} />)[3]).toHaveClass('active')
     })
 
-    it('can be set via "activePage"', () => {
+    it('can be set via "activePage"', async () => {
       expect(itemsOf(<Pagination activePage={2} totalPages={3} />)[3]).toHaveClass('active')
     })
   })
