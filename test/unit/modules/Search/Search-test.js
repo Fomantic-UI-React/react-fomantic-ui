@@ -1,4 +1,5 @@
-import { fireEvent, render } from '@testing-library/react'
+import { render } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import _ from 'lodash'
 import React from 'react'
 
@@ -65,10 +66,20 @@ const searchResultsIsOpen = () => {
   expect(menu()).toHaveClass('visible')
 }
 
-const openSearchResults = () => fireEvent.focus(root())
+// Interactions go through user-event, which sends the whole pointer, focus and
+// keyboard sequence a browser does rather than the single event `fireEvent`
+// dispatches. Nothing in this file needs an event a user cannot produce.
+let user
+
 const input = () => container.querySelector('input.prompt')
-const type = (value) => fireEvent.change(input(), { target: { value } })
-const pressKey = (key) => fireEvent.keyDown(document, { key })
+
+// Tab moves focus onto the prompt, which is what opens the results.
+const openSearchResults = () => user.tab()
+const type = async (value) => {
+  if (input().value !== '') await user.clear(input())
+  if (value !== '') await user.type(input(), value)
+}
+const pressKey = (key) => user.keyboard(`{${key}}`)
 
 describe('Search', () => {
   let options
@@ -76,6 +87,7 @@ describe('Search', () => {
   beforeEach(() => {
     container = undefined
     options = getOptions()
+    user = userEvent.setup()
   })
 
   common.isConformant(Search)
@@ -87,47 +99,47 @@ describe('Search', () => {
   common.propKeyOnlyToClassName(Search, 'fluid')
   common.propKeyOnlyToClassName(Search, 'loading')
 
-  it('closes on blur', () => {
+  it('closes on blur', async () => {
     wrapperMount(<Search results={options} minCharacters={0} />)
 
-    openSearchResults()
+    await openSearchResults()
     searchResultsIsOpen()
 
-    fireEvent.blur(root())
+    await user.tab()
     searchResultsIsClosed()
   })
 
-  it('opens on focus', () => {
+  it('opens on focus', async () => {
     wrapperMount(<Search results={options} minCharacters={0} />)
 
     searchResultsIsClosed()
-    openSearchResults()
+    await openSearchResults()
     searchResultsIsOpen()
   })
 
   describe('isMouseDown', () => {
-    it('tracks when the mouse is down', () => {
+    it('tracks when the mouse is down', async () => {
       // To understand this test please check componentDidUpdate() on Search
       wrapperMount(<Search minCharacters={0} />)
       searchResultsIsClosed()
 
-      // When ".isMouseDown === false" a focus event will not open Search results
-      fireEvent.mouseDown(root())
-      openSearchResults()
+      // The prompt is what a user presses on. While the button is held, focus
+      // has moved to it but ".isMouseDown" is true, so the focus does not open
+      // the results.
+      await user.pointer({ target: input(), keys: '[MouseLeft>]' })
+      expect(document.activeElement).toBe(input())
       searchResultsIsClosed()
 
-      // Reset to default component state
-      fireEvent.blur(root())
-      fireEvent.mouseUp(document.body)
-
-      // When ".isMouseDown === true" a focus event will open Search results
-      openSearchResults()
+      // A focus arriving with no button held does open them.
+      await user.pointer({ keys: '[/MouseLeft]' })
+      await user.tab()
+      await user.tab()
       searchResultsIsOpen()
     })
   })
 
   describe('icon', () => {
-    it('defaults to a search icon', () => {
+    it('defaults to a search icon', async () => {
       wrapperMount(<Search />)
 
       expect(container.querySelector('.search.icon')).not.toBeNull()
@@ -135,44 +147,44 @@ describe('Search', () => {
   })
 
   describe('active item', () => {
-    it('defaults to no result active', () => {
+    it('defaults to no result active', async () => {
       wrapperMount(<Search results={options} minCharacters={0} />)
 
       expect(activeResult()).toBeNull()
     })
 
-    it('defaults to the first item with selectFirstResult', () => {
+    it('defaults to the first item with selectFirstResult', async () => {
       wrapperMount(<Search results={options} minCharacters={0} selectFirstResult />)
 
       expect(results()[0]).toHaveClass('active')
     })
 
-    it('moves down on arrow down when open', () => {
+    it('moves down on arrow down when open', async () => {
       wrapperMount(<Search results={options} minCharacters={0} selectFirstResult />)
 
-      openSearchResults()
+      await openSearchResults()
       searchResultsIsOpen()
 
-      pressKey('ArrowDown')
+      await pressKey('ArrowDown')
 
       expect(results()[0]).not.toHaveClass('active')
       expect(results()[1]).toHaveClass('active')
     })
 
-    it('moves up on arrow up when open', () => {
+    it('moves up on arrow up when open', async () => {
       wrapperMount(<Search results={options} minCharacters={0} />)
 
-      openSearchResults()
+      await openSearchResults()
       searchResultsIsOpen()
 
-      pressKey('ArrowUp')
+      await pressKey('ArrowUp')
 
       // selection wrapped to the last item
       expect(results()[0]).not.toHaveClass('active')
       expect(results()[options.length - 1]).toHaveClass('active')
     })
 
-    it('scrolls the selected item into view', () => {
+    it('scrolls the selected item into view', async () => {
       // jsdom computes no layout, so `offsetTop` and `clientHeight` are 0 for
       // everything and the component's arithmetic has nothing to work with.
       // The frozen spec ran in a real browser; here the measurements are
@@ -183,7 +195,7 @@ describe('Search', () => {
       const opts = getOptions(20)
 
       wrapperMount(<Search results={opts} minCharacters={0} selectFirstResult />)
-      openSearchResults()
+      await openSearchResults()
       searchResultsIsOpen()
 
       const stub = (element, values) =>
@@ -205,30 +217,30 @@ describe('Search', () => {
       expect(activeResult()).toHaveTextContent(opts[0].title)
 
       // Wrap the selection to the last item. It should scroll to the bottom.
-      pressKey('ArrowUp')
+      await pressKey('ArrowUp')
 
       expect(activeResult()).toHaveTextContent(_.last(opts).title)
       expect(menu().scrollTop).toBe(0)
 
       // Wrap the selection back to the first item. Only now does the menu
       // scroll to where the last item was.
-      pressKey('ArrowDown')
+      await pressKey('ArrowDown')
 
       expect(activeResult()).toHaveTextContent(opts[0].title)
       expect(menu().scrollTop).toBe(opts.length * itemHeight - menuHeight)
     })
 
-    it('closes the menu', () => {
+    it('closes the menu', async () => {
       wrapperMount(<Search results={options} minCharacters={0} selectFirstResult />)
 
-      openSearchResults()
+      await openSearchResults()
       searchResultsIsOpen()
 
-      pressKey('Enter')
+      await pressKey('Enter')
       searchResultsIsClosed()
     })
 
-    it('uses custom renderer', () => {
+    it('uses custom renderer', async () => {
       const resultRenderer = vi.fn(() => <div className='custom-result' />)
       wrapperMount(<Search results={options} minCharacters={0} resultRenderer={resultRenderer} />)
 
@@ -244,7 +256,7 @@ describe('Search', () => {
       categoryOptions = getCategoryOptions()
     })
 
-    it('defaults to the first item with selectFirstResult', () => {
+    it('defaults to the first item with selectFirstResult', async () => {
       wrapperMount(
         <Search results={categoryOptions} category minCharacters={0} selectFirstResult />,
       )
@@ -253,16 +265,19 @@ describe('Search', () => {
       expect(results()[0]).toHaveClass('active')
     })
 
-    it('moves down on arrow down when open', () => {
+    it('moves down on arrow down when open', async () => {
       wrapperMount(
         <Search results={categoryOptions} category minCharacters={0} selectFirstResult />,
       )
 
-      openSearchResults()
+      await openSearchResults()
       searchResultsIsOpen()
 
       // arrow into the next category
-      _.times(categoryResultsLength, () => pressKey('ArrowDown'))
+      for (let i = 0; i < categoryResultsLength; i += 1) {
+        // eslint-disable-next-line no-await-in-loop -- keypresses are a sequence
+        await pressKey('ArrowDown')
+      }
 
       expect(categories()[0]).not.toHaveClass('active')
       expect(results()[0]).not.toHaveClass('active')
@@ -271,13 +286,13 @@ describe('Search', () => {
       expect(results()[categoryResultsLength]).toHaveClass('active')
     })
 
-    it('moves up on arrow up when open', () => {
+    it('moves up on arrow up when open', async () => {
       wrapperMount(<Search results={categoryOptions} category minCharacters={0} />)
 
-      openSearchResults()
+      await openSearchResults()
       searchResultsIsOpen()
 
-      pressKey('ArrowUp')
+      await pressKey('ArrowUp')
 
       // selection wrapped to the last item of the last category
       expect(categories()[0]).not.toHaveClass('active')
@@ -287,7 +302,7 @@ describe('Search', () => {
       expect(results()[categoryLength * categoryResultsLength - 1]).toHaveClass('active')
     })
 
-    it('uses custom renderer', () => {
+    it('uses custom renderer', async () => {
       const categoryRenderer = vi.fn(() => <div className='custom-category' />)
       const resultRenderer = vi.fn(() => <div className='custom-result' />)
       wrapperMount(
@@ -309,27 +324,27 @@ describe('Search', () => {
       expect(container.querySelector('.result .custom-result')).not.toBeNull()
     })
 
-    it('uses default noResultsMessage', () => {
+    it('uses default noResultsMessage', async () => {
       wrapperMount(<Search results={[]} category minCharacters={0} />)
 
       expect(container.querySelector('.message.empty')).toHaveTextContent('No results found.')
     })
 
-    it('closes the menu', () => {
+    it('closes the menu', async () => {
       wrapperMount(
         <Search results={categoryOptions} category minCharacters={0} selectFirstResult />,
       )
 
-      openSearchResults()
+      await openSearchResults()
       searchResultsIsOpen()
 
-      pressKey('Enter')
+      await pressKey('Enter')
       searchResultsIsClosed()
     })
   })
 
   describe('value', () => {
-    it('updates text when value changed', () => {
+    it('updates text when value changed', async () => {
       const { rerender } = render(<Search results={options} minCharacters={0} value='initial' />)
       container = document.body.querySelector('div')
 
@@ -341,108 +356,108 @@ describe('Search', () => {
   })
 
   describe('results menu', () => {
-    it('opens after min characters', () => {
+    it('opens after min characters', async () => {
       const { title } = options[0]
       wrapperMount(<Search results={options} minCharacters={2} />)
-      openSearchResults()
+      await openSearchResults()
 
       searchResultsIsClosed()
 
-      type(title.slice(0, 1))
+      await type(title.slice(0, 1))
       searchResultsIsClosed()
 
-      type(title.slice(0, 2))
+      await type(title.slice(0, 2))
       searchResultsIsOpen()
     })
 
-    it('opens (and remains open) when clicking the input', () => {
+    it('opens (and remains open) when clicking the input', async () => {
       wrapperMount(<Search results={options} minCharacters={0} />)
 
-      fireEvent.click(input())
+      await user.click(input())
       searchResultsIsOpen()
 
       // Stays open after multiple clicks on the input
-      fireEvent.click(input())
+      await user.click(input())
       searchResultsIsOpen()
     })
 
-    it('closes on menu item click', () => {
+    it('closes on menu item click', async () => {
       wrapperMount(<Search results={options} minCharacters={0} />)
 
-      openSearchResults()
+      await openSearchResults()
       searchResultsIsOpen()
 
-      fireEvent.click(results()[2])
+      await user.click(results()[2])
       searchResultsIsClosed()
     })
 
-    it('blurs after menu item click (mousedown)', () => {
+    it('blurs after menu item click (mousedown)', async () => {
       wrapperMount(<Search results={options} minCharacters={0} />)
 
-      openSearchResults()
+      await openSearchResults()
       searchResultsIsOpen()
 
-      fireEvent.mouseDown(results()[2])
+      await user.pointer({ target: results()[2], keys: '[MouseLeft>]' })
       searchResultsIsOpen()
 
-      fireEvent.click(results()[2])
+      await user.pointer({ keys: '[/MouseLeft]' })
       searchResultsIsClosed()
     })
 
-    it('closes on click outside', () => {
+    it('closes on click outside', async () => {
       wrapperMount(<Search results={options} minCharacters={0} />)
 
-      openSearchResults()
+      await openSearchResults()
       searchResultsIsOpen()
 
-      fireEvent.click(document.body)
+      await user.click(document.body)
       searchResultsIsClosed()
     })
 
-    it('closes on esc key', () => {
+    it('closes on esc key', async () => {
       wrapperMount(<Search results={options} minCharacters={0} />)
 
-      openSearchResults()
+      await openSearchResults()
       searchResultsIsOpen()
 
-      pressKey('Escape')
+      await pressKey('Escape')
       searchResultsIsClosed()
     })
   })
 
   describe('open', () => {
-    it('defaultOpen opens the menu when true', () => {
+    it('defaultOpen opens the menu when true', async () => {
       wrapperMount(<Search results={options} minCharacters={0} defaultOpen />)
 
       searchResultsIsOpen()
     })
 
-    it('defaultOpen stays open on focus', () => {
+    it('defaultOpen stays open on focus', async () => {
       wrapperMount(<Search results={options} minCharacters={0} defaultOpen />)
 
-      openSearchResults()
+      await openSearchResults()
       searchResultsIsOpen()
     })
 
-    it('defaultOpen closes the menu when false', () => {
+    it('defaultOpen closes the menu when false', async () => {
       wrapperMount(<Search results={options} minCharacters={0} defaultOpen={false} />)
 
       searchResultsIsClosed()
     })
 
-    it('opens the menu when true', () => {
+    it('opens the menu when true', async () => {
       wrapperMount(<Search results={options} minCharacters={0} open />)
 
       searchResultsIsOpen()
     })
 
-    it('closes the menu when false', () => {
+    it('closes the menu when false', async () => {
       wrapperMount(<Search results={options} minCharacters={0} open={false} />)
 
       searchResultsIsClosed()
     })
 
-    it('closes the menu when toggled from true to false', () => {
+    it('closes the menu when toggled from true to false', async () => {
       const { rerender } = render(<Search results={options} minCharacters={0} open />)
       container = document.body.querySelector('div')
 
@@ -450,7 +465,7 @@ describe('Search', () => {
       searchResultsIsClosed()
     })
 
-    it('opens the menu when toggled from false to true', () => {
+    it('opens the menu when toggled from false to true', async () => {
       const { rerender } = render(<Search results={options} minCharacters={0} open={false} />)
       container = document.body.querySelector('div')
 
@@ -460,11 +475,13 @@ describe('Search', () => {
   })
 
   describe('onBlur', () => {
-    it('is called with (event, data) on search input blur', () => {
+    it('is called with (event, data) on search input blur', async () => {
       const onBlur = vi.fn()
       wrapperMount(<Search results={options} onBlur={onBlur} />)
 
-      fireEvent.blur(root())
+      // Tab onto the prompt, then off it again.
+      await user.tab()
+      await user.tab()
 
       expect(onBlur).toHaveBeenCalledTimes(1)
       expect(onBlur).toHaveBeenCalledWith(
@@ -473,23 +490,23 @@ describe('Search', () => {
       )
     })
 
-    it('is not called on an item click', () => {
+    it('is not called on an item click', async () => {
       const onBlur = vi.fn()
       wrapperMount(<Search results={options} onBlur={onBlur} />)
 
-      openSearchResults()
-      fireEvent.click(results()[0])
+      await openSearchResults()
+      await user.click(results()[0])
 
       expect(onBlur).not.toHaveBeenCalled()
     })
   })
 
   describe('onFocus', () => {
-    it('is called with (event, data) on search input focus', () => {
+    it('is called with (event, data) on search input focus', async () => {
       const onFocus = vi.fn()
       wrapperMount(<Search results={options} onFocus={onFocus} />)
 
-      openSearchResults()
+      await openSearchResults()
 
       expect(onFocus).toHaveBeenCalledTimes(1)
       expect(onFocus).toHaveBeenCalledWith(
@@ -506,14 +523,14 @@ describe('Search', () => {
       onResultSelect = vi.fn()
     })
 
-    it('is called with event and value on item click', () => {
+    it('is called with event and value on item click', async () => {
       const index = 2
       wrapperMount(<Search results={options} minCharacters={0} onResultSelect={onResultSelect} />)
 
-      openSearchResults()
+      await openSearchResults()
       searchResultsIsOpen()
 
-      fireEvent.click(results()[index])
+      await user.click(results()[index])
 
       expect(onResultSelect).toHaveBeenCalledTimes(1)
       expect(onResultSelect).toHaveBeenCalledWith(
@@ -526,7 +543,7 @@ describe('Search', () => {
       )
     })
 
-    it('is called with event and value when pressing enter on a selected item', () => {
+    it('is called with event and value when pressing enter on a selected item', async () => {
       wrapperMount(
         <Search
           results={options}
@@ -536,10 +553,10 @@ describe('Search', () => {
         />,
       )
 
-      openSearchResults()
+      await openSearchResults()
       searchResultsIsOpen()
 
-      pressKey('Enter')
+      await pressKey('Enter')
 
       expect(onResultSelect).toHaveBeenCalledTimes(1)
       expect(onResultSelect).toHaveBeenCalledWith(
@@ -548,7 +565,7 @@ describe('Search', () => {
       )
     })
 
-    it('is not called when updating the value prop', () => {
+    it('is not called when updating the value prop', async () => {
       const { rerender } = render(
         <Search
           results={options}
@@ -570,21 +587,21 @@ describe('Search', () => {
       expect(onResultSelect).not.toHaveBeenCalled()
     })
 
-    it('does not call onResultSelect on query change', () => {
+    it('does not call onResultSelect on query change', async () => {
       wrapperMount(<Search results={options} minCharacters={0} onResultSelect={onResultSelect} />)
 
-      type('query')
+      await type('query')
 
       expect(onResultSelect).not.toHaveBeenCalled()
     })
   })
 
   describe('onSearchChange', () => {
-    it('is called with (event, value) on search input change', () => {
+    it('is called with (event, value) on search input change', async () => {
       const onSearchChange = vi.fn()
       wrapperMount(<Search results={options} minCharacters={0} onSearchChange={onSearchChange} />)
 
-      type('a')
+      await type('a')
 
       expect(onSearchChange).toHaveBeenCalledTimes(1)
       expect(onSearchChange).toHaveBeenCalledWith(
@@ -595,7 +612,7 @@ describe('Search', () => {
   })
 
   describe('onSelectionChange', () => {
-    it('is called with (event, data) when the active selection index is changed', () => {
+    it('is called with (event, data) when the active selection index is changed', async () => {
       const onSelectionChange = vi.fn()
       wrapperMount(
         <Search
@@ -606,8 +623,8 @@ describe('Search', () => {
         />,
       )
 
-      openSearchResults()
-      pressKey('ArrowDown')
+      await openSearchResults()
+      await pressKey('ArrowDown')
 
       // The selection moves to `options[1]`, but the handler is told
       // `options[0]` — `handleSelectionChange` reads `this.state.selectedIndex`
@@ -629,26 +646,28 @@ describe('Search', () => {
   })
 
   describe('results prop', () => {
-    it('adds the onClick handler to all items', () => {
+    it('adds the onClick handler to all items', async () => {
       // Enzyme asked whether each SearchResult element carried an `onClick`
       // prop. What that prop is for is selecting the result it sits on.
       const onResultSelect = vi.fn()
 
-      options.forEach((option, index) => {
+      for (const [index, option] of options.entries()) {
         wrapperMount(<Search results={options} minCharacters={0} onResultSelect={onResultSelect} />)
-        openSearchResults()
-        fireEvent.click(results()[index])
+        // eslint-disable-next-line no-await-in-loop -- interactions are a sequence
+        await openSearchResults()
+        // eslint-disable-next-line no-await-in-loop -- interactions are a sequence
+        await user.click(results()[index])
 
         expect(onResultSelect).toHaveBeenLastCalledWith(
           expect.anything(),
           expect.objectContaining({ result: option }),
         )
-      })
+      }
 
       expect(onResultSelect).toHaveBeenCalledTimes(options.length)
     })
 
-    it('renders new options when options change', () => {
+    it('renders new options when options change', async () => {
       const customOptions = [
         { title: 'abra', description: 'abra' },
         { title: 'cadabra', description: 'cadabra' },
@@ -670,7 +689,7 @@ describe('Search', () => {
       expect(newItem.querySelector('.description')).toHaveTextContent('bar')
     })
 
-    it('passes options as props', () => {
+    it('passes options as props', async () => {
       const customOptions = [
         { title: 'abra', description: 'abra', 'data-foo': 'someValue' },
         { title: 'cadabra', description: 'cadabra', 'data-foo': 'someValue' },
@@ -683,14 +702,14 @@ describe('Search', () => {
       }
     })
 
-    it('ignores search value', () => {
+    it('ignores search value', async () => {
       wrapperMount(<Search results={options} minCharacters={0} selectFirstResult />)
 
-      openSearchResults()
+      await openSearchResults()
       searchResultsIsOpen()
 
       // search for something we know will not exist
-      type('_________________')
+      await type('_________________')
 
       expect(results()).toHaveLength(options.length)
     })
@@ -699,7 +718,7 @@ describe('Search', () => {
   describe('no results message', () => {
     const emptyMessage = () => container.querySelector('.message.empty')
 
-    it('is shown when there are no results', () => {
+    it('is shown when there are no results', async () => {
       const { rerender } = render(<Search results={options} minCharacters={0} defaultOpen />)
       container = document.body.querySelector('div')
 
@@ -709,25 +728,25 @@ describe('Search', () => {
       expect(emptyMessage()).not.toBeNull()
     })
 
-    it('uses default noResultsMessage', () => {
+    it('uses default noResultsMessage', async () => {
       wrapperMount(<Search results={[]} minCharacters={0} />)
 
       expect(emptyMessage().querySelector('.header')).toHaveTextContent('No results found.')
     })
 
-    it('uses custom string for noResultsMessage', () => {
+    it('uses custom string for noResultsMessage', async () => {
       wrapperMount(<Search results={[]} minCharacters={0} noResultsMessage='Something custom' />)
 
       expect(emptyMessage().querySelector('.header')).toHaveTextContent('Something custom')
     })
 
-    it('uses custom component for noResultsMessage', () => {
+    it('uses custom component for noResultsMessage', async () => {
       wrapperMount(<Search results={[]} minCharacters={0} noResultsMessage={<span>Test</span>} />)
 
       expect(emptyMessage().querySelector('.header span')).not.toBeNull()
     })
 
-    it('uses custom noResultsDescription if present', () => {
+    it('uses custom noResultsDescription if present', async () => {
       wrapperMount(
         <Search results={[]} minCharacters={0} noResultsDescription='Something custom' />,
       )
@@ -736,13 +755,13 @@ describe('Search', () => {
       expect(emptyMessage().querySelector('.description')).toHaveTextContent('Something custom')
     })
 
-    it('uses no noResultsMessage', () => {
+    it('uses no noResultsMessage', async () => {
       wrapperMount(<Search results={[]} minCharacters={0} noResultsMessage='' />)
 
       expect(emptyMessage().querySelector('.header')).toHaveTextContent('')
     })
 
-    it('shows no message with showNoResults=false', () => {
+    it('shows no message with showNoResults=false', async () => {
       wrapperMount(<Search results={[]} minCharacters={0} showNoResults={false} />)
 
       expect(emptyMessage()).toBeNull()
@@ -750,14 +769,14 @@ describe('Search', () => {
   })
 
   describe('input', () => {
-    it('merges nested shorthand props for the <input>', () => {
+    it('merges nested shorthand props for the <input>', async () => {
       wrapperMount(<Search input={{ input: { className: 'foo', tabIndex: '-1' } }} />)
 
       expect(input()).toHaveAttribute('tabindex', '-1')
       expect(input()).toHaveClass('foo', 'prompt')
     })
 
-    it('will not merge for a function', () => {
+    it('will not merge for a function', async () => {
       // TODO: V4 remove this test and simplify the implementation
       consoleUtil.disableOnce()
 
@@ -768,7 +787,7 @@ describe('Search', () => {
       expect(element).not.toHaveClass('prompt')
     })
 
-    it('"placeholder" in passed to an "input"', () => {
+    it('"placeholder" in passed to an "input"', async () => {
       wrapperMount(<Search placeholder='foo' />)
 
       expect(input()).toHaveAttribute('placeholder', 'foo')

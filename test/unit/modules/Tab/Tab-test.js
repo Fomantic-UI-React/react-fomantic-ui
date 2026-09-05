@@ -1,4 +1,5 @@
-import { fireEvent, render } from '@testing-library/react'
+import { render } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import React from 'react'
 
 import Tab from 'src/modules/Tab/Tab'
@@ -25,6 +26,15 @@ describe('Tab', () => {
   const panesOf = (container) => [...container.querySelectorAll('.tab')]
   const columnsOf = (container) => [...container.querySelectorAll('.ui.grid > .column')]
   const childrenOf = (container) => [...container.firstElementChild.children]
+
+  // Menu items are clicked through user-event, which sends the pointer and
+  // focus sequence a browser does rather than the lone `click` fireEvent
+  // dispatches.
+  let user
+
+  beforeEach(() => {
+    user = userEvent.setup()
+  })
 
   describe('menu', () => {
     it('passes the props to the Menu', () => {
@@ -130,12 +140,12 @@ describe('Tab', () => {
       expect(items[2]).not.toHaveClass('active')
     })
 
-    it('is set when clicking an item', () => {
+    it('is set when clicking an item', async () => {
       const { container } = render(<Tab panes={panes} />)
 
       expect(container).toHaveTextContent('Tab 1 Content')
 
-      fireEvent.click(itemsOf(container)[1])
+      await user.click(itemsOf(container)[1])
       expect(container).toHaveTextContent('Tab 2 Content')
     })
 
@@ -164,7 +174,7 @@ describe('Tab', () => {
   })
 
   describe('onTabChange', () => {
-    it('is called with (e, { ...props, activeIndex }) when a menu item is clicked', () => {
+    it('is called with (e, { ...props, activeIndex }) when a menu item is clicked', async () => {
       // The frozen spec passed a `{ fake: 'event' }` object through Enzyme's
       // `simulate()` and asserted it arrived. React only ever hands a DOM
       // handler the event, so the real event is what is asserted here.
@@ -172,7 +182,7 @@ describe('Tab', () => {
       const props = { onTabChange, panes }
       const { container } = render(<Tab {...props} />)
 
-      fireEvent.click(itemsOf(container)[1])
+      await user.click(itemsOf(container)[1])
 
       expect(onTabChange).toHaveBeenCalledTimes(1)
       expect(onTabChange).toHaveBeenCalledWith(
@@ -181,7 +191,7 @@ describe('Tab', () => {
       )
     })
 
-    it('is called with the new proposed activeIndex, not the current', () => {
+    it('is called with the new proposed activeIndex, not the current', async () => {
       const onTabChange = vi.fn()
       const { container } = render(<Tab activeIndex={-1} onTabChange={onTabChange} panes={panes} />)
       const items = itemsOf(container)
@@ -189,7 +199,8 @@ describe('Tab', () => {
       expect(onTabChange).not.toHaveBeenCalled()
 
       for (const index of [0, 1, 2]) {
-        fireEvent.click(items[index])
+        // eslint-disable-next-line no-await-in-loop -- clicks are a sequence
+        await user.click(items[index])
 
         expect(onTabChange).toHaveBeenCalledTimes(index + 1)
         expect(onTabChange).toHaveBeenLastCalledWith(
