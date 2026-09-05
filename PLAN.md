@@ -223,7 +223,7 @@ remaining in `test/specs` — no growing include-list in the config.
 | 7g | `modules` — Sticky | ✅ |
 | 7h | `modules` — Tab, Transition | ✅ |
 | 7i | `modules` — Popup, Search | ✅ Split from Dropdown: 1,293 LOC between them |
-| 7j | `modules` — Dropdown (2,903 LOC) | The largest file in the corpus |
+| 7j | `modules` — Dropdown (2,903 LOC) | ✅ The largest file in the corpus |
 | 8 | Delete the frozen `commonTests` and `docs` originals | Phase 2 done when `test/specs` is empty |
 
 **`componentInfoContext` must be replaced first.** `isConformant.js` and
@@ -605,6 +605,72 @@ port earning its cost: a shipped regression that the old suite could not see
 because it ran on the React version the bug predates.
 
 `Dropdown` should be checked for the same shape before #29 is closed.
+**Ported in PR 7j** (`Dropdown`): 2,903 LOC and 217 tests, the largest file in
+the corpus, plus its three remaining subcomponents. It came across in eight
+passes, each run green before the next was written.
+
+The structural translation is the same one `Tab` needed — `DropdownMenu`,
+`DropdownItem`, `DropdownText` and `DropdownSearchInput` are `.menu`, `.item`,
+`[role="alert"]` and `input.search` — and most of the file follows from that.
+Three things did not.
+
+**`fireEvent` is the wrong tool for a user interaction, and this is the file
+that proves it.** `Dropdown` reads the events a browser sends *around* a click:
+`isMouseDown` is set from `mousedown`, and it gates the `openOnFocus` branch in
+`componentDidUpdate`. Under a bare click the focus that selection moves back to
+the dropdown reads as a *fresh* focus and the menu reopens the moment it closes
+— a working component looking broken. That was mistaken for a shipped React 18
+regression twice before the cause was found, and the first fix was a helper
+sending mousedown, click and mouseup by hand, which is `user-event` reinvented
+badly. Every interaction in the file now goes through `user-event`; the general
+rule and the gesture-by-gesture mapping are in their own section below.
+
+Two assertions changed shape as a result. `preventDefault` is read from the kept
+event once the interaction resolves, because a listener on the element runs
+before React's handler on the container and would always see `false`. And the
+search dropdown's "focused but closed" state is reached by tabbing in and
+pressing escape, which is how a user gets there — the input keeps focus after
+the menu closes.
+
+**Popper-style config with no DOM trace** appears once more, in `upward`.
+`setOpenDirection` compares the dropdown's rect against the viewport height,
+neither of which jsdom computes, so both are stubbed as in `Sticky` and the
+assertion is on the direction the component derives. Mutation-checked by
+swapping the two stubbed positions and confirming both tests fail.
+
+Assertions that got *stronger*, not weaker:
+
+- **Three `TODO: try reenable after Enzyme update` comments are now live code.**
+  `dropdownMenuIsClosed()` in "is not called when value is not changed on item
+  click" (twice) and in "sets focus to the dropdown after selection" were
+  commented out in 2019 waiting on an Enzyme fix that never came. A real click
+  makes all three hold.
+- **`allowAdditions`' label tests** picked apart the React elements inside the
+  addition item's `text` prop — `text[1].type`, `text[1].key`. What those
+  produce is `Add <b>boo</b>`, which is what the port asserts, and what a user
+  sees.
+- **The three "does not display if value is ''/null/undefined" tests** asserted
+  `should.contain.text('')`, which every string satisfies — including the text
+  of an element that is not there. They now assert the text element is absent.
+
+Two assertions were dropped, both deliberately. `options` "handles keys
+correctly" read React keys off the elements, and keys are never rendered — the
+port asserts what the key derivation is *for* instead: three options render, and
+React does not warn about duplicates. And `describe('render')` was an empty block
+left over from a commented-out test; mocha allowed that, vitest does not.
+
+**Eighth bug found**: `DropdownText` renders the `divider` class. The line is
+copy-pasted from `DropdownDivider`, so every selection dropdown's selected-value
+node comes out as `class="divider default text"` and picks up the border and
+spacing SUI gives menu dividers. Tracked as **issue #31**. The frozen
+`DropdownText-test.js` was 18 lines and never looked at a class name — and
+`isConformant` cannot, since its `componentClassName` assertion was dropped in
+PR 1 as underivable.
+
+**`Dropdown` does not have Search's #29 bug.** It calls
+`scrollSelectedItemIntoView` from `componentDidUpdate` when `selectedIndex`
+changes, not inline after `setState`, so it sees the item that is actually
+selected. The ported scroll test asserts the correct positions and passes.
 
 **`shallow()` has no RTL equivalent, by design.** The 93 shallow files cannot be
 ported mechanically: structural assertions (`should.have.descendants`) have to
