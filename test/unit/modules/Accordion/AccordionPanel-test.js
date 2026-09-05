@@ -1,5 +1,6 @@
 import { dom } from 'test/support/rtl'
-import { fireEvent } from '@testing-library/react'
+
+import userEvent from '@testing-library/user-event'
 import React from 'react'
 
 import AccordionContent from 'src/modules/Accordion/AccordionContent'
@@ -8,6 +9,15 @@ import AccordionTitle from 'src/modules/Accordion/AccordionTitle'
 import * as common from 'test/support/commonTests'
 
 describe('AccordionPanel', () => {
+  // Interactions go through user-event, which sends the pointer, focus and
+  // keyboard sequence a browser does rather than the single event `fireEvent`
+  // dispatches.
+  let user
+
+  beforeEach(() => {
+    user = userEvent.setup()
+  })
+
   common.isConformant(AccordionPanel, { rendersChildren: false, forwardsRef: false })
 
   common.implementsShorthandProp(AccordionPanel, {
@@ -28,7 +38,7 @@ describe('AccordionPanel', () => {
   })
 
   describe('active', () => {
-    it('should passed to children', () => {
+    it('should passed to children', async () => {
       const container = dom(<AccordionPanel active content='Content' title='Title' />)
 
       expect(container.querySelector('.title')).toHaveClass('active')
@@ -39,20 +49,20 @@ describe('AccordionPanel', () => {
   describe('index', () => {
     // AccordionPanel renders a fragment: the title and content are siblings in
     // the container, not children of a wrapper.
-    it('should passed to title', () => {
+    it('should passed to title', async () => {
       const onTitleClick = vi.fn()
       const container = dom(
         <AccordionPanel content='Content' index={5} onTitleClick={onTitleClick} title='Title' />,
       )
 
-      fireEvent.click(container.querySelector('.title'))
+      await user.click(container.querySelector('.title'))
 
       expect(onTitleClick.mock.calls[0][1]).toMatchObject({ index: 5 })
     })
   })
 
   describe('onTitleClick', () => {
-    it('is called with (e, titleProps) when clicked', () => {
+    it('is called with (e, titleProps) when clicked', async () => {
       const onClick = vi.fn()
       const onTitleClick = vi.fn()
 
@@ -63,7 +73,7 @@ describe('AccordionPanel', () => {
           title={{ content: 'Title', onClick }}
         />,
       )
-      fireEvent.click(container.querySelector('.title'))
+      await user.click(container.querySelector('.title'))
 
       expect(onClick).toHaveBeenCalledTimes(1)
       expect(onClick.mock.calls[0][1]).toMatchObject({ content: 'Title' })

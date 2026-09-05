@@ -1,4 +1,5 @@
-import { fireEvent, render, waitFor } from '@testing-library/react'
+import { render, waitFor } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import React from 'react'
 
 import TransitionablePortal from 'src/addons/TransitionablePortal/TransitionablePortal'
@@ -14,6 +15,15 @@ const requiredProps = {
 const children = () => document.getElementById('children')
 
 describe('TransitionablePortal', () => {
+  // Interactions go through user-event, which sends the pointer, focus and
+  // keyboard sequence a browser does rather than the single event `fireEvent`
+  // dispatches.
+  let user
+
+  beforeEach(() => {
+    user = userEvent.setup()
+  })
+
   common.isConformant(TransitionablePortal, {
     rendersPortal: true,
     requiredProps,
@@ -26,7 +36,7 @@ describe('TransitionablePortal', () => {
   })
 
   describe('children', () => {
-    it('renders a Transition', () => {
+    it('renders a Transition', async () => {
       render(<TransitionablePortal {...requiredProps} open />)
 
       expect(document.body.querySelector('.transition')).not.toBeNull()
@@ -45,8 +55,8 @@ describe('TransitionablePortal', () => {
         />,
       )
 
-      fireEvent.click(container.querySelector('button'))
-      fireEvent.click(document.body)
+      await user.click(container.querySelector('button'))
+      await user.click(document.body)
 
       await waitFor(() => {
         expect(onClose).toHaveBeenCalledTimes(1)
@@ -55,13 +65,13 @@ describe('TransitionablePortal', () => {
       expect(onClose.mock.calls[0][1]).toMatchObject({ portalOpen: false })
     })
 
-    it('hides contents on a click outside', () => {
+    it('hides contents on a click outside', async () => {
       const { container } = render(<TransitionablePortal {...requiredProps} trigger={<button />} />)
 
-      fireEvent.click(container.querySelector('button'))
+      await user.click(container.querySelector('button'))
       expect(children()).toHaveClass('in')
 
-      fireEvent.click(document.body)
+      await user.click(document.body)
       expect(children()).toHaveClass('out')
     })
   })
@@ -102,39 +112,39 @@ describe('TransitionablePortal', () => {
   })
 
   describe('onOpen', () => {
-    it('is called with (null, data) when opens', () => {
+    it('is called with (null, data) when opens', async () => {
       const onOpen = vi.fn()
       const { container } = render(
         <TransitionablePortal {...requiredProps} onOpen={onOpen} trigger={<button />} />,
       )
 
-      fireEvent.click(container.querySelector('button'))
+      await user.click(container.querySelector('button'))
 
       expect(onOpen).toHaveBeenCalledTimes(1)
       expect(onOpen.mock.calls[0][0]).toBeNull()
       expect(onOpen.mock.calls[0][1]).toMatchObject({ portalOpen: true })
     })
 
-    it('renders contents', () => {
+    it('renders contents', async () => {
       const { container } = render(<TransitionablePortal {...requiredProps} trigger={<button />} />)
 
-      fireEvent.click(container.querySelector('button'))
+      await user.click(container.querySelector('button'))
 
       expect(children()).toHaveClass('in')
     })
   })
 
   describe('open', () => {
-    it('blocks update of state on a portal close', () => {
+    it('blocks update of state on a portal close', async () => {
       render(<TransitionablePortal {...requiredProps} open />)
       expect(children()).toHaveClass('in')
 
-      fireEvent.click(document.body)
+      await user.click(document.body)
 
       expect(children()).toHaveClass('in')
     })
 
-    it('passes `open` prop to Transition when defined', () => {
+    it('passes `open` prop to Transition when defined', async () => {
       const { rerender } = render(<TransitionablePortal {...requiredProps} />)
 
       rerender(<TransitionablePortal {...requiredProps} open />)
@@ -144,7 +154,7 @@ describe('TransitionablePortal', () => {
       expect(children()).toHaveClass('out')
     })
 
-    it('does not pass `open` prop to Transition when not defined', () => {
+    it('does not pass `open` prop to Transition when not defined', async () => {
       const { rerender } = render(<TransitionablePortal {...requiredProps} />)
       expect(children()).toBeNull()
 

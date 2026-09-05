@@ -722,6 +722,35 @@ Four things fell out of it:
 `fireEvent` is still right where there is no user gesture — `scroll` on `window`
 is the only use left in these files.
 
+Swept across the whole of `test/unit` afterwards: 32 files, ~200 call sites.
+What is left on `fireEvent` is left deliberately, and each site says why:
+
+| where | why it stays |
+| --- | --- |
+| `Sticky` (12), `Popup` (4) | `scroll` — no gesture produces it, and jsdom does not scroll |
+| `isConformant` / `syntheticEvent` | dispatches a *listener list* by name, to prove every declared event prop is passed through |
+| `Portal`'s trigger loop | same shape — one dispatch per handler name, chosen at run time |
+| `Checkbox`'s native-comparison matrix | the exact event sequence per target *is* the fixture; a click would substitute its own |
+
+Four things the sweep turned up that are worth knowing:
+
+- **`user.click(document)` does not work** — user-event needs an element. Use
+  `document.body`; it reaches a document listener just the same.
+- **A drag out of a component is `user.pointer` with two steps**, press on one
+  target and release on another. `Modal` and `Portal` both have a "mousedown
+  inside, mouseup outside" test, and converting those to `user.click` on the
+  outside target quietly destroys them — the click sends its own mousedown
+  there, which is the case being excluded.
+- **`unhover` needs a `hover` first**, and it takes the pointer all the way out
+  to the body. `Portal`'s "does not close on a mouseleave from a child" is about
+  moving *within* the portal, which is `user.pointer({ target: parent })`.
+- **Releasing Tab fires a keyup on the element that just received focus.** A
+  `keyup` handler will count it, so `RatingIcon` takes focus by clicking.
+
+`expect(() => fireEvent.click(x)).not.toThrow()` has no async equivalent worth
+having; those became a bare `await user.click(x)`, which fails the test if it
+throws and reads better.
+
 **`shallow()` has no RTL equivalent, by design.** The 93 shallow files cannot be
 ported mechanically: structural assertions (`should.have.descendants`) have to
 become behavioural ones against rendered output. Expect the assertion count to

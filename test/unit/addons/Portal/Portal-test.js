@@ -1,4 +1,5 @@
 import { fireEvent, render } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import PropTypes from 'prop-types'
 import React from 'react'
 
@@ -32,14 +33,23 @@ const createHandlingComponent = (eventName) =>
   }
 
 describe('Portal', () => {
+  // Interactions go through user-event, which sends the pointer, focus and
+  // keyboard sequence a browser does rather than the single event `fireEvent`
+  // dispatches.
+  let user
+
+  beforeEach(() => {
+    user = userEvent.setup()
+  })
+
   common.hasSubcomponents(Portal, [PortalInner])
   common.hasValidTypings(Portal, { forwardsRef: false })
 
-  it('propTypes.children should be required', () => {
+  it('propTypes.children should be required', async () => {
     expect(Portal.propTypes.children).toBe(PropTypes.node.isRequired)
   })
 
-  it('does not warn when an open portal is unmounted', () => {
+  it('does not warn when an open portal is unmounted', async () => {
     // Enzyme spied on wrapper.setState to prove nothing was set after unmount.
     // There is no wrapper to spy on now; the observable symptom of that bug is
     // React's "state update on an unmounted component" warning.
@@ -53,7 +63,7 @@ describe('Portal', () => {
   })
 
   describe('open', () => {
-    it('opens the portal when toggled from false to true', () => {
+    it('opens the portal when toggled from false to true', async () => {
       const { rerender } = render(<Portal open={false}>{portalChild()}</Portal>)
       expect(isOpen()).toBe(false)
 
@@ -61,7 +71,7 @@ describe('Portal', () => {
       expect(isOpen()).toBe(true)
     })
 
-    it('closes the portal when toggled from true to false', () => {
+    it('closes the portal when toggled from true to false', async () => {
       const { rerender } = render(<Portal open>{portalChild()}</Portal>)
       expect(isOpen()).toBe(true)
 
@@ -71,7 +81,7 @@ describe('Portal', () => {
   })
 
   describe('onMount', () => {
-    it('called when portal opens', () => {
+    it('called when portal opens', async () => {
       const onMount = vi.fn()
       const { rerender } = render(
         <Portal open={false} onMount={onMount}>
@@ -88,7 +98,7 @@ describe('Portal', () => {
       expect(onMount).toHaveBeenCalledTimes(1)
     })
 
-    it('is not called when portal receives props', () => {
+    it('is not called when portal receives props', async () => {
       const onMount = vi.fn()
       const { rerender } = render(
         <Portal open={false} onMount={onMount}>
@@ -113,7 +123,7 @@ describe('Portal', () => {
   })
 
   describe('onUnmount', () => {
-    it('is called when portal closes', () => {
+    it('is called when portal closes', async () => {
       const onUnmount = vi.fn()
       const { rerender } = render(
         <Portal open onUnmount={onUnmount}>
@@ -130,7 +140,7 @@ describe('Portal', () => {
       expect(onUnmount).toHaveBeenCalledTimes(1)
     })
 
-    it('is not called when portal receives props', () => {
+    it('is not called when portal receives props', async () => {
       const onUnmount = vi.fn()
       const { rerender } = render(
         <Portal open onUnmount={onUnmount}>
@@ -153,7 +163,7 @@ describe('Portal', () => {
       expect(onUnmount).toHaveBeenCalledTimes(1)
     })
 
-    it('is called only once when portal closes and then is unmounted', () => {
+    it('is called only once when portal closes and then is unmounted', async () => {
       const onUnmount = vi.fn()
       const { rerender, unmount } = render(
         <Portal open onUnmount={onUnmount}>
@@ -171,7 +181,7 @@ describe('Portal', () => {
       expect(onUnmount).toHaveBeenCalledTimes(1)
     })
 
-    it('is called only once when directly unmounting', () => {
+    it('is called only once when directly unmounting', async () => {
       const onUnmount = vi.fn()
       const { unmount } = render(
         <Portal open onUnmount={onUnmount}>
@@ -186,7 +196,7 @@ describe('Portal', () => {
   })
 
   describe('onOpen', () => {
-    it('is called on trigger click', () => {
+    it('is called on trigger click', async () => {
       const onOpen = vi.fn()
       const { container } = render(
         <Portal onOpen={onOpen} trigger={<div id='trigger' />}>
@@ -194,7 +204,7 @@ describe('Portal', () => {
         </Portal>,
       )
 
-      fireEvent.click(container.querySelector('#trigger'))
+      await user.click(container.querySelector('#trigger'))
 
       expect(onOpen).toHaveBeenCalledTimes(1)
       expect(onOpen.mock.calls[0][1]).toMatchObject({ open: true })
@@ -202,7 +212,7 @@ describe('Portal', () => {
   })
 
   describe('onClose', () => {
-    it('is called on body click', () => {
+    it('is called on body click', async () => {
       const onClose = vi.fn()
       render(
         <Portal defaultOpen onClose={onClose} trigger={<div />}>
@@ -210,7 +220,7 @@ describe('Portal', () => {
         </Portal>,
       )
 
-      fireEvent.click(document.body)
+      await user.click(document.body)
 
       expect(onClose).toHaveBeenCalled()
       expect(onClose.mock.calls[0][1]).toMatchObject({ open: false })
@@ -218,13 +228,13 @@ describe('Portal', () => {
   })
 
   describe('trigger', () => {
-    it('renders nothing when not set', () => {
+    it('renders nothing when not set', async () => {
       const { container } = render(<Portal>{portalChild()}</Portal>)
 
       expect(container).toBeEmptyDOMElement()
     })
 
-    it('renders the trigger when set', () => {
+    it('renders the trigger when set', async () => {
       const text = 'open by click on me'
       const { container } = render(
         <Portal trigger={<button>{text}</button>}>{portalChild()}</Portal>,
@@ -241,6 +251,10 @@ describe('Portal', () => {
           <Portal trigger={<Trigger color='blue' handler={handler} />}>{portalChild()}</Portal>,
         )
 
+        // fireEvent, deliberately: this asserts that Portal passes each
+        // handler through to the trigger, by dispatching the one event that
+        // handler is named for. It is not modelling anything a user does, and
+        // user-event has no way to dispatch an event chosen at run time.
         const eventName = handlerName.slice(2)
         fireEvent[eventName.charAt(0).toLowerCase() + eventName.slice(1)](
           container.querySelector('button'),
@@ -253,7 +267,7 @@ describe('Portal', () => {
   })
 
   describe('triggerRef', () => {
-    it('calls itself and an original ref', () => {
+    it('calls itself and an original ref', async () => {
       const elementRef = React.createRef()
       const triggerRef = React.createRef()
 
@@ -271,7 +285,7 @@ describe('Portal', () => {
   })
 
   describe('mountNode', () => {
-    it('renders the portal into the given node', () => {
+    it('renders the portal into the given node', async () => {
       const mountNode = document.createElement('div')
       document.body.appendChild(mountNode)
 
@@ -288,20 +302,20 @@ describe('Portal', () => {
   })
 
   describe('openOnTriggerClick', () => {
-    it('defaults to true', () => {
+    it('defaults to true', async () => {
       const onTriggerClick = vi.fn()
       const { container } = render(
         <Portal trigger={<button onClick={onTriggerClick}>button</button>}>{portalChild()}</Portal>,
       )
       expect(isOpen()).toBe(false)
 
-      fireEvent.click(container.querySelector('button'))
+      await user.click(container.querySelector('button'))
 
       expect(isOpen()).toBe(true)
       expect(onTriggerClick).toHaveBeenCalledTimes(1)
     })
 
-    it('does not open the portal on trigger click when false', () => {
+    it('does not open the portal on trigger click when false', async () => {
       const spy = vi.fn()
       const { container } = render(
         <Portal trigger={<button onClick={spy}>button</button>} openOnTriggerClick={false}>
@@ -310,13 +324,13 @@ describe('Portal', () => {
       )
       expect(isOpen()).toBe(false)
 
-      fireEvent.click(container.querySelector('button'))
+      await user.click(container.querySelector('button'))
 
       expect(isOpen()).toBe(false)
       expect(spy).toHaveBeenCalledTimes(1)
     })
 
-    it('opens the portal on trigger click when true', () => {
+    it('opens the portal on trigger click when true', async () => {
       const spy = vi.fn()
       const { container } = render(
         <Portal trigger={<button onClick={spy}>button</button>} openOnTriggerClick>
@@ -325,7 +339,7 @@ describe('Portal', () => {
       )
       expect(isOpen()).toBe(false)
 
-      fireEvent.click(container.querySelector('button'))
+      await user.click(container.querySelector('button'))
 
       expect(isOpen()).toBe(true)
       expect(spy).toHaveBeenCalledTimes(1)
@@ -333,7 +347,7 @@ describe('Portal', () => {
   })
 
   describe('closeOnTriggerClick', () => {
-    it('does not close the portal on click', () => {
+    it('does not close the portal on click', async () => {
       const { container } = render(
         <Portal trigger={<button />} defaultOpen>
           {portalChild()}
@@ -341,12 +355,12 @@ describe('Portal', () => {
       )
       expect(isOpen()).toBe(true)
 
-      fireEvent.click(container.querySelector('button'))
+      await user.click(container.querySelector('button'))
 
       expect(isOpen()).toBe(true)
     })
 
-    it('closes the portal on click when set', () => {
+    it('closes the portal on click when set', async () => {
       const { container } = render(
         <Portal trigger={<button />} defaultOpen closeOnTriggerClick>
           {portalChild()}
@@ -354,18 +368,18 @@ describe('Portal', () => {
       )
       expect(isOpen()).toBe(true)
 
-      fireEvent.click(container.querySelector('button'))
+      await user.click(container.querySelector('button'))
 
       expect(isOpen()).toBe(false)
     })
   })
 
   describe('openOnTriggerMouseEnter', () => {
-    it('does not open the portal on mouseenter when not set', () => {
+    it('does not open the portal on mouseenter when not set', async () => {
       const { container } = render(<Portal trigger={<button />}>{portalChild()}</Portal>)
       expect(isOpen()).toBe(false)
 
-      fireEvent.mouseEnter(container.querySelector('button'))
+      await user.hover(container.querySelector('button'))
 
       expect(isOpen()).toBe(false)
     })
@@ -378,7 +392,7 @@ describe('Portal', () => {
       )
       expect(isOpen()).toBe(false)
 
-      fireEvent.mouseEnter(container.querySelector('button'))
+      await user.hover(container.querySelector('button'))
       await wait(5)
 
       expect(isOpen()).toBe(true)
@@ -403,11 +417,12 @@ describe('Portal', () => {
       )
       expect(isOpen()).toBe(false)
 
-      fireEvent.mouseEnter(container.querySelector('button'))
+      await user.hover(container.querySelector('button'))
       await wait(BEFORE_DELAY)
 
       expect(isOpen()).toBe(false)
-      fireEvent.mouseLeave(container.querySelector('button'))
+      await user.hover(container.querySelector('button'))
+      await user.unhover(container.querySelector('button'))
       await wait(DELAY)
 
       expect(isOpen()).toBe(false)
@@ -423,7 +438,9 @@ describe('Portal', () => {
       )
       expect(isOpen()).toBe(true)
 
-      fireEvent.mouseLeave(container.querySelector('button'))
+      await user.hover(container.querySelector('button'))
+
+      await user.unhover(container.querySelector('button'))
       await wait(5)
 
       expect(isOpen()).toBe(true)
@@ -437,7 +454,9 @@ describe('Portal', () => {
       )
       expect(isOpen()).toBe(true)
 
-      fireEvent.mouseLeave(container.querySelector('button'))
+      await user.hover(container.querySelector('button'))
+
+      await user.unhover(container.querySelector('button'))
       await wait(5)
 
       expect(isOpen()).toBe(false)
@@ -471,10 +490,12 @@ describe('Portal', () => {
       const trigger = container.querySelector('button')
       expect(isOpen()).toBe(true)
 
-      fireEvent.mouseLeave(trigger)
+      await user.hover(trigger)
+
+      await user.unhover(trigger)
       await wait(BEFORE_DELAY)
 
-      fireEvent.mouseEnter(trigger)
+      await user.hover(trigger)
       await wait(DELAY)
 
       expect(isOpen()).toBe(true)
@@ -490,7 +511,9 @@ describe('Portal', () => {
       )
       expect(isOpen()).toBe(true)
 
-      fireEvent.mouseLeave(document.getElementById('inner'))
+      await user.hover(document.getElementById('inner'))
+
+      await user.unhover(document.getElementById('inner'))
       await wait(5)
 
       expect(isOpen()).toBe(true)
@@ -504,7 +527,9 @@ describe('Portal', () => {
       )
       expect(isOpen()).toBe(true)
 
-      fireEvent.mouseLeave(document.getElementById('inner'))
+      await user.hover(document.getElementById('inner'))
+
+      await user.unhover(document.getElementById('inner'))
       await wait(5)
 
       expect(isOpen()).toBe(false)
@@ -520,7 +545,13 @@ describe('Portal', () => {
       )
       expect(isOpen()).toBe(true)
 
-      fireEvent.mouseLeave(document.getElementById('child'))
+      await user.hover(document.getElementById('child'))
+
+      // Move the pointer up to the portal's own element. The child gets a
+      // mouseleave; the portal does not, because the pointer never left it.
+      // `unhover` would take the pointer all the way out to the body, which is
+      // a different gesture and would close the portal legitimately.
+      await user.pointer({ target: document.querySelector(`[${CHILD_MARKER}]`) })
       await wait(5)
 
       expect(isOpen()).toBe(true)
@@ -541,14 +572,16 @@ describe('Portal', () => {
       )
       expect(isOpen()).toBe(true)
 
-      fireEvent.mouseLeave(container.querySelector('button'))
+      await user.hover(container.querySelector('button'))
+
+      await user.unhover(container.querySelector('button'))
 
       // Enter the portal inside the delay. Without closeOnPortalMouseLeave that
       // does not cancel the pending close.
       await wait(withinDelay)
       const inner = document.getElementById('inner')
       expect(inner, 'the portal closed before the mouseenter could be fired').not.toBeNull()
-      fireEvent.mouseEnter(inner)
+      await user.hover(inner)
 
       await wait(delay)
 
@@ -571,12 +604,14 @@ describe('Portal', () => {
       )
       expect(isOpen()).toBe(true)
 
-      fireEvent.mouseLeave(container.querySelector('button'))
+      await user.hover(container.querySelector('button'))
+
+      await user.unhover(container.querySelector('button'))
 
       await wait(withinDelay)
       const inner = document.getElementById('inner')
       expect(inner, 'the portal closed before the mouseenter could be fired').not.toBeNull()
-      fireEvent.mouseEnter(inner)
+      await user.hover(inner)
 
       await wait(delay)
 
@@ -585,16 +620,17 @@ describe('Portal', () => {
   })
 
   describe('openOnTriggerFocus', () => {
-    it('does not open the portal on focus when not set', () => {
+    it('does not open the portal on focus when not set', async () => {
       const { container } = render(<Portal trigger={<button />}>{portalChild()}</Portal>)
       expect(isOpen()).toBe(false)
 
-      fireEvent.focus(container.querySelector('button'))
+      await user.tab()
+      expect(document.activeElement).toBe(container.querySelector('button'))
 
       expect(isOpen()).toBe(false)
     })
 
-    it('opens the portal on focus when set', () => {
+    it('opens the portal on focus when set', async () => {
       const { container } = render(
         <Portal trigger={<button />} openOnTriggerFocus>
           {portalChild({ id: 'inner' })}
@@ -602,42 +638,45 @@ describe('Portal', () => {
       )
       expect(isOpen()).toBe(false)
 
-      fireEvent.focus(container.querySelector('button'))
+      await user.tab()
+      expect(document.activeElement).toBe(container.querySelector('button'))
 
       expect(isOpen()).toBe(true)
     })
   })
 
   describe('closeOnTriggerBlur', () => {
-    it('does not close the portal on blur when not set', () => {
-      const { container } = render(
+    it('does not close the portal on blur when not set', async () => {
+      render(
         <Portal trigger={<button />} defaultOpen>
           {portalChild({ id: 'inner' })}
         </Portal>,
       )
       expect(isOpen()).toBe(true)
 
-      fireEvent.blur(container.querySelector('button'))
+      await user.tab()
+      await user.tab()
 
       expect(isOpen()).toBe(true)
     })
 
-    it('closes the portal on blur when set', () => {
-      const { container } = render(
+    it('closes the portal on blur when set', async () => {
+      render(
         <Portal trigger={<button />} defaultOpen closeOnTriggerBlur>
           {portalChild()}
         </Portal>,
       )
       expect(isOpen()).toBe(true)
 
-      fireEvent.blur(container.querySelector('button'))
+      await user.tab()
+      await user.tab()
 
       expect(isOpen()).toBe(false)
     })
   })
 
   describe('closeOnEscape', () => {
-    it('closes the portal on escape', () => {
+    it('closes the portal on escape', async () => {
       render(
         <Portal closeOnEscape defaultOpen>
           {portalChild()}
@@ -645,12 +684,12 @@ describe('Portal', () => {
       )
       expect(isOpen()).toBe(true)
 
-      fireEvent.keyDown(document, { key: 'Escape' })
+      await user.keyboard('{Escape}')
 
       expect(isOpen()).toBe(false)
     })
 
-    it('does not close the portal on escape when false', () => {
+    it('does not close the portal on escape when false', async () => {
       render(
         <Portal closeOnEscape={false} defaultOpen>
           {portalChild()}
@@ -658,14 +697,14 @@ describe('Portal', () => {
       )
       expect(isOpen()).toBe(true)
 
-      fireEvent.keyDown(document, { key: 'Escape' })
+      await user.keyboard('{Escape}')
 
       expect(isOpen()).toBe(true)
     })
   })
 
   describe('closeOnDocumentClick', () => {
-    it('closes the portal on document click', () => {
+    it('closes the portal on document click', async () => {
       render(
         <Portal closeOnDocumentClick defaultOpen>
           {portalChild()}
@@ -673,12 +712,12 @@ describe('Portal', () => {
       )
       expect(isOpen()).toBe(true)
 
-      fireEvent.click(document)
+      await user.click(document.body)
 
       expect(isOpen()).toBe(false)
     })
 
-    it('does not close on click inside', () => {
+    it('does not close on click inside', async () => {
       render(
         <Portal closeOnDocumentClick defaultOpen>
           {portalChild({ id: 'inner' })}
@@ -686,12 +725,12 @@ describe('Portal', () => {
       )
       expect(isOpen()).toBe(true)
 
-      fireEvent.click(document.getElementById('inner'))
+      await user.click(document.getElementById('inner'))
 
       expect(isOpen()).toBe(true)
     })
 
-    it('does not close on mousedown inside and mouseup outside', () => {
+    it('does not close on mousedown inside and mouseup outside', async () => {
       render(
         <Portal closeOnDocumentClick defaultOpen>
           {portalChild({ id: 'inner' })}
@@ -699,8 +738,13 @@ describe('Portal', () => {
       )
       expect(isOpen()).toBe(true)
 
-      fireEvent.mouseDown(document.getElementById('inner'))
-      fireEvent.click(document)
+      // Press inside the portal and release outside it. `user.click` on the
+      // body would send its own mousedown there, which is the case this test
+      // exists to exclude.
+      await user.pointer([
+        { target: document.getElementById('inner'), keys: '[MouseLeft>]' },
+        { target: document.body, keys: '[/MouseLeft]' },
+      ])
 
       expect(isOpen()).toBe(true)
     })

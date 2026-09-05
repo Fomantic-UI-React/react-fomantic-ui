@@ -1,4 +1,5 @@
-import { fireEvent, render } from '@testing-library/react'
+import { render } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import React from 'react'
 
 import Confirm from 'src/addons/Confirm/Confirm'
@@ -6,6 +7,15 @@ import Modal from 'src/modules/Modal/Modal'
 import * as common from 'test/support/commonTests'
 
 describe('Confirm', () => {
+  // Interactions go through user-event, which sends the pointer, focus and
+  // keyboard sequence a browser does rather than the single event `fireEvent`
+  // dispatches.
+  let user
+
+  beforeEach(() => {
+    user = userEvent.setup()
+  })
+
   common.isConformant(Confirm, { rendersPortal: true })
 
   common.implementsShorthandProp(Confirm, {
@@ -37,13 +47,13 @@ describe('Confirm', () => {
   const buttons = (props) => [...openConfirm(props).querySelectorAll('button')]
 
   describe('children', () => {
-    it('renders a Modal', () => {
+    it('renders a Modal', async () => {
       expect(openConfirm()).not.toBeNull()
     })
   })
 
   describe('size', () => {
-    it('has "small" size by default', () => {
+    it('has "small" size by default', async () => {
       expect(openConfirm()).toHaveClass('small')
     })
 
@@ -55,21 +65,21 @@ describe('Confirm', () => {
   })
 
   describe('cancelButton', () => {
-    it('is "Cancel" by default', () => {
+    it('is "Cancel" by default', async () => {
       expect(buttons()[0]).toHaveTextContent('Cancel')
     })
 
-    it('sets the cancel button text', () => {
+    it('sets the cancel button text', async () => {
       expect(buttons({ cancelButton: 'foo' })[0]).toHaveTextContent('foo')
     })
   })
 
   describe('confirmButton', () => {
-    it('is "OK" by default', () => {
+    it('is "OK" by default', async () => {
       expect(openConfirm().querySelector('button.primary')).toHaveTextContent('OK')
     })
 
-    it('sets the confirm button text', () => {
+    it('sets the confirm button text', async () => {
       expect(
         openConfirm({ confirmButton: 'foo' }).querySelector('button.primary'),
       ).toHaveTextContent('foo')
@@ -77,66 +87,67 @@ describe('Confirm', () => {
   })
 
   describe('onCancel', () => {
-    it('omitted when not defined', () => {
-      expect(() => fireEvent.click(buttons()[0])).not.toThrow()
+    it('omitted when not defined', async () => {
+      // No handler to invoke — clicking must simply not throw.
+      await user.click(buttons()[0])
     })
 
-    it('is called on Cancel button click', () => {
+    it('is called on Cancel button click', async () => {
       const spy = vi.fn()
 
-      fireEvent.click(buttons({ onCancel: spy })[0])
+      await user.click(buttons({ onCancel: spy })[0])
 
       expect(spy).toHaveBeenCalledTimes(1)
     })
 
-    it('is called on dimmer click', () => {
+    it('is called on dimmer click', async () => {
       const spy = vi.fn()
       openConfirm({ onCancel: spy })
 
-      fireEvent.click(document.body.querySelector('.ui.dimmer'))
+      await user.click(document.body.querySelector('.ui.dimmer'))
 
       expect(spy).toHaveBeenCalledTimes(1)
     })
 
-    it('is not called on click inside of the modal', () => {
+    it('is not called on click inside of the modal', async () => {
       const spy = vi.fn()
       const modal = openConfirm({ onCancel: spy })
 
-      fireEvent.click(modal)
+      await user.click(modal)
 
       expect(spy).not.toHaveBeenCalled()
     })
 
-    it('is called when pressing escape', () => {
+    it('is called when pressing escape', async () => {
       const spy = vi.fn()
       openConfirm({ onCancel: spy })
 
-      fireEvent.keyDown(document, { key: 'Escape' })
+      await user.keyboard('{Escape}')
 
       expect(spy).toHaveBeenCalledTimes(1)
     })
 
-    it('is not called when pressing a key other than "Escape"', () => {
+    it('is not called when pressing a key other than "Escape"', async () => {
       const spy = vi.fn()
       openConfirm({ onCancel: spy })
 
-      for (const key of ['Enter', 'a', 'ArrowDown', ' ']) {
-        fireEvent.keyDown(document, { key })
-      }
+      // Nothing but Escape should cancel: an enter, a letter, an arrow, a space.
+      await user.keyboard('{Enter}a{ArrowDown}[Space]')
 
       expect(spy).not.toHaveBeenCalled()
     })
   })
 
   describe('onConfirm', () => {
-    it('omitted when not defined', () => {
-      expect(() => fireEvent.click(openConfirm().querySelector('button.primary'))).not.toThrow()
+    it('omitted when not defined', async () => {
+      // No handler to invoke — clicking must simply not throw.
+      await user.click(openConfirm().querySelector('button.primary'))
     })
 
-    it('is called on OK button click', () => {
+    it('is called on OK button click', async () => {
       const spy = vi.fn()
 
-      fireEvent.click(openConfirm({ onConfirm: spy }).querySelector('button.primary'))
+      await user.click(openConfirm({ onConfirm: spy }).querySelector('button.primary'))
 
       expect(spy).toHaveBeenCalledTimes(1)
     })

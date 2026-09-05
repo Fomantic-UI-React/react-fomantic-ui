@@ -1,6 +1,7 @@
 import { dom, root } from 'test/support/rtl'
 import _ from 'lodash'
 import { fireEvent, render } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import React from 'react'
 
 import { htmlInputAttrs } from 'src/lib'
@@ -21,6 +22,15 @@ const wrapperMount = (element) => {
 }
 
 describe('Checkbox', () => {
+  // Interactions go through user-event, which sends the pointer, focus and
+  // keyboard sequence a browser does rather than the single event `fireEvent`
+  // dispatches.
+  let user
+
+  beforeEach(() => {
+    user = userEvent.setup()
+  })
+
   common.isConformant(Checkbox, {
     // Checkbox's onChange fires on a click, not on a DOM change event, so the
     // event-transparency check cannot exercise it. The behaviour it stands for
@@ -55,103 +65,97 @@ describe('Checkbox', () => {
   })
 
   describe('checking', () => {
-    it('can be checked and unchecked', () => {
+    it('can be checked and unchecked', async () => {
       wrapperMount(<Checkbox />)
 
       expect(container.querySelector('input')).not.toBeChecked()
 
-      fireEvent.mouseUp(container.querySelector('label'))
-      fireEvent.click(container.querySelector('label'))
+      await user.click(container.querySelector('label'))
       expect(container.querySelector('input')).toBeChecked()
 
-      fireEvent.mouseUp(container.querySelector('label'))
-      fireEvent.click(container.querySelector('label'))
+      await user.click(container.querySelector('label'))
       expect(container.querySelector('input')).not.toBeChecked()
     })
 
-    it('can be checked but not unchecked when radio', () => {
+    it('can be checked but not unchecked when radio', async () => {
       wrapperMount(<Checkbox radio />)
 
       expect(container.querySelector('input')).not.toBeChecked()
 
-      fireEvent.mouseUp(container.querySelector('label'))
-      fireEvent.click(container.querySelector('label'))
+      await user.click(container.querySelector('label'))
       expect(container.querySelector('input')).toBeChecked()
 
-      fireEvent.mouseUp(container.querySelector('label'))
-      fireEvent.click(container.querySelector('label'))
+      await user.click(container.querySelector('label'))
       expect(container.querySelector('input')).toBeChecked()
     })
   })
 
   describe('defaultChecked', () => {
-    it('sets the initial checked state', () => {
+    it('sets the initial checked state', async () => {
       expect(dom(<Checkbox defaultChecked />).querySelector('input')).toBeChecked()
     })
   })
 
   describe('indeterminate', () => {
-    it('can be indeterminate', () => {
+    it('can be indeterminate', async () => {
       wrapperMount(<Checkbox indeterminate />)
       const input = document.querySelector('.ui.checkbox input')
 
       expect(input.indeterminate).toBe(true)
 
-      fireEvent.click(input)
+      await user.click(input)
       expect(input.indeterminate).toBe(true)
     })
 
-    it('can not be indeterminate', () => {
+    it('can not be indeterminate', async () => {
       wrapperMount(<Checkbox indeterminate={false} />)
       const input = document.querySelector('.ui.checkbox input')
 
       expect(input.indeterminate).toBe(false)
 
-      fireEvent.click(input)
+      await user.click(input)
       expect(input.indeterminate).toBe(false)
     })
   })
 
   describe('defaultIndeterminate', () => {
-    it('sets the initial indeterminate state', () => {
+    it('sets the initial indeterminate state', async () => {
       wrapperMount(<Checkbox defaultIndeterminate />)
       const input = document.querySelector('.ui.checkbox input')
 
       expect(input.indeterminate).toBe(true)
     })
 
-    it('unsets indeterminate state on any click', () => {
+    it('unsets indeterminate state on any click', async () => {
       wrapperMount(<Checkbox defaultIndeterminate />)
       const input = document.querySelector('.ui.checkbox input')
 
       expect(input.indeterminate).toBe(true)
 
-      fireEvent.click(input)
+      await user.click(input)
       expect(input.indeterminate).toBe(false)
 
-      fireEvent.click(input)
+      await user.click(input)
       expect(input.indeterminate).toBe(false)
     })
   })
 
   describe('disabled', () => {
-    it('cannot be checked', () => {
+    it('cannot be checked', async () => {
       wrapperMount(<Checkbox disabled />)
 
-      fireEvent.mouseUp(container.querySelector('label'))
-      fireEvent.click(container.querySelector('label'))
+      await user.click(container.querySelector('label'))
       expect(container.querySelector('input')).not.toBeChecked()
     })
 
-    it('cannot be unchecked', () => {
+    it('cannot be unchecked', async () => {
       wrapperMount(<Checkbox defaultChecked disabled />)
 
-      fireEvent.mouseUp(container.querySelector('label'))
-      fireEvent.click(container.querySelector('label'))
+      await user.click(container.querySelector('label'))
       expect(container.querySelector('input')).toBeChecked()
     })
 
-    it('is applied to the underlying html input element', () => {
+    it('is applied to the underlying html input element', async () => {
       expect(wrapperMount(<Checkbox disabled />).querySelector('input')).toBeDisabled()
 
       expect(wrapperMount(<Checkbox disabled={false} />).querySelector('input')).not.toBeDisabled()
@@ -159,15 +163,15 @@ describe('Checkbox', () => {
   })
 
   describe('id', () => {
-    it('passes value to the input', () => {
+    it('passes value to the input', async () => {
       expect(dom(<Checkbox id='foo' />).querySelector('input')).toHaveAttribute('id', String('foo'))
     })
 
-    it('adds htmlFor prop to the label', () => {
+    it('adds htmlFor prop to the label', async () => {
       expect(dom(<Checkbox id='foo' />).querySelector('label')).toHaveAttribute('for', 'foo')
     })
 
-    it('adds htmlFor prop to the label when it is empty', () => {
+    it('adds htmlFor prop to the label when it is empty', async () => {
       expect(dom(<Checkbox id='foo' label={null} />).querySelector('label')).toHaveAttribute(
         'for',
         'foo',
@@ -199,15 +203,15 @@ describe('Checkbox', () => {
   })
 
   describe('label', () => {
-    it('adds the "fitted" class when not present', () => {
+    it('adds the "fitted" class when not present', async () => {
       expect(root(<Checkbox name='firstName' />)).toHaveClass('fitted')
     })
 
-    it('adds the "fitted" class when is null', () => {
+    it('adds the "fitted" class when is null', async () => {
       expect(root(<Checkbox name='firstName' />)).toHaveClass('fitted')
     })
 
-    it('does not add the "fitted" class when is not nil', () => {
+    it('does not add the "fitted" class when is not nil', async () => {
       expect(root(<Checkbox name='firstName' label='' />)).not.toHaveClass('fitted')
 
       expect(root(<Checkbox name='firstName' label={0} />)).not.toHaveClass('fitted')
@@ -215,14 +219,13 @@ describe('Checkbox', () => {
   })
 
   describe('onChange', () => {
-    it('is called with (e, data) on mouse up', () => {
+    it('is called with (e, data) on mouse up', async () => {
       const onChange = vi.fn()
       const props = { name: 'foo', value: 'bar', checked: false, indeterminate: true }
 
       wrapperMount(<Checkbox onChange={onChange} {...props} />)
 
-      fireEvent.mouseUp(container.querySelector('label'))
-      fireEvent.click(container.querySelector('label'))
+      await user.click(container.querySelector('label'))
 
       expect(onChange).toHaveBeenCalledTimes(1)
       expect(onChange).toHaveBeenCalledWith(
@@ -231,37 +234,35 @@ describe('Checkbox', () => {
       )
     })
 
-    it('is called exactly once on change when "id" is passed', () => {
+    it('is called exactly once on change when "id" is passed', async () => {
       const onChange = vi.fn()
       wrapperMount(<Checkbox id='foo' onChange={onChange} />)
 
-      fireEvent.mouseUp(container.querySelector('label'))
-      fireEvent.click(container.querySelector('label'))
+      await user.click(container.querySelector('label'))
       expect(onChange).toHaveBeenCalledTimes(1)
     })
 
-    it('is called when click is done on nested element', () => {
+    it('is called when click is done on nested element', async () => {
       const onChange = vi.fn()
       wrapperMount(<Checkbox label={{ children: <span>Foo</span> }} onChange={onChange} />)
 
-      fireEvent.mouseUp(container.querySelector('span'))
-      fireEvent.click(container.querySelector('span'))
+      await user.click(container.querySelector('span'))
 
       expect(onChange).toHaveBeenCalledTimes(1)
     })
   })
 
   describe('onClick', () => {
-    it('is called with (event, data) on click', () => {
+    it('is called with (event, data) on click', async () => {
       const onClick = vi.fn()
       const props = { name: 'foo', value: 'bar', checked: false, indeterminate: true }
-      fireEvent.click(root(<Checkbox onClick={onClick} {...props} />))
+      await user.click(root(<Checkbox onClick={onClick} {...props} />))
 
       expect(onClick).toHaveBeenCalledTimes(1)
       expect(onClick.mock.calls[0][1]).toMatchObject({ ...props, checked: true })
     })
 
-    it('is called exactly once when "id" is passed', () => {
+    it('is called exactly once when "id" is passed', async () => {
       // Heads up! The frozen spec asserted this handler was never called. That
       // was an Enzyme artefact: simulate() on a label does not forward the
       // click to the associated input, where a real DOM does. The id handling
@@ -269,91 +270,95 @@ describe('Checkbox', () => {
       const onClick = vi.fn()
       wrapperMount(<Checkbox id='foo' onClick={onClick} />)
 
-      fireEvent.mouseUp(container.querySelector('label'))
-      fireEvent.click(container.querySelector('label'))
+      await user.click(container.querySelector('label'))
 
       expect(onClick).toHaveBeenCalledTimes(1)
     })
   })
 
   describe('onMouseDown', () => {
-    it('is called with (event, data) on mouse down', () => {
+    it('is called with (event, data) on mouse down', async () => {
       const onMousedDown = vi.fn()
       const props = { name: 'foo', value: 'bar', checked: false, indeterminate: true }
-      fireEvent.mouseDown(root(<Checkbox onMouseDown={onMousedDown} {...props} />))
+      // Press without releasing — the mousedown half of a click on its own.
+      await user.pointer({
+        target: root(<Checkbox onMouseDown={onMousedDown} {...props} />),
+        keys: '[MouseLeft>]',
+      })
 
       expect(onMousedDown).toHaveBeenCalledTimes(1)
       expect(onMousedDown.mock.calls[0][1]).toMatchObject(props)
     })
 
-    it('sets focus to container', () => {
+    it('sets focus to container', async () => {
       wrapperMount(<Checkbox />)
       const input = document.querySelector('.ui.checkbox input')
 
-      fireEvent.mouseDown(input)
+      await user.pointer({ target: input, keys: '[MouseLeft>]' })
       expect(document.activeElement).toBe(input)
     })
 
-    it('will not set focus to container, if default is prevented', () => {
+    it('will not set focus to container, if default is prevented', async () => {
       wrapperMount(<Checkbox onMouseDown={(e) => e.preventDefault()} />)
 
-      fireEvent.mouseDown(container.querySelector('input'))
+      await user.pointer({ target: container.querySelector('input'), keys: '[MouseLeft>]' })
       expect(document.activeElement).toBe(document.body)
     })
   })
 
   describe('onMouseUp', () => {
-    it('is called with (event, data) on mouse up', () => {
+    it('is called with (event, data) on mouse up', async () => {
       const onMouseUp = vi.fn()
       const props = { name: 'foo', value: 'bar', checked: false, indeterminate: true }
-      fireEvent.mouseUp(root(<Checkbox onMouseUp={onMouseUp} {...props} />))
+      await user.click(root(<Checkbox onMouseUp={onMouseUp} {...props} />))
 
       expect(onMouseUp).toHaveBeenCalledTimes(1)
       expect(onMouseUp.mock.calls[0][1]).toMatchObject(props)
     })
 
-    it('is called with (event, data) on mouse up with right button', () => {
+    it('is called with (event, data) on mouse up with right button', async () => {
       const onMouseUp = vi.fn()
-      fireEvent.mouseUp(root(<Checkbox id='foo' onMouseUp={onMouseUp} />), { button: 2 })
+      await user.pointer({
+        target: root(<Checkbox id='foo' onMouseUp={onMouseUp} />),
+        keys: '[MouseRight]',
+      })
 
       expect(onMouseUp).toHaveBeenCalledTimes(1)
     })
   })
 
   describe('readOnly', () => {
-    it('cannot be checked', () => {
+    it('cannot be checked', async () => {
       wrapperMount(<Checkbox readOnly />)
 
-      fireEvent.mouseUp(container.querySelector('label'))
-      fireEvent.click(container.querySelector('label'))
+      await user.click(container.querySelector('label'))
       expect(container.querySelector('input')).not.toBeChecked()
     })
-    it('cannot be unchecked', () => {
+    it('cannot be unchecked', async () => {
       wrapperMount(<Checkbox defaultChecked readOnly />)
 
-      fireEvent.mouseUp(container.querySelector('label'))
-      fireEvent.click(container.querySelector('label'))
+      await user.click(container.querySelector('label'))
       expect(container.querySelector('input')).toBeChecked()
     })
   })
 
   describe('tabIndex', () => {
-    it('defaults to 0', () => {
+    it('defaults to 0', async () => {
       expect(dom(<Checkbox />).querySelector('input')).toHaveAttribute('tabIndex', String(0))
     })
-    it('defaults to -1 when disabled', () => {
+    it('defaults to -1 when disabled', async () => {
       expect(dom(<Checkbox disabled />).querySelector('input')).toHaveAttribute(
         'tabIndex',
         String(-1),
       )
     })
-    it('can be set explicitly', () => {
+    it('can be set explicitly', async () => {
       expect(dom(<Checkbox tabIndex={123} />).querySelector('input')).toHaveAttribute(
         'tabIndex',
         String(123),
       )
     })
-    it('can be set explicitly when disabled', () => {
+    it('can be set explicitly when disabled', async () => {
       expect(dom(<Checkbox tabIndex={123} disabled />).querySelector('input')).toHaveAttribute(
         'tabIndex',
         String(123),
@@ -362,10 +367,10 @@ describe('Checkbox', () => {
   })
 
   describe('type', () => {
-    it('renders an input of type checkbox when not set', () => {
+    it('renders an input of type checkbox when not set', async () => {
       expect(dom(<Checkbox />).querySelector('input')).toHaveAttribute('type', String('checkbox'))
     })
-    it('sets the input type ', () => {
+    it('sets the input type ', async () => {
       expect(dom(<Checkbox type='checkbox' />).querySelector('input')).toHaveAttribute(
         'type',
         String('checkbox'),
@@ -458,6 +463,9 @@ describe('Checkbox', () => {
           expect(element, `no element matched "${selector}"`).not.toBeNull()
 
           for (const targetEvent of targetEvents) {
+            // fireEvent, deliberately. This matrix compares Checkbox's handler
+            // order against a bare <input>, and the exact event sequence per
+            // target is the fixture — a `user.click` would substitute its own.
             fireEvent[EVENT_NAMES[targetEvent]](element)
           }
         })
@@ -493,11 +501,11 @@ describe('Checkbox', () => {
         }
       }
 
-    it('toggles state on "change" with "setState" as function', () => {
+    it('toggles state on "change" with "setState" as function', async () => {
       const TestComponent = getControlledCheckbox(false)
       wrapperMount(<TestComponent />)
 
-      fireEvent.click(container.querySelector('input'))
+      await user.click(container.querySelector('input'))
 
       // Heads up! The frozen spec asserted this was absent, contradicting its
       // own name: the Enzyme wrapper was never re-rendered, so it could not see
@@ -505,11 +513,11 @@ describe('Checkbox', () => {
       expect(container.querySelector('[data-checked=true]')).not.toBeNull()
     })
 
-    it('toggles state on "click" with "setState" as function', () => {
+    it('toggles state on "click" with "setState" as function', async () => {
       const TestComponent = getControlledCheckbox(true)
       wrapperMount(<TestComponent />)
 
-      fireEvent.click(container.querySelector('input'))
+      await user.click(container.querySelector('input'))
 
       // Heads up! The frozen spec asserted this was absent, contradicting its
       // own name: the Enzyme wrapper was never re-rendered, so it could not see
