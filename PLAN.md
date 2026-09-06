@@ -934,6 +934,22 @@ Order of work:
 it *is* the baseline. 909 of the month's 5,000 spent; the four remaining CSS
 steps need 3,636 more, which is why the sponsorship application matters.
 
+**Chromatic does not run on pull requests from forks.** GitHub does not pass
+repository secrets to a `pull_request` run from a fork — deliberately, since a
+PR can edit the workflow that would read them — so the job is skipped there and
+the diff is caught on the push to `main` instead. The first outside
+contribution, #43, failed red on "Missing project token" before this was
+understood, which is a poor welcome.
+
+Chromatic's own answer for open source is to **put the project token in the
+workflow as plaintext**: contributors can then run builds, and cannot reach the
+account, the settings, or accept baselines. The tradeoff is that anyone who can
+open a PR can spend snapshots, and at 909 for a full build against 5,000 a
+month that is roughly five malicious pushes from an exhausted budget. Worth
+revisiting once the open-source sponsorship lands and the budget is 35,000 —
+the cost of abuse drops by seven times and pre-merge visual review on
+contributions is worth having.
+
 **Chromatic authenticates from CI configuration, never from a committed file.**
 It runs as its own CI job rather than a step in `build`, so a
 snapshot diff — which is a question for a reviewer, not a failure — does not
