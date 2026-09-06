@@ -1089,12 +1089,21 @@ as Aug 2026 — people still contribute to a repo that has merged nothing since
 None are reviewed or verified — treat as leads, not trusted patches. They also
 predate the tooling strip and the codemod, so expect conflicts.
 
-> **Before merging any harvested work: temporarily re-enable merge commits.**
-> The repo is squash-only, which collapses every commit in a PR into one
-> authored by the merger. That is right for our own PRs and wrong for upstream
-> contributions — it would erase the original authors from the history of a
-> fork whose legitimacy rests on respecting their work. Settings → General →
-> Pull Requests → tick "Allow merge commits", merge, then untick it.
+> **Harvesting upstream work: cherry-pick, do not reimplement.** `git cherry-pick`
+> and `git am` both keep the original author, so the attribution survives; typing
+> the change out again does not, and that is the thing to avoid in a fork whose
+> legitimacy rests on respecting other people's work.
+>
+> An earlier version of this note said squash-merging "collapses every commit in
+> a PR into one authored by the merger", and told you to enable merge commits
+> before merging outside work. **That is wrong**, checked against this repo's own
+> history: GitHub sets the squashed commit's author to the *pull request author*,
+> itself as committer, and adds a `Co-authored-by` trailer for every distinct
+> commit author in the branch. #41 landed as author `aphenine`, committer
+> `GitHub`, with two co-author trailers it preserved or added.
+>
+> So squash-merging a contribution attributes it correctly and counts on the
+> contributor's GitHub graph. No settings change needed.
 
 ## Reference numbers
 
