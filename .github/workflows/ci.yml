@@ -53,6 +53,19 @@ jobs:
   # human to accept or reject — does not read as the test suite failing.
   chromatic:
     runs-on: ubuntu-latest
+
+    # GitHub does not pass repository secrets to `pull_request` runs from a
+    # fork, deliberately: a PR can change the workflow, so a fork with secrets
+    # could exfiltrate them. Chromatic then fails with "Missing project token",
+    # which looks like a broken contribution rather than a policy.
+    #
+    # So it is skipped for fork PRs and runs on the push to `main` instead. The
+    # diff still gets caught, one step later than for a branch on this repo.
+    # See "Phase 3" in PLAN.md for the alternative and why it is not taken yet.
+    if: >-
+      github.event_name == 'push' ||
+      github.event.pull_request.head.repo.full_name == github.repository
+
     steps:
       - uses: actions/checkout@v4
         with:
