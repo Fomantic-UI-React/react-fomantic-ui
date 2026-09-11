@@ -11,10 +11,6 @@ const assertIframeSrc = (props, srcPart) => {
 
   const iframe = dom(<Embed active id={id} source={source} {...rest} />).querySelector('iframe')
 
-  // Heads up! These expectations contain `&amp;` because Embed really does
-  // build its URL that way, which means every parameter after the first is
-  // named "amp;autoplay" and is ignored by the provider. See issue #19 —
-  // change these to `&` as part of the fix, they are the regression test.
   expect(iframe.getAttribute('src')).toContain(srcPart)
 }
 
@@ -82,27 +78,27 @@ describe('Embed', () => {
 
   describe('autoplay', () => {
     it('generates url part for source', async () => {
-      assertIframeSrc({ autoplay: true }, '&amp;autoplay=true')
-      assertIframeSrc({ autoplay: false }, '&amp;autoplay=false')
+      assertIframeSrc({ autoplay: true }, '&autoplay=true')
+      assertIframeSrc({ autoplay: false }, '&autoplay=false')
     })
   })
 
   describe('brandedUI', () => {
     it('generates "modestbranding" url parameter', async () => {
-      assertIframeSrc({ brandedUI: true }, '&amp;modestbranding=true')
-      assertIframeSrc({ brandedUI: false }, '&amp;modestbranding=false')
+      assertIframeSrc({ brandedUI: true }, '&modestbranding=true')
+      assertIframeSrc({ brandedUI: false }, '&modestbranding=false')
     })
 
     it('generates "rel" url parameter', async () => {
-      assertIframeSrc({ brandedUI: true }, '&amp;rel=0')
-      assertIframeSrc({ brandedUI: false }, '&amp;rel=1')
+      assertIframeSrc({ brandedUI: true }, '&rel=0')
+      assertIframeSrc({ brandedUI: false }, '&rel=1')
     })
   })
 
   describe('color', () => {
     it('generates url part for source', async () => {
       const color = 'red'
-      assertIframeSrc({ color }, `&amp;color=${encodeURIComponent(color)}`)
+      assertIframeSrc({ color }, `&color=${encodeURIComponent(color)}`)
     })
   })
 
@@ -115,8 +111,8 @@ describe('Embed', () => {
 
   describe('hd', () => {
     it('generates url part for source', async () => {
-      assertIframeSrc({ hd: true }, '&amp;hq=true')
-      assertIframeSrc({ hd: false }, '&amp;hq=false')
+      assertIframeSrc({ hd: true }, '&hq=true')
+      assertIframeSrc({ hd: false }, '&hq=false')
     })
   })
 
