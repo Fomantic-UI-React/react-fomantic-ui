@@ -15,7 +15,7 @@ import {
  */
 const DropdownText = React.forwardRef(function (props, ref) {
   const { children, className, content } = props
-  const classes = cx('divider', className)
+  const classes = cx('text', className)
   const rest = getUnhandledProps(DropdownText, props)
   const ElementType = getComponentType(props)
 

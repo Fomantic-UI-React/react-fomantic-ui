@@ -45,12 +45,12 @@ const Embed = React.forwardRef(function (props, ref) {
       return [
         `//www.youtube.com/embed/${id}`,
         '?autohide=true',
-        `&amp;autoplay=${autoplay}`,
-        `&amp;color=${encodeURIComponent(color)}`,
-        `&amp;hq=${hd}`,
-        '&amp;jsapi=false',
-        `&amp;modestbranding=${brandedUI}`,
-        `&amp;rel=${brandedUI ? 0 : 1}`,
+        `&autoplay=${autoplay}`,
+        `&color=${encodeURIComponent(color)}`,
+        `&hq=${hd}`,
+        '&jsapi=false',
+        `&modestbranding=${brandedUI}`,
+        `&rel=${brandedUI ? 0 : 1}`,
       ].join('')
     }
 
@@ -58,11 +58,11 @@ const Embed = React.forwardRef(function (props, ref) {
       return [
         `//player.vimeo.com/video/${id}`,
         '?api=false',
-        `&amp;autoplay=${autoplay}`,
-        '&amp;byline=false',
-        `&amp;color=${encodeURIComponent(color)}`,
-        '&amp;portrait=false',
-        '&amp;title=false',
+        `&autoplay=${autoplay}`,
+        '&byline=false',
+        `&color=${encodeURIComponent(color)}`,
+        '&portrait=false',
+        '&title=false',
       ].join('')
     }
 

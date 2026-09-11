@@ -53,18 +53,23 @@ const Tab = React.forwardRef(function (props, ref) {
   }
 
   const renderMenu = () => {
-    if (menu.tabular === true && menuPosition === 'right') {
-      menu.tabular = 'right'
-    }
+    // `menu` is a prop object the consumer owns, and may be held across
+    // renders. Derive the inferred value rather than writing it back: once
+    // 'right' had been assigned, the `=== true` guard never matched again and
+    // the inference could not be undone by changing `menuPosition`.
+    const tabular = menu.tabular === true && menuPosition === 'right' ? 'right' : menu.tabular
 
-    return Menu.create(menu, {
-      autoGenerateKey: false,
-      overrideProps: {
-        items: _.map(panes, 'menuItem'),
-        onItemClick: handleItemClick,
-        activeIndex,
+    return Menu.create(
+      { ...menu, tabular },
+      {
+        autoGenerateKey: false,
+        overrideProps: {
+          items: _.map(panes, 'menuItem'),
+          onItemClick: handleItemClick,
+          activeIndex,
+        },
       },
-    })
+    )
   }
 
   const renderVertical = (menuElement) => {
