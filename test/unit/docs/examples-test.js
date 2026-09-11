@@ -26,13 +26,6 @@ const sources = import.meta.glob('/docs/src/examples/**/*Example*.js', {
 // — Phase 4 wants them free of random data anyway.
 const usesFaker = (path) => /from 'faker'/.test(sources[path])
 
-// `@fluentui/react-component-event-listener` sets `defaultProps` on a function
-// component. React 18 warns; React 19 removes the feature outright, so this is
-// a Phase 3 blocker in a dependency rather than anything an example does wrong.
-// See issue #35.
-const KNOWN_WARNINGS = [/Support for defaultProps will be removed from function components/]
-const isKnown = (call) => KNOWN_WARNINGS.some((pattern) => pattern.test(String(call[0])))
-
 describe('examples', () => {
   // A section directory called `Examples` means its generated story file is
   // `Examples.stories.js`, which the glob above matches. Stories are covered by
@@ -58,9 +51,7 @@ describe('examples', () => {
         expect(container).not.toBeEmptyDOMElement()
         unmount()
 
-        const complaints = [...error.mock.calls, ...warn.mock.calls].filter(
-          (call) => !isKnown(call),
-        )
+        const complaints = [...error.mock.calls, ...warn.mock.calls]
 
         expect(complaints, `console output:\n${complaints.join('\n')}`).toHaveLength(0)
       } finally {
