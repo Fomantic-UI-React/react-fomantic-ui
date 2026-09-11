@@ -79,6 +79,27 @@ describe('Tab', () => {
       expect(menuOf(container)).toHaveClass('right', 'tabular')
     })
 
+    it("does not write the inferred tabular value back into the caller's menu object", () => {
+      // The menu object belongs to the consumer and may be held across renders.
+      // Tab used to assign `menu.tabular = 'right'`, after which the `=== true`
+      // guard never matched again and the inference could not be undone.
+      // See issue #26.
+      const menu = { fluid: true, vertical: true, tabular: true }
+      const { container, rerender } = render(<Tab menu={menu} menuPosition='right' panes={panes} />)
+
+      expect(menuOf(container)).toHaveClass('right', 'tabular')
+      expect(menu.tabular).toBe(true)
+
+      rerender(<Tab menu={menu} menuPosition='left' panes={panes} />)
+
+      const [menuColumn, paneColumn] = columnsOf(container)
+
+      expect(menuColumn.firstElementChild).toHaveClass('menu')
+      expect(paneColumn.firstElementChild).toHaveClass('tab')
+      expect(menuOf(container)).toHaveClass('tabular')
+      expect(menuOf(container)).not.toHaveClass('right')
+    })
+
     it("does not infer tabular's value from tab's menuPosition if tabular is explicitly set", () => {
       const menu = { fluid: true, vertical: true, tabular: 'right' }
       const { container } = render(<Tab menu={menu} menuPosition='left' panes={panes} />)
