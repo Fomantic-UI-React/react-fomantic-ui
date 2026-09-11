@@ -64,7 +64,7 @@ assert.ok(SUI.Portal.handledProps.length > 0, 'Portal.handledProps must not be e
 
 // Without these directives every hook-using component throws under the Next.js
 // App Router. The count is pinned so that losing the transform is loud.
-const EXPECTED_CLIENT_MODULES = 36
+const EXPECTED_CLIENT_MODULES = 37
 
 for (const format of ['commonjs', 'es']) {
   const clients = jsFiles(dist(format)).filter((file) => /^['"]use client['"]/.test(read(file)))

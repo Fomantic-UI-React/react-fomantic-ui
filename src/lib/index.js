@@ -47,6 +47,7 @@ export { makeDebugger }
 export { default as useAutoControlledValue } from './hooks/useAutoControlledValue'
 export { default as useClassNamesOnNode } from './hooks/useClassNamesOnNode'
 export { default as useEventCallback } from './hooks/useEventCallback'
+export { default as useEventListener, documentRef } from './hooks/useEventListener'
 export { default as useForceUpdate } from './hooks/useForceUpdate'
 export { default as useIsomorphicLayoutEffect } from './hooks/useIsomorphicLayoutEffect'
 export { default as useMergedRefs, setRef } from './hooks/useMergedRefs'

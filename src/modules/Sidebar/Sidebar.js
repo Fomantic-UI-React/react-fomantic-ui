@@ -1,4 +1,3 @@
-import { EventListener, documentRef } from '@fluentui/react-component-event-listener'
 import cx from 'clsx'
 import _ from 'lodash'
 import PropTypes from 'prop-types'
@@ -12,8 +11,10 @@ import {
   getComponentType,
   isRefObject,
   getKeyOnly,
+  documentRef,
   useIsomorphicLayoutEffect,
   useEventCallback,
+  useEventListener,
   useForceUpdate,
   useMergedRefs,
   usePrevious,
@@ -99,6 +100,13 @@ const Sidebar = React.forwardRef((props, ref) => {
     handleAnimationStart()
   }, [animationTick])
 
+  useEventListener({
+    enabled: visible,
+    listener: handleDocumentClick,
+    type: 'click',
+    ...(isRefObject(target) ? { targetRef: target } : { target }),
+  })
+
   React.useEffect(() => {
     return () => {
       clearTimeout(animationTimer.current)
@@ -117,16 +125,11 @@ const Sidebar = React.forwardRef((props, ref) => {
   )
   const rest = getUnhandledProps(Sidebar, props)
   const ElementType = getComponentType(props)
-  const targetProp = isRefObject(target) ? { targetRef: target } : { target }
 
   return (
-    <>
-      <ElementType {...rest} className={classes} ref={elementRef}>
-        {childrenUtils.isNil(children) ? content : children}
-      </ElementType>
-
-      {visible && <EventListener listener={handleDocumentClick} type='click' {...targetProp} />}
-    </>
+    <ElementType {...rest} className={classes} ref={elementRef}>
+      {childrenUtils.isNil(children) ? content : children}
+    </ElementType>
   )
 })
 
