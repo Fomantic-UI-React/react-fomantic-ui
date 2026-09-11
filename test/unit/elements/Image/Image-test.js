@@ -27,11 +27,7 @@ describe('Image', () => {
 
   common.hasSubcomponents(Image, [ImageGroup])
   common.hasUIClassName(Image)
-  // rendersContent is off because `<Image content='...' />` throws: content is
-  // rendered into a void <img>. See issue #11 — remove this option with the fix,
-  // it is the regression test. The Enzyme suite passed it only because
-  // shallow() never rendered to a DOM.
-  common.rendersChildren(Image, { rendersContent: false })
+  common.rendersChildren(Image)
 
   common.implementsCreateMethod(Image)
   common.implementsLabelProp(Image, { autoGenerateKey: false })
