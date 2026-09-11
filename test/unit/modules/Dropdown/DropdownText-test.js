@@ -17,11 +17,10 @@ describe('DropdownText', () => {
     expect(element).toHaveAttribute('role', 'alert')
   })
 
-  it('renders the "divider" class', () => {
-    // This is wrong, and is asserted so the fix has a test to flip. The class
-    // is copy-pasted from DropdownDivider, so a Dropdown's selected-text node
-    // renders as `class="divider default text"` and picks up divider styling.
-    // See issue #31.
-    expect(root(<DropdownText />)).toHaveClass('divider')
+  it('renders the "text" class, not "divider"', () => {
+    const element = root(<DropdownText />)
+
+    expect(element).toHaveClass('text')
+    expect(element).not.toHaveClass('divider')
   })
 })

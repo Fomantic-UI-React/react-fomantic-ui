@@ -920,11 +920,9 @@ class DropdownInner extends Component {
     const { searchQuery, selectedIndex, value, open } = this.state
     const hasValue = this.hasValue()
 
-    const classes = cx(
-      placeholder && !hasValue && 'default',
-      'text',
-      search && searchQuery && 'filtered',
-    )
+    // `text` is supplied by DropdownText itself, so that a bare
+    // <Dropdown.Text /> — or one given its own className — still carries it.
+    const classes = cx(placeholder && !hasValue && 'default', search && searchQuery && 'filtered')
     let _text = placeholder
     let selectedItem
 
