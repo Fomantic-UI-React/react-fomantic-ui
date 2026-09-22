@@ -214,7 +214,7 @@
     core-js-pure "^3.0.0"
     regenerator-runtime "^0.13.4"
 
-"@babel/runtime@^7.10.2", "@babel/runtime@^7.10.4":
+"@babel/runtime@^7.10.2":
   version "7.23.7"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.23.7.tgz#dd7c88deeb218a0f8bd34d5db1aa242e0f203193"
   integrity sha512-w06OXVOFso7LcbzMiDGt+3X7Rh7Ho8MmgPoWU3rarH+8upf+wSU/grlGbWzQyr3DkdN6ZeuMFjpdwW0Q+HxobA==
@@ -508,13 +508,6 @@
   version "1.15.1"
   resolved "https://registry.yarnpkg.com/@exodus/bytes/-/bytes-1.15.1.tgz#b13bc464ca162c17abf0837fb3a11aeab79e45d1"
   integrity sha512-S6mL0yNB/Abt9Ei4tq8gDhcczc4S3+vQ4ra7vxnAf+YHC02srtqxKKZghx2Dq6p0e66THKwR6r8N6P95wEty7Q==
-
-"@fluentui/react-component-event-listener@~0.63.0":
-  version "0.63.0"
-  resolved "https://registry.yarnpkg.com/@fluentui/react-component-event-listener/-/react-component-event-listener-0.63.0.tgz#d595890f39a97939e20624778325a60196b2bbe4"
-  integrity sha512-3OfmzM4rXf8yeB1GaDBKcdkO0UQN8rafygsp9CeC1x85gO6uv/TgnjC3co6kcxZ8GtVqU1YyH5SjJQgNOmKvXw==
-  dependencies:
-    "@babel/runtime" "^7.10.4"
 
 "@iarna/toml@2.2.5":
   version "2.2.5"

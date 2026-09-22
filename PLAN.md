@@ -845,6 +845,10 @@ blocker sitting in a dependency rather than in our own code. Tracked as
 **issue #35**, and allow-listed narrowly enough in the test that any other
 warning still fails it.
 
+**Resolved.** The package is gone and the allow-list with it, so all 909
+examples now render with no console activity at all and any warning fails the
+test. See Phase 4.
+
 
 ### Phases 3 and 4 are swapped — Storybook first
 
@@ -856,6 +860,11 @@ that stops being applied, a shorthand that stops being built. Unit tests catch
 the ones somebody thought to assert. A visual diff catches the rest, and there
 is no way to diff against a baseline that was never taken. Baselines have to
 exist before the change that might move them, which puts Storybook first.
+
+> **The premise was wrong** — upstream had already done that conversion, so
+> there were never 21 files to codemod. See Phase 4. The decision stands
+> anyway: the baselines are what the CSS walk is reviewed against, and they are
+> worth having before any React upgrade moves rendering underneath them.
 
 The examples smoke test added in PR 8 is the weak version of this — it proves
 909 examples still render and say nothing on the console. It cannot see a
@@ -1047,22 +1056,49 @@ baseline.
 
 ### Phase 4 — React 19
 
-Convert `defaultProps` on the 21 function-component files (49 occurrences
-total across 26 files; the 5 remaining class components are unaffected).
-Resolve the propTypes/`handledProps` coupling. Verified against Phase 2's
-10,603 tests *and* Phase 3's visual baselines, which is the combination this
-reordering exists to produce.
+**The `defaultProps` conversion this phase was built around does not exist.**
+The scope recorded here — "21 function-component files, 49 occurrences across 26
+files" — was never checked against the tree. Upstream had already done it in
+`564690519` (*chore: remove usage of deprecated `.defaultProps`*, #4449,
+December 2023): 169 files, 47 assignments converted to destructuring defaults.
+The fork inherited the finished state.
 
-Two known items waiting here, both found by the port:
+What `src` actually contains today:
 
-- **#35** — `@fluentui/react-component-event-listener` uses `defaultProps` on a
-  function component. It is a dependency, so the codemod cannot reach it, and
-  `Sidebar` is its only consumer. Dropping the package looks cheaper than
-  patching it, and would also close the transitive-React hazard from PR #21.
-  Storybook first means `Sidebar` has a baseline before this is touched.
+| what                          | why it does not matter                                  |
+| ----------------------------- | ------------------------------------------------------- |
+| `Transition.defaultProps`     | a **class** component — React 19 keeps `defaultProps`   |
+| ~40 other `defaultProps` hits | our own `createShorthand(..., { defaultProps })` option |
+| everything else               | already destructuring defaults                          |
+
+So there are **zero React-19-breaking `defaultProps` in our own source**, and the
+codemod at the centre of this phase has nothing to run on.
+
+The other React 19 removals are clear too: no `findDOMNode`, no string refs, no
+legacy `ReactDOM.render` (`PortalInner` uses `createPortal`). The 5 remaining
+class components are unaffected.
+
+What is actually left:
+
+- ✅ **#35** — `@fluentui/react-component-event-listener` set `defaultProps` on a
+  *function* component, which is a real break rather than a warning. Resolved by
+  dropping the package: `Sidebar` was its only consumer, and
+  `src/lib/hooks/useEventListener.js` now does the job in ~30 lines. That also
+  closes the transitive-React hazard from PR #21 for good.
 - **#29** — `Search` reads state in the same tick as the `setState` that changes
   it. That is already broken on React 18 and should be fixed before anything
   else changes underneath it.
+- **`propTypes`.** React 19 ignores them on function components rather than
+  erroring, so nothing breaks at runtime — but 164 files declare them and
+  `isConformant` leans on them. This is the propTypes/`handledProps` coupling,
+  it lands in the test suite rather than the library, and it is the real body of
+  work left in this phase.
+- **Peer ranges.** `@semantic-ui-react/event-stack` declares
+  `^16 || ^17 || ^18`. It is a class component so it *works* on 19, but expect
+  install warnings until it is bumped or vendored. Not a blocker.
+
+Verified against Phase 2's tests *and* Phase 3's visual baselines, which is the
+combination this reordering exists to produce.
 
 ## Open decisions
 
