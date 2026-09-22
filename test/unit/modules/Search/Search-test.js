@@ -208,26 +208,19 @@ describe('Search', () => {
         stub(result, { offsetTop: index * itemHeight, clientHeight: itemHeight }),
       )
 
-      // Heads up! The scroll positions below describe what the component does
-      // today, which is one step behind what it should. `moveSelectionBy`
-      // calls `scrollSelectedItemIntoView` synchronously after `setState`, and
-      // under React 18's automatic batching that measures the item that *was*
-      // selected. See issue #29 — with that fixed, each expectation here moves
-      // one keypress earlier.
       expect(activeResult()).toHaveTextContent(opts[0].title)
 
       // Wrap the selection to the last item. It should scroll to the bottom.
       await pressKey('ArrowUp')
 
       expect(activeResult()).toHaveTextContent(_.last(opts).title)
-      expect(menu().scrollTop).toBe(0)
+      expect(menu().scrollTop).toBe(opts.length * itemHeight - menuHeight)
 
-      // Wrap the selection back to the first item. Only now does the menu
-      // scroll to where the last item was.
+      // Wrap the selection back to the first item. It should scroll to the top.
       await pressKey('ArrowDown')
 
       expect(activeResult()).toHaveTextContent(opts[0].title)
-      expect(menu().scrollTop).toBe(opts.length * itemHeight - menuHeight)
+      expect(menu().scrollTop).toBe(0)
     })
 
     it('closes the menu', async () => {
@@ -638,7 +631,7 @@ describe('Search', () => {
         expect.anything(),
         expect.objectContaining({
           minCharacters: 0,
-          result: options[0],
+          result: options[1],
           results: options,
         }),
       )
