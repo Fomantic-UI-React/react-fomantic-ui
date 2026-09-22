@@ -338,9 +338,13 @@ class SearchInner extends Component {
     if (nextIndex > lastIndex) nextIndex = 0
     else if (nextIndex < 0) nextIndex = lastIndex
 
-    this.setState({ selectedIndex: nextIndex })
-    this.scrollSelectedItemIntoView()
-    this.handleSelectionChange(e)
+    // Both read the committed selection — state and the `.result.active` node —
+    // so they wait for the update. The keydown comes from a native listener,
+    // which React 18 batches, so the update has not happened yet on return.
+    this.setState({ selectedIndex: nextIndex }, () => {
+      this.scrollSelectedItemIntoView()
+      this.handleSelectionChange(e)
+    })
   }
 
   // ----------------------------------------
