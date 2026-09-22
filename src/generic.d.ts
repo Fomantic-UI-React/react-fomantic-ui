@@ -68,7 +68,7 @@ export interface StrictHtmlSpanProps {
 export type SemanticShorthandItemFunc<TProps> = (
   component: React.ElementType<TProps>,
   props: TProps,
-  children?: React.ReactNode | React.ReactNodeArray,
+  children?: React.ReactNode,
 ) => React.ReactElement<any> | null
 
 export type ShorthandRenderFunction<C extends React.ElementType, P> = (
