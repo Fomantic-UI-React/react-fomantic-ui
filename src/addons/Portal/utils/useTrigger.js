@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { useMergedRefs } from '../../../lib'
+import { getElementRef, useMergedRefs } from '../../../lib'
 import validateTrigger from './validateTrigger'
 
 /**
@@ -8,7 +8,7 @@ import validateTrigger from './validateTrigger'
  * @param {React.Ref} triggerRef
  */
 function useTrigger(trigger, triggerRef) {
-  const ref = useMergedRefs(trigger?.ref, triggerRef)
+  const ref = useMergedRefs(getElementRef(trigger), triggerRef)
 
   if (trigger) {
     /* istanbul ignore else */

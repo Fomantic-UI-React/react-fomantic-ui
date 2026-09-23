@@ -11,11 +11,16 @@ export default function forwardsRef(Component, options = {}) {
     const RootComponent = isMemoized ? Component.type : Component
 
     it('is produced by a React.forwardRef() call', () => {
-      expect(ReactIs.isForwardRef(<RootComponent {...requiredProps} />)).toBe(true)
+      // Checks the type rather than `ReactIs.isForwardRef(<RootComponent />)`,
+      // which only recognises elements from the same major version of React.
+      expect(RootComponent.$$typeof).toBe(ReactIs.ForwardRef)
     })
 
     it('has an anonymous render function', () => {
-      expect(RootComponent.render.name).toBe('')
+      // Assigning `displayName` to a forwardRef copies it onto the render
+      // function only if that function has no name of its own. React 19 also
+      // sets its `name`, so `name` cannot be asserted empty across versions.
+      expect(RootComponent.render.displayName).toBe(RootComponent.displayName)
     })
 
     it(`forwards ref to "${tagName}"`, () => {
