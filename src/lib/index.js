@@ -36,6 +36,7 @@ export { numberToWordMap, numberToWord } from './numberToWord'
 export { default as normalizeTransitionDuration } from './normalizeTransitionDuration'
 export { default as objectDiff } from './objectDiff'
 export { default as isRefObject } from './isRefObject'
+export { default as getElementRef } from './getElementRef'
 // Heads up! We import/export this module so that stripDebug() in build/plugins.mjs
 // can drop it, along with every debug() call, from the published build.
 export { makeDebugger }

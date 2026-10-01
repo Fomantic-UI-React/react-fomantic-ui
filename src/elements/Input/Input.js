@@ -9,6 +9,7 @@ import {
   createShorthandFactory,
   customPropTypes,
   getComponentType,
+  getElementRef,
   getUnhandledProps,
   partitionHTMLProps,
   getKeyOnly,
@@ -121,7 +122,7 @@ const Input = React.forwardRef(function (props, ref) {
           ...htmlInputProps,
           ...child.props,
           ref: (c) => {
-            setRef(child.ref, c)
+            setRef(getElementRef(child), c)
             setRef(ref, c)
           },
         })
