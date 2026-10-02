@@ -20,13 +20,15 @@ modernise the toolchain, and to support current React versions.
 
 ## Status
 
-Early. The library builds and its public API is unchanged from
-`3.0.0-beta.2`, but the test suite is mid-migration and there is no published
-release yet. See [PLAN.md](./PLAN.md) for the roadmap, the known landmines and
-what is done so far.
+`3.0.0` is the first stable release. Its public API is unchanged from
+upstream's `3.0.0-beta.2`, and it supports **React 18 and React 19**. The test
+suite runs on Vitest and Testing Library, and every component example is
+checked for visual regressions in Storybook. See [PLAN.md](./PLAN.md) for the
+roadmap and what is done so far, and the [issue tracker][issues] for known bugs.
 
-Not yet ready to depend on in production unless you are comfortable tracking a
-moving target.
+On React 19, npm prints `ERESOLVE overriding peer dependency` warnings during
+install. They come from `@semantic-ui-react/event-stack`, which still declares
+React 18 as its maximum. It works on React 19, and the install succeeds.
 
 ## Installation
 
@@ -53,8 +55,9 @@ const App = () => <Button primary>Click me</Button>
 
 ## Migrating from `semantic-ui-react`
 
-`3.0.0-beta.3` is upstream's `3.0.0-beta.2` plus this fork's tooling work. **No
-component API changed**, and the change was verified against a production
+`3.0.0` is upstream's `3.0.0-beta.2` plus this fork's tooling work, bug fixes
+and React 19 support. **No component API changed.** The first fork release,
+`3.0.0-beta.3`, was verified against a production
 Next.js application: 1,206 unit tests, 3 snapshots and 9 accessibility tests
 all stayed green with no source changes, alongside a clean typecheck and a
 successful production build.
@@ -65,9 +68,9 @@ Keep every `import { Button } from 'semantic-ui-react'` exactly as it is and
 repoint the name in `package.json`:
 
 ```sh
-npm install semantic-ui-react@npm:react-fomantic-ui@3.0.0-beta.3
-# yarn add semantic-ui-react@npm:react-fomantic-ui@3.0.0-beta.3
-# pnpm add semantic-ui-react@npm:react-fomantic-ui@3.0.0-beta.3
+npm install semantic-ui-react@npm:react-fomantic-ui@^3.0.0
+# yarn add semantic-ui-react@npm:react-fomantic-ui@^3.0.0
+# pnpm add semantic-ui-react@npm:react-fomantic-ui@^3.0.0
 ```
 
 which records:
@@ -75,7 +78,7 @@ which records:
 ```json
 {
   "dependencies": {
-    "semantic-ui-react": "npm:react-fomantic-ui@3.0.0-beta.3"
+    "semantic-ui-react": "npm:react-fomantic-ui@^3.0.0"
   }
 }
 ```
@@ -107,7 +110,7 @@ the dependency really is called `semantic-ui-react` — it just resolves here.
 If you would rather your imports name the package you are actually using:
 
 ```sh
-npm install react-fomantic-ui@3.0.0-beta.3
+npm install react-fomantic-ui@^3.0.0
 ```
 
 ```diff
