@@ -1128,14 +1128,6 @@
   resolved "https://registry.yarnpkg.com/@rollup/rollup-win32-x64-msvc/-/rollup-win32-x64-msvc-4.63.1.tgz#cd19d691330cbd52ebb13620acb6cf7140b95e80"
   integrity sha512-at8QVep6S3h5Y6gSbdGU06bRY5WJkf6WUduM9YtvYMbYhB1MOFfUgc6kehitQXzOtMSaT70q7f9ydPhpqu821w==
 
-"@semantic-ui-react/event-stack@^3.1.3":
-  version "3.1.3"
-  resolved "https://registry.yarnpkg.com/@semantic-ui-react/event-stack/-/event-stack-3.1.3.tgz#2862d2631d67dd846c705db2fc1ede1c468be3a1"
-  integrity sha512-FdTmJyWvJaYinHrKRsMLDrz4tTMGdFfds299Qory53hBugiDvGC0tEJf+cHsi5igDwWb/CLOgOiChInHwq8URQ==
-  dependencies:
-    exenv "^1.2.2"
-    prop-types "^15.6.2"
-
 "@sindresorhus/is@^5.2.0":
   version "5.3.0"
   resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-5.3.0.tgz#0ec9264cf54a527671d990eb874e030b55b70dcc"
@@ -2818,10 +2810,6 @@ execa@^5.1.1:
     onetime "^5.1.2"
     signal-exit "^3.0.3"
     strip-final-newline "^2.0.0"
-
-exenv@^1.2.2:
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/exenv/-/exenv-1.2.2.tgz#2ae78e85d9894158670b03d47bec1f03bd91bb9d"
 
 expect-type@^1.4.0:
   version "1.4.0"
@@ -4715,7 +4703,7 @@ promise.allsettled@1.0.6:
     get-intrinsic "^1.1.3"
     iterate-value "^1.0.2"
 
-prop-types@^15.6.2, prop-types@^15.7.2:
+prop-types@^15.7.2:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==

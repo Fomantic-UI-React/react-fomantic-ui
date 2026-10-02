@@ -436,6 +436,72 @@ describe('Modal', () => {
     })
   })
 
+  describe('nested', () => {
+    // Modals share the `Modal` event pool, in which only the most recently
+    // opened one reacts to a document event. Without that, one Escape would close
+    // the whole stack.
+    function NestedExample({ onInnerClose = () => {}, onOuterClose = () => {} }) {
+      const [outerOpen, setOuterOpen] = React.useState(true)
+      const [innerOpen, setInnerOpen] = React.useState(false)
+
+      return (
+        <Modal
+          className='outer'
+          open={outerOpen}
+          onClose={() => {
+            onOuterClose()
+            setOuterOpen(false)
+          }}
+        >
+          <ModalContent>
+            <button id='open-inner' onClick={() => setInnerOpen(true)} />
+          </ModalContent>
+          <Modal
+            className='inner'
+            open={innerOpen}
+            onClose={() => {
+              onInnerClose()
+              setInnerOpen(false)
+            }}
+          />
+        </Modal>
+      )
+    }
+
+    it('closes only the top modal on Escape', async () => {
+      const onInnerClose = vi.fn()
+      const onOuterClose = vi.fn()
+      wrapperMount(<NestedExample onInnerClose={onInnerClose} onOuterClose={onOuterClose} />)
+
+      await user.click(inBody('#open-inner'))
+      expect(inBody('.ui.modal.inner')).not.toBeNull()
+
+      await user.keyboard('{Escape}')
+      expect(onInnerClose).toHaveBeenCalledTimes(1)
+      expect(onOuterClose).not.toHaveBeenCalled()
+      expect(inBody('.ui.modal.inner')).toBeNull()
+      expect(inBody('.ui.modal.outer')).not.toBeNull()
+
+      await user.keyboard('{Escape}')
+      expect(onOuterClose).toHaveBeenCalledTimes(1)
+      expect(inBody('.ui.modal.outer')).toBeNull()
+    })
+
+    it('closes only the top modal on its dimmer click', async () => {
+      const onInnerClose = vi.fn()
+      const onOuterClose = vi.fn()
+      wrapperMount(<NestedExample onInnerClose={onInnerClose} onOuterClose={onOuterClose} />)
+
+      await user.click(inBody('#open-inner'))
+      const dimmers = document.body.querySelectorAll('.ui.dimmer')
+      await user.click(dimmers[dimmers.length - 1])
+
+      expect(onInnerClose).toHaveBeenCalledTimes(1)
+      expect(onOuterClose).not.toHaveBeenCalled()
+      expect(inBody('.ui.modal.outer')).not.toBeNull()
+    })
+  })
+
   describe('closeOnDocumentClick', () => {
     it('is false by default', async () => {
       wrapperMount(<Modal defaultOpen />)

@@ -54,6 +54,16 @@ describe('useEventListener', () => {
       expect(listener).toHaveBeenCalledTimes(1)
     })
 
+    it('does nothing while targetRef is empty', () => {
+      const listener = vi.fn()
+
+      expect(() =>
+        render(
+          <TestComponent options={{ listener, targetRef: { current: null }, type: 'click' }} />,
+        ),
+      ).not.toThrow()
+    })
+
     it('throws when neither target nor targetRef is given', () => {
       const listener = vi.fn()
 

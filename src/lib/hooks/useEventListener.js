@@ -69,7 +69,13 @@ export default function useEventListener(options) {
 
     const element = typeof targetRef === 'undefined' ? target : targetRef.current
 
-    if (!element || typeof element.addEventListener !== 'function') {
+    // A ref that is not attached to anything has nothing to listen on, which is
+    // not an error: a Portal with no element to render leaves its ref empty.
+    if (element === null || typeof element === 'undefined') {
+      return undefined
+    }
+
+    if (typeof element.addEventListener !== 'function') {
       if (process.env.NODE_ENV !== 'production') {
         throw new Error(
           'useEventListener(): the passed element does not support addEventListener().',
