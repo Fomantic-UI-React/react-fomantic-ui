@@ -8,13 +8,13 @@ import {
   childrenUtils,
   customPropTypes,
   doesNodeContainClick,
-  eventStack,
   getComponentType,
   getUnhandledProps,
   isBrowser,
   makeDebugger,
   getKeyOnly,
   useAutoControlledValue,
+  useEventCallback,
   useMergedRefs,
 } from '../../lib'
 import Icon from '../../elements/Icon'
@@ -67,6 +67,8 @@ const Modal = React.forwardRef(function (props, ref) {
 
   const elementRef = useMergedRefs(ref, React.useRef())
   const dimmerRef = React.useRef()
+  // The dimmer the listeners went on, so they come off the same node.
+  const subscribedDimmer = React.useRef()
 
   const animationRequestId = React.useRef()
   const latestDocumentMouseDownEvent = React.useRef()
@@ -111,11 +113,13 @@ const Modal = React.forwardRef(function (props, ref) {
     _.invoke(props, 'onClose', e, { ...props, open: false })
   }
 
-  const handleDocumentMouseDown = (e) => {
+  // Stable, so the listeners added on mount can be removed on unmount, while
+  // still reading the latest props when they run.
+  const handleDocumentMouseDown = useEventCallback((e) => {
     latestDocumentMouseDownEvent.current = e
-  }
+  })
 
-  const handleDocumentClick = (e) => {
+  const handleDocumentClick = useEventCallback((e) => {
     debug('handleDocumentClick()')
 
     const currentDocumentMouseDownEvent = latestDocumentMouseDownEvent.current
@@ -130,7 +134,7 @@ const Modal = React.forwardRef(function (props, ref) {
 
     setOpen(false)
     _.invoke(props, 'onClose', e, { ...props, open: false })
-  }
+  })
 
   const handleOpen = (e) => {
     debug('open()')
@@ -145,14 +149,9 @@ const Modal = React.forwardRef(function (props, ref) {
     setScrolling(false)
     setPositionAndClassNames()
 
-    eventStack.sub('mousedown', handleDocumentMouseDown, {
-      pool: eventPool,
-      target: dimmerRef.current,
-    })
-    eventStack.sub('click', handleDocumentClick, {
-      pool: eventPool,
-      target: dimmerRef.current,
-    })
+    subscribedDimmer.current = dimmerRef.current
+    subscribedDimmer.current?.addEventListener('mousedown', handleDocumentMouseDown, true)
+    subscribedDimmer.current?.addEventListener('click', handleDocumentClick, true)
     _.invoke(props, 'onMount', e, props)
   }
 
@@ -160,14 +159,9 @@ const Modal = React.forwardRef(function (props, ref) {
     debug('handlePortalUnmount()', { eventPool })
 
     cancelAnimationFrame(animationRequestId.current)
-    eventStack.unsub('mousedown', handleDocumentMouseDown, {
-      pool: eventPool,
-      target: dimmerRef.current,
-    })
-    eventStack.unsub('click', handleDocumentClick, {
-      pool: eventPool,
-      target: dimmerRef.current,
-    })
+    subscribedDimmer.current?.removeEventListener('mousedown', handleDocumentMouseDown, true)
+    subscribedDimmer.current?.removeEventListener('click', handleDocumentClick, true)
+    subscribedDimmer.current = null
     _.invoke(props, 'onUnmount', e, props)
   }
 

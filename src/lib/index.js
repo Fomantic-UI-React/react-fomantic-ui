@@ -14,7 +14,6 @@ export {
 } from './classNameBuilders'
 
 export * as customPropTypes from './customPropTypes'
-export { default as eventStack } from './eventStack'
 export * from './factories'
 export { default as getComponentType } from './getComponentType'
 export { default as getUnhandledProps } from './getUnhandledProps'
@@ -49,6 +48,7 @@ export { default as useAutoControlledValue } from './hooks/useAutoControlledValu
 export { default as useClassNamesOnNode } from './hooks/useClassNamesOnNode'
 export { default as useEventCallback } from './hooks/useEventCallback'
 export { default as useEventListener, documentRef } from './hooks/useEventListener'
+export { default as useEventPool } from './hooks/useEventPool'
 export { default as useForceUpdate } from './hooks/useForceUpdate'
 export { default as useIsomorphicLayoutEffect } from './hooks/useIsomorphicLayoutEffect'
 export { default as useMergedRefs, setRef } from './hooks/useMergedRefs'
