@@ -1118,8 +1118,9 @@ combination this reordering exists to produce.
    has to be managed is visual divergence, not breakage. See Phase 3.
 4. ~~**First version number.**~~ — **resolved**: continue the v3 beta line.
    `3.0.0-beta.5` is the first release off the new pipeline and holds `latest`.
-   Prereleases take `latest` because no stable release of this package name
-   exists; revisit when 3.0.0 ships.
+   Prereleases took `latest` because no stable release of this package name
+   existed. `3.0.0` is the first stable release and now holds `latest`; publish
+   future prereleases under `--tag next` so they do not displace it.
 5. **Which components you actually use.** If it is eight of ~50, extracting
    those into your own design system may beat maintaining 22,340 LOC.
    Still open, and phase 2 is where it starts to cost real money — see below.
