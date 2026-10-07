@@ -1,5 +1,44 @@
 # Change Log
 
+## v3.0.1 (2026-10-07)
+
+> Upgrade from 3.0.0. In 3.0.0, a bundler that loaded `ButtonGroup`, `StepGroup`, `CardGroup`, `ItemGroup`, `StatisticGroup` or `TransitionGroup` before its parent left `Button.Group` (and so on) `undefined`, or threw `ReferenceError: Cannot access 'StepGroup' before initialization` from the ES build. Next.js apps on Turbopack failed to start this way.
+
+#### :bug: Bug Fix
+* [#53](https://github.com/Fomantic-UI-React/react-fomantic-ui/pull/53) fix: break the parent ↔ Group circular imports ([@aphenine](https://github.com/aphenine))
+
+## v3.0.0 (2026-10-02)
+
+> First stable release of `react-fomantic-ui`, the maintained fork of `semantic-ui-react`. This entry covers everything since upstream's `v3.0.0-beta.2`, including the prereleases `3.0.0-beta.3` to `3.0.0-beta.5` (all 2026-09-03). Avoid `3.0.0-beta.4`: it shipped a UMD bundle that cannot load and no `'use client'` directives. See [Migrating from `semantic-ui-react`](https://github.com/Fomantic-UI-React/react-fomantic-ui#migrating-from-semantic-ui-react).
+
+#### :boom: Breaking Change
+* [#3](https://github.com/Fomantic-UI-React/react-fomantic-ui/pull/3) feat: rebrand to react-fomantic-ui, restore CI ([@aphenine](https://github.com/aphenine)): the package is now `react-fomantic-ui`, the UMD global is `reactFomanticUI` and the UMD file is `dist/umd/react-fomantic-ui.min.js`
+* [#49](https://github.com/Fomantic-UI-React/react-fomantic-ui/pull/49) feat: support React 19 ([@aphenine](https://github.com/aphenine)): peer range is now `^18.0.0 || ^19.0.0`, so React 16 and 17 are no longer supported
+* [#5](https://github.com/Fomantic-UI-React/react-fomantic-ui/pull/5) Replace gulp/webpack 4 build with rollup/esbuild ([@aphenine](https://github.com/aphenine)): published code now targets ES2017 instead of IE 11
+
+#### :rocket: New Feature
+* [#49](https://github.com/Fomantic-UI-React/react-fomantic-ui/pull/49) feat: support React 19 ([@aphenine](https://github.com/aphenine))
+
+#### :bug: Bug Fix
+* [#46](https://github.com/Fomantic-UI-React/react-fomantic-ui/pull/46) fix: four bugs surfaced by the Vitest/RTL port ([@aphenine](https://github.com/aphenine)): `Embed` URLs joined with `&amp;`, `DropdownText` rendering the `divider` class, `<Image content>` throwing, and `Tab` mutating the caller's `menu` prop
+* [#47](https://github.com/Fomantic-UI-React/react-fomantic-ui/pull/47) fix(Sidebar): drop @fluentui/react-component-event-listener ([@aphenine](https://github.com/aphenine))
+* [#48](https://github.com/Fomantic-UI-React/react-fomantic-ui/pull/48) fix(Search): read the selection after it commits ([@aphenine](https://github.com/aphenine))
+* [#4490](https://github.com/Semantic-Org/Semantic-UI-React/pull/4490) fix(Popup): fix ability to not hide popup on scroll ([@konradkierus](https://github.com/konradkierus))
+* [#4473](https://github.com/Semantic-Org/Semantic-UI-React/pull/4473) fix(typings): Type Tab.Pane is missing ([@atti187](https://github.com/atti187))
+
+#### :memo: Documentation
+* [#4](https://github.com/Fomantic-UI-React/react-fomantic-ui/pull/4) docs: add a migration guide from semantic-ui-react ([@aphenine](https://github.com/aphenine))
+* [#38](https://github.com/Fomantic-UI-React/react-fomantic-ui/pull/38) feat: Storybook 10, pinned to fomantic-ui-css 2.4.4 ([@aphenine](https://github.com/aphenine))
+* [#42](https://github.com/Fomantic-UI-React/react-fomantic-ui/pull/42) docs: link the published component explorer from the README ([@aphenine](https://github.com/aphenine))
+
+#### :house: Internal
+* [#2](https://github.com/Fomantic-UI-React/react-fomantic-ui/pull/2) refactor: bake handledProps into source, drop the Babel plugin ([@aphenine](https://github.com/aphenine))
+* [#6](https://github.com/Fomantic-UI-React/react-fomantic-ui/pull/6) to [#36](https://github.com/Fomantic-UI-React/react-fomantic-ui/pull/36) test: port the suite from Enzyme and Karma to Vitest and Testing Library ([@aphenine](https://github.com/aphenine))
+* [#40](https://github.com/Fomantic-UI-React/react-fomantic-ui/pull/40), [#41](https://github.com/Fomantic-UI-React/react-fomantic-ui/pull/41) visual regression testing on Chromatic ([@aphenine](https://github.com/aphenine))
+* [#43](https://github.com/Fomantic-UI-React/react-fomantic-ui/pull/43) test(Dropdown): add regression coverage for Checkbox nested in Dropdown.Item/Header ([@AmanUllah687](https://github.com/AmanUllah687))
+* [#4499](https://github.com/Semantic-Org/Semantic-UI-React/pull/4499) chore(Popup): replace event-stack ([@dominikdosoudil](https://github.com/dominikdosoudil))
+* [#4500](https://github.com/Semantic-Org/Semantic-UI-React/pull/4500) to [#4505](https://github.com/Semantic-Org/Semantic-UI-React/pull/4505) chore: rename classNameBuilder utils from `use*` to `get*` ([@dominikdosoudil](https://github.com/dominikdosoudil))
+
 ## v3.0.0-beta.2 (2023-12-30)
 
 #### :rocket: New Feature
