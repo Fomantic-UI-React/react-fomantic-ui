@@ -1,4 +1,3 @@
-import EventStack from '@semantic-ui-react/event-stack'
 import keyboardKey from 'keyboard-key'
 import _ from 'lodash'
 import PropTypes from 'prop-types'
@@ -6,10 +5,13 @@ import * as React from 'react'
 
 import {
   customPropTypes,
+  documentRef,
   doesNodeContainClick,
   makeDebugger,
   useAutoControlledValue,
   useEventCallback,
+  useEventListener,
+  useEventPool,
 } from '../../lib'
 import useTrigger from './utils/useTrigger'
 import PortalInner from './PortalInner'
@@ -268,35 +270,61 @@ function Portal(props) {
     mouseEnterTimer.current = openPortalWithTimeout(e, mouseEnterDelay)
   }
 
+  // Capture phase on the document, so these run before any handler in the tree
+  // can stop the event. In a named pool only the newest member reacts, see
+  // useEventPool().
+  const isNewestInPool = useEventPool(eventPool, open)
+  const inPool = (handler) => (e) => {
+    if (isNewestInPool()) handler(e)
+  }
+
+  useEventListener({
+    capture: true,
+    enabled: open,
+    listener: handlePortalMouseLeave,
+    targetRef: contentRef,
+    type: 'mouseleave',
+  })
+  useEventListener({
+    capture: true,
+    enabled: open,
+    listener: handlePortalMouseEnter,
+    targetRef: contentRef,
+    type: 'mouseenter',
+  })
+  useEventListener({
+    capture: true,
+    enabled: open,
+    listener: inPool(handleDocumentMouseDown),
+    targetRef: documentRef,
+    type: 'mousedown',
+  })
+  useEventListener({
+    capture: true,
+    enabled: open,
+    listener: inPool(handleDocumentClick),
+    targetRef: documentRef,
+    type: 'click',
+  })
+  useEventListener({
+    capture: true,
+    enabled: open,
+    listener: inPool(handleEscape),
+    targetRef: documentRef,
+    type: 'keydown',
+  })
+
   return (
     <>
       {open && (
-        <>
-          <PortalInner
-            mountNode={mountNode}
-            onMount={() => _.invoke(props, 'onMount', null, props)}
-            onUnmount={() => _.invoke(props, 'onUnmount', null, props)}
-            ref={contentRef}
-          >
-            {children}
-          </PortalInner>
-
-          <EventStack
-            name='mouseleave'
-            on={handlePortalMouseLeave}
-            pool={eventPool}
-            target={contentRef}
-          />
-          <EventStack
-            name='mouseenter'
-            on={handlePortalMouseEnter}
-            pool={eventPool}
-            target={contentRef}
-          />
-          <EventStack name='mousedown' on={handleDocumentMouseDown} pool={eventPool} />
-          <EventStack name='click' on={handleDocumentClick} pool={eventPool} />
-          <EventStack name='keydown' on={handleEscape} pool={eventPool} />
-        </>
+        <PortalInner
+          mountNode={mountNode}
+          onMount={() => _.invoke(props, 'onMount', null, props)}
+          onUnmount={() => _.invoke(props, 'onUnmount', null, props)}
+          ref={contentRef}
+        >
+          {children}
+        </PortalInner>
       )}
       {trigger &&
         React.cloneElement(trigger, {

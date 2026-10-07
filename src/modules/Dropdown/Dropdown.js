@@ -1,4 +1,3 @@
-import EventStack from '@semantic-ui-react/event-stack'
 import cx from 'clsx'
 import keyboardKey from 'keyboard-key'
 import _ from 'lodash'
@@ -10,6 +9,7 @@ import {
   ModernAutoControlledComponent as Component,
   childrenUtils,
   customPropTypes,
+  documentRef,
   doesNodeContainClick,
   getComponentType,
   getUnhandledProps,
@@ -18,6 +18,7 @@ import {
   setRef,
   getKeyOnly,
   getKeyOrValueAndKey,
+  useEventListener,
 } from '../../lib'
 import Icon from '../../elements/Icon'
 import Label from '../../elements/Label'
@@ -33,6 +34,16 @@ import getMenuOptions from './utils/getMenuOptions'
 import getSelectedIndex from './utils/getSelectedIndex'
 
 const debug = makeDebugger('dropdown')
+
+/**
+ * Listens on the document, in the capture phase, for as long as it is rendered.
+ * Lets this class component subscribe by rendering, as hooks cannot be called
+ * conditionally.
+ */
+function DocumentListener({ listener, type }) {
+  useEventListener({ capture: true, listener, targetRef: documentRef, type })
+  return null
+}
 
 const getKeyOrValue = (key, value) => (_.isNil(key) ? value : key)
 const getKeyAndValues = (options) =>
@@ -1150,10 +1161,10 @@ class DropdownInner extends Component {
         })}
         {this.renderMenu()}
 
-        {open && <EventStack name='keydown' on={this.closeOnEscape} />}
-        {open && <EventStack name='click' on={this.closeOnDocumentClick} />}
+        {open && <DocumentListener type='keydown' listener={this.closeOnEscape} />}
+        {open && <DocumentListener type='click' listener={this.closeOnDocumentClick} />}
 
-        {focus && <EventStack name='keydown' on={this.removeItemOnBackspace} />}
+        {focus && <DocumentListener type='keydown' listener={this.removeItemOnBackspace} />}
       </ElementType>
     )
   }

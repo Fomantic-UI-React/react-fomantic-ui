@@ -1132,9 +1132,17 @@ What is actually left:
   `isConformant` leans on them. This is the propTypes/`handledProps` coupling,
   it lands in the test suite rather than the library, and it is the real body of
   work left in this phase.
-- **Peer ranges.** `@semantic-ui-react/event-stack` declares
-  `^16 || ^17 || ^18`. It is a class component so it *works* on 19, but expect
-  install warnings until it is bumped or vendored. Not a blocker.
+- ✅ **Peer ranges.** `@semantic-ui-react/event-stack` declared
+  `^16 || ^17 || ^18`, so `3.0.0` installs on React 19 with `ERESOLVE` warnings.
+  The package is deprecated, and it is gone: `Dropdown`, `Search` and `Modal`
+  use plain capture-phase `addEventListener`, and `Portal` uses
+  `useEventListener`. Its one real feature, a named pool in which only the
+  newest subscriber reacts, is `src/lib/hooks/useEventPool.js`. That feature was
+  already broken: members were ordered by when they last *re-subscribed*, which
+  `<EventStack>` did on every render, so the first Escape in a stack of Modals
+  closed the outer one. `useEventPool` orders by when a member opened.
+  `react-popper` (used by `Popup`) also declares React `≤18`, so React 19
+  installs still warn until it is replaced.
 
 Verified against Phase 2's tests *and* Phase 3's visual baselines, which is the
 combination this reordering exists to produce.

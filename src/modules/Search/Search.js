@@ -8,7 +8,6 @@ import shallowEqual from 'shallowequal'
 import {
   ModernAutoControlledComponent as Component,
   customPropTypes,
-  eventStack,
   getComponentType,
   getUnhandledProps,
   htmlInputAttrs,
@@ -27,6 +26,16 @@ import SearchResult from './SearchResult'
 import SearchResults from './SearchResults'
 
 const debug = makeDebugger('search')
+
+// Document listeners go on in the capture phase, so they run before any handler
+// in the tree can stop the event. Adding a listener that is already on the
+// document does nothing, and removing one that is not there is safe too.
+const listen = (type, listeners) => {
+  _.castArray(listeners).forEach((listener) => document.addEventListener(type, listener, true))
+}
+const unlisten = (type, listeners) => {
+  _.castArray(listeners).forEach((listener) => document.removeEventListener(type, listener, true))
+}
 
 const overrideSearchInputProps = (predefinedProps) => {
   const { input } = predefinedProps
@@ -100,7 +109,7 @@ class SearchInner extends Component {
         this.tryOpen()
       }
       if (this.state.open) {
-        eventStack.sub('keydown', [this.moveSelectionOnKeyDown, this.selectItemOnEnter])
+        listen('keydown', [this.moveSelectionOnKeyDown, this.selectItemOnEnter])
       }
     } else if (prevState.focus && !this.state.focus) {
       debug('search blurred')
@@ -108,40 +117,28 @@ class SearchInner extends Component {
         debug('mouse is not down, closing')
         this.close()
       }
-      eventStack.unsub('keydown', [this.moveSelectionOnKeyDown, this.selectItemOnEnter])
+      unlisten('keydown', [this.moveSelectionOnKeyDown, this.selectItemOnEnter])
     }
 
     // opened / closed
     if (!prevState.open && this.state.open) {
       debug('search opened')
       this.open()
-      eventStack.sub('click', this.closeOnDocumentClick)
-      eventStack.sub('keydown', [
-        this.closeOnEscape,
-        this.moveSelectionOnKeyDown,
-        this.selectItemOnEnter,
-      ])
+      listen('click', this.closeOnDocumentClick)
+      listen('keydown', [this.closeOnEscape, this.moveSelectionOnKeyDown, this.selectItemOnEnter])
     } else if (prevState.open && !this.state.open) {
       debug('search closed')
       this.close()
-      eventStack.unsub('click', this.closeOnDocumentClick)
-      eventStack.unsub('keydown', [
-        this.closeOnEscape,
-        this.moveSelectionOnKeyDown,
-        this.selectItemOnEnter,
-      ])
+      unlisten('click', this.closeOnDocumentClick)
+      unlisten('keydown', [this.closeOnEscape, this.moveSelectionOnKeyDown, this.selectItemOnEnter])
     }
   }
 
   componentWillUnmount() {
     debug('componentWillUnmount()')
 
-    eventStack.unsub('click', this.closeOnDocumentClick)
-    eventStack.unsub('keydown', [
-      this.closeOnEscape,
-      this.moveSelectionOnKeyDown,
-      this.selectItemOnEnter,
-    ])
+    unlisten('click', this.closeOnDocumentClick)
+    unlisten('keydown', [this.closeOnEscape, this.moveSelectionOnKeyDown, this.selectItemOnEnter])
   }
 
   // ----------------------------------------
@@ -218,14 +215,14 @@ class SearchInner extends Component {
 
     this.isMouseDown = true
     _.invoke(this.props, 'onMouseDown', e, this.props)
-    eventStack.sub('mouseup', this.handleDocumentMouseUp)
+    listen('mouseup', this.handleDocumentMouseUp)
   }
 
   handleDocumentMouseUp = () => {
     debug('handleDocumentMouseUp()')
 
     this.isMouseDown = false
-    eventStack.unsub('mouseup', this.handleDocumentMouseUp)
+    unlisten('mouseup', this.handleDocumentMouseUp)
   }
 
   handleInputClick = (e) => {

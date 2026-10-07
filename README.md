@@ -27,8 +27,9 @@ checked for visual regressions in Storybook. See [PLAN.md](./PLAN.md) for the
 roadmap and what is done so far, and the [issue tracker][issues] for known bugs.
 
 On React 19, npm prints `ERESOLVE overriding peer dependency` warnings during
-install. They come from `@semantic-ui-react/event-stack`, which still declares
-React 18 as its maximum. It works on React 19, and the install succeeds.
+install. They come from `react-popper`, which `Popup` uses and which still
+declares React 18 as its maximum. It works on React 19, and the install
+succeeds.
 
 ## Installation
 
