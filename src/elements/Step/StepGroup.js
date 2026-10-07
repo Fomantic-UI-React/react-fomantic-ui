@@ -15,7 +15,7 @@ import {
   getValueAndKey,
   getWidthProp,
 } from '../../lib'
-import Step from './Step'
+import Step from './internal/Step'
 
 const numberMap = _.pickBy(numberToWordMap, (val, key) => key <= 8)
 

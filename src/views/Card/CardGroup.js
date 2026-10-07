@@ -13,7 +13,7 @@ import {
   getTextAlignProp,
   getWidthProp,
 } from '../../lib'
-import Card from './Card'
+import Card from './internal/Card'
 
 /**
  * A group of cards.

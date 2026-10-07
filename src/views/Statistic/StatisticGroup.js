@@ -12,7 +12,7 @@ import {
   getKeyOnly,
   getWidthProp,
 } from '../../lib'
-import Statistic from './Statistic'
+import Statistic from './internal/Statistic'
 
 /**
  * A group of statistics.

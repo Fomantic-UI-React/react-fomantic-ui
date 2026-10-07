@@ -55,6 +55,25 @@ const indexEntries = (dir) =>
 
 const entries = indexEntries('src')
 
+// A cycle that attaches a static while it loads (`Button.Group = ButtonGroup`)
+// breaks whichever of its modules a consumer happens to load first — that shipped
+// in 3.0.0 as #8. Label and Image only render each other's shorthand, so they
+// touch nothing while loading and stay; any new cycle fails the build.
+const ALLOWED_CYCLES = [['src/elements/Image/Image.js', 'src/elements/Label/Label.js']]
+
+const onwarn = (warning, warn) => {
+  if (warning.code !== 'CIRCULAR_DEPENDENCY') {
+    warn(warning)
+    return
+  }
+
+  const cycle = warning.ids.map((id) => path.relative(process.cwd(), id))
+  const members = [...new Set(cycle)].sort()
+  const allowed = ALLOWED_CYCLES.some((pair) => pair.join() === members.join())
+
+  if (!allowed) throw new Error(`Circular dependency: ${cycle.join(' -> ')}`)
+}
+
 const preserved = (dir, format) => ({
   dir,
   format,
@@ -70,6 +89,7 @@ export default defineConfig([
     output: preserved('dist/commonjs', 'cjs'),
     external,
     treeshake: false,
+    onwarn,
     plugins: [...transforms('lodash'), clientDirective()],
   },
   {
@@ -77,6 +97,7 @@ export default defineConfig([
     output: preserved('dist/es', 'esm'),
     external,
     treeshake: false,
+    onwarn,
     plugins: [...transforms('lodash-es'), clientDirective()],
   },
   {
@@ -92,6 +113,7 @@ export default defineConfig([
       plugins: [terser({ format: { comments: 'some' } })],
     },
     external: ['react', 'react-dom'],
+    onwarn,
     plugins: [
       // A <script> tag has no `process`. Without this the bundle throws
       // `ReferenceError: process is not defined` before it exports anything.

@@ -14,7 +14,7 @@ import {
   getValueAndKey,
   getWidthProp,
 } from '../../lib'
-import Button from './Button'
+import Button from './internal/Button'
 
 /**
  * Buttons can be grouped.
