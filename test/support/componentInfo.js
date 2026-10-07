@@ -23,19 +23,25 @@ const isComponentFile = (name) => /^[A-Z]\w*\.js$/.test(name)
  * `Button.Group = ButtonGroup` in the parent module is the authoritative
  * statement of a child's public API path, so read it rather than guessing at
  * where the parent's name stops and the child's suffix starts.
+ *
+ * Parents split into `internal/` attach theirs in the export instead —
+ * `export default Object.assign(Button, { Group: ButtonGroup })` — so both
+ * forms are read.
  */
 const readStatics = (file) => {
   const source = fs.readFileSync(file, 'utf8')
   const parent = path.basename(file, '.js')
   const statics = {}
 
-  const pattern = new RegExp(`^${parent}\\.([A-Z]\\w*) = (\\w+)$`, 'gm')
-  let match = pattern.exec(source)
+  const assigned = new RegExp(`^${parent}\\.([A-Z]\\w*) = (\\w+)$`, 'gm')
+  const exported = new RegExp(`^export default Object\\.assign\\(${parent}, \\{([^}]*)\\}\\)`, 'm')
+  const pairs = [
+    ...source.matchAll(assigned),
+    ...(exported.exec(source)?.[1] ?? '').matchAll(/^ {2}([A-Z]\w*): (\w+),$/gm),
+  ]
 
-  while (match !== null) {
-    const [, subcomponentName, childName] = match
+  for (const [, subcomponentName, childName] of pairs) {
     statics[childName] = subcomponentName
-    match = pattern.exec(source)
   }
 
   return statics

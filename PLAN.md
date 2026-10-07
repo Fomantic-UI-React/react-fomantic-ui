@@ -812,6 +812,25 @@ own. Three guards keep it fixed:
 - `scripts/verify-build.js` does the same load-first check against
   `dist/commonjs` and `dist/es`, the latter one process per module.
 
+**3.0.1 broke it differently.** The public `Button.js` attached the statics as
+statements and then re-exported the binding it had imported. Rollup traced that
+export back to `internal/Button.js` and pointed the package entry straight at
+it, leaving `import './elements/Button/Button.js'` as a bare side-effect
+import. Under `"sideEffects": false` a bundler may drop that import, and
+Turbopack does: `Button.Content` and every `*.Group` came out undefined in a
+production build, while every check above passed because none of them
+tree-shakes.
+
+The public modules now attach the statics in the export itself,
+`export default Object.assign(Button, { Content: ButtonContent, ... })`.
+Rollup cannot trace through the call, so the entry exports `Button` from the
+public module, and a bundler cannot keep `Button` without it. `componentInfo`
+reads both forms. A fourth guard:
+
+- `scripts/verify-build.js` bundles `dist/es` with esbuild, honouring
+  `sideEffects`, and compares every component's statics with the package
+  loaded whole. Against the published 3.0.1 it reports all 23 lost statics.
+
 > **Working rule: no source changes until Phase 2 and Phase 4 are in place.**
 > Restructuring five components' modules is exactly the kind of change that
 > needs tests and Storybook underneath it. This is why the Phase ordering is

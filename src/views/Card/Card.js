@@ -6,11 +6,16 @@ import CardHeader from './CardHeader'
 import CardMeta from './CardMeta'
 
 // Card is defined in internal/ so that CardGroup can import it without importing
-// this module back. That cycle broke `Card.Group` whenever CardGroup loaded first (#8).
-Card.Content = CardContent
-Card.Description = CardDescription
-Card.Group = CardGroup
-Card.Header = CardHeader
-Card.Meta = CardMeta
-
-export default Card
+// this module back; that cycle broke `Card.Group` whenever the Group loaded first (#8).
+//
+// The statics are attached in the export itself, not as statements before it. Exporting
+// the imported binding lets rollup point the package entry straight at internal/Card,
+// leaving this module as a side-effect-only import that bundlers drop under
+// "sideEffects": false, and `Card.Group` with it.
+export default Object.assign(Card, {
+  Content: CardContent,
+  Description: CardDescription,
+  Group: CardGroup,
+  Header: CardHeader,
+  Meta: CardMeta,
+})
