@@ -11,7 +11,9 @@
  *     consumer's machine, so they are asserted against the built output here.
  */
 const assert = require('assert')
+const { execFile } = require('child_process')
 const fs = require('fs')
+const os = require('os')
 const path = require('path')
 const url = require('url')
 const vm = require('vm')
@@ -163,6 +165,68 @@ for (const format of ['commonjs', 'es']) {
 }
 
 // ----------------------------------------
+// Load order
+// ----------------------------------------
+
+// Every module has to work as the first one a consumer's bundler reaches. A
+// circular import that attaches a static while loading breaks whichever side
+// loads first: `Step.Group` is undefined in CommonJS, and in ESM `StepGroup`
+// throws a ReferenceError — which is how 3.0.0 took down a Next.js app (#8).
+// Each module is loaded first, then the entry, and no component may come out
+// with an undefined static.
+const lostStatics = (exports) =>
+  Object.entries(exports).flatMap(([name, value]) =>
+    value
+      ? Object.keys(value)
+          .filter((key) => /^[A-Z]/.test(key) && value[key] === undefined)
+          .map((key) => `${name}.${key}`)
+      : [],
+  )
+
+const modules = (format) => jsFiles(dist(format)).filter((file) => !file.endsWith('.d.ts'))
+
+for (const file of modules('commonjs')) {
+  for (const id of Object.keys(require.cache)) {
+    if (id.startsWith(dist('commonjs'))) delete require.cache[id]
+  }
+
+  require(file)
+  const lost = lostStatics(require(dist('commonjs', 'index.js')))
+  assert.deepStrictEqual(lost, [], `${file} loaded first leaves statics undefined`)
+}
+
+// ESM has no module cache to clear, so each module gets a fresh process.
+const loadFirstInEs = (file) =>
+  new Promise((resolve) => {
+    const script = `
+      await import(${JSON.stringify(url.pathToFileURL(file).href)})
+      const es = await import(${JSON.stringify(url.pathToFileURL(dist('es', 'index.js')).href)})
+      const lostStatics = ${lostStatics.toString()}
+      const lost = lostStatics(es)
+      if (lost.length) throw new Error('undefined statics: ' + lost.join(', '))
+    `
+    execFile(process.execPath, ['--input-type=module', '-e', script], (error, stdout, stderr) =>
+      resolve(error && `${path.relative(root, file)}: ${/^\w*Error\b.*$/m.exec(stderr) ?? stderr}`),
+    )
+  })
+
+const loadOrderInEs = async () => {
+  const pending = modules('es')
+  const failures = []
+  const worker = async () => {
+    const file = pending.pop()
+    if (!file) return
+
+    const failure = await loadFirstInEs(file)
+    if (failure) failures.push(failure)
+    await worker()
+  }
+
+  await Promise.all(Array.from({ length: os.availableParallelism() }, worker))
+  assert.deepStrictEqual(failures.sort(), [], 'dist/es modules that fail when loaded first')
+}
+
+// ----------------------------------------
 // Native ESM
 // ----------------------------------------
 
@@ -177,10 +241,14 @@ import(url.pathToFileURL(dist('es', 'index.js')).href)
       '<button class="ui primary button">Go</button>',
       'dist/es did not render',
     )
-
-    console.log('build verification passed')
   })
   .catch((error) => {
     console.error(`dist/es is not loadable by node: ${error.message}`)
+    process.exit(1)
+  })
+  .then(loadOrderInEs)
+  .then(() => console.log('build verification passed'))
+  .catch((error) => {
+    console.error(error.message)
     process.exit(1)
   })

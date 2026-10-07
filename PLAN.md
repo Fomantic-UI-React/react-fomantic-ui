@@ -792,6 +792,26 @@ Tracked as **issue #8**. Until then `test/setup.js` imports `src/index` so specs
 see the load order a consumer importing the package gets — that makes the suite
 correct, it does not fix the shipped bug.
 
+**Resolved after 3.0.0, which shipped it.** The note above was wrong about the
+cost: in native ESM the early read is a `ReferenceError`, not a silent
+`undefined`, and Turbopack reached `StepGroup` before `Step` in a Next.js 16
+app, which then failed to hydrate. `Transition` ↔ `TransitionGroup` (through
+`utils/wrapChild`) broke `Transition.Group` the same way, making six cycles.
+
+Each of the six parents now lives in `internal/` — `elements/Button/internal/Button.js`
+and so on — and its `Group` imports it from there. The public `Button.js` only
+attaches the subcomponent statics. `componentInfo` reads those statics from the
+public file, and skips `internal/` because it holds no component files of its
+own. Three guards keep it fixed:
+
+- `test/unit/importOrder-test.js` loads every component module first, in a
+  fresh module graph, and checks the parent's statics. The `test/setup.js`
+  import is gone.
+- `rollup.config.mjs` fails the build on any circular dependency except
+  `Label` ↔ `Image`, which only render each other's shorthand.
+- `scripts/verify-build.js` does the same load-first check against
+  `dist/commonjs` and `dist/es`, the latter one process per module.
+
 > **Working rule: no source changes until Phase 2 and Phase 4 are in place.**
 > Restructuring five components' modules is exactly the kind of change that
 > needs tests and Storybook underneath it. This is why the Phase ordering is

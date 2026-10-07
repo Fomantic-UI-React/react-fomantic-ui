@@ -11,7 +11,7 @@ import {
   getKeyOnly,
   getKeyOrValueAndKey,
 } from '../../lib'
-import Item from './Item'
+import Item from './internal/Item'
 
 /**
  * A group of items.

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import Transition from '../Transition'
+import Transition from '../internal/Transition'
 
 /**
  * Wraps a React element with a Transition component.
