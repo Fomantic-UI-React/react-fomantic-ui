@@ -1,8 +1,15 @@
 # Change Log
 
+## v3.0.2 (2026-10-07)
+
+> Upgrade from 3.0.0 or 3.0.1. 3.0.1 fixed the circular-import crash but attached the subcomponents (`Button.Content`, `Button.Group` and 21 others on `Card`, `Item`, `Statistic`, `Step` and `Transition`) in a module that bundlers drop under `"sideEffects": false`. In production builds, Turbopack among them, they came out `undefined` and React threw error #130.
+
+#### :bug: Bug Fix
+* [#55](https://github.com/Fomantic-UI-React/react-fomantic-ui/pull/55) fix: keep subcomponent statics when the package is tree-shaken ([@aphenine](https://github.com/aphenine))
+
 ## v3.0.1 (2026-10-07)
 
-> Upgrade from 3.0.0. In 3.0.0, a bundler that loaded `ButtonGroup`, `StepGroup`, `CardGroup`, `ItemGroup`, `StatisticGroup` or `TransitionGroup` before its parent left `Button.Group` (and so on) `undefined`, or threw `ReferenceError: Cannot access 'StepGroup' before initialization` from the ES build. Next.js apps on Turbopack failed to start this way.
+> Superseded by 3.0.2: this release loses subcomponents when tree-shaken. In 3.0.0, a bundler that loaded `ButtonGroup`, `StepGroup`, `CardGroup`, `ItemGroup`, `StatisticGroup` or `TransitionGroup` before its parent left `Button.Group` (and so on) `undefined`, or threw `ReferenceError: Cannot access 'StepGroup' before initialization` from the ES build. Next.js apps on Turbopack failed to start this way.
 
 #### :bug: Bug Fix
 * [#53](https://github.com/Fomantic-UI-React/react-fomantic-ui/pull/53) fix: break the parent ↔ Group circular imports ([@aphenine](https://github.com/aphenine))
