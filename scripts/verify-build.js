@@ -18,6 +18,8 @@ const path = require('path')
 const url = require('url')
 const vm = require('vm')
 
+const esbuild = require('esbuild')
+const _ = require('lodash')
 const React = require('react')
 const ReactDOM = require('react-dom')
 const ReactDOMServer = require('react-dom/server')
@@ -227,6 +229,53 @@ const loadOrderInEs = async () => {
 }
 
 // ----------------------------------------
+// Tree-shaking
+// ----------------------------------------
+
+// `"sideEffects": false` lets a bundler drop any module whose exports nobody
+// uses. 3.0.1 attached `Button.Group` and its siblings in a module the entry
+// imported only for its side effects, so Turbopack dropped it and
+// `Button.Content` rendered as undefined. Nothing above bundles, so the es build
+// is bundled the way a consumer's bundler does it, and every component must come
+// out with the statics it has when the package is loaded whole.
+const staticsOf = (exports) =>
+  _.mapValues(exports, (value) =>
+    value
+      ? Object.keys(value)
+          .filter((key) => /^[A-Z]/.test(key) && value[key])
+          .sort()
+      : [],
+  )
+
+const treeShaking = async () => {
+  const names = Object.keys(SUI).filter((name) => name !== '__esModule')
+  const outfile = path.join(root, 'node_modules', '.cache', 'verify-build', 'tree-shaken.mjs')
+
+  esbuild.buildSync({
+    stdin: {
+      contents: [
+        `import { ${names.join(', ')} } from ${JSON.stringify(dist('es', 'index.js'))}`,
+        `export default { ${names.join(', ')} }`,
+      ].join('\n'),
+      resolveDir: root,
+    },
+    bundle: true,
+    platform: 'node',
+    format: 'esm',
+    packages: 'external',
+    outfile,
+    logLevel: 'error',
+  })
+
+  const { default: shaken } = await import(url.pathToFileURL(outfile).href)
+  assert.deepStrictEqual(
+    staticsOf(shaken),
+    staticsOf(_.pick(SUI, names)),
+    'statics lost when dist/es is bundled with "sideEffects": false',
+  )
+}
+
+// ----------------------------------------
 // Native ESM
 // ----------------------------------------
 
@@ -247,6 +296,7 @@ import(url.pathToFileURL(dist('es', 'index.js')).href)
     process.exit(1)
   })
   .then(loadOrderInEs)
+  .then(treeShaking)
   .then(() => console.log('build verification passed'))
   .catch((error) => {
     console.error(error.message)

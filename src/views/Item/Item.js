@@ -8,13 +8,18 @@ import ItemImage from './ItemImage'
 import ItemMeta from './ItemMeta'
 
 // Item is defined in internal/ so that ItemGroup can import it without importing
-// this module back. That cycle broke `Item.Group` whenever ItemGroup loaded first (#8).
-Item.Content = ItemContent
-Item.Description = ItemDescription
-Item.Extra = ItemExtra
-Item.Group = ItemGroup
-Item.Header = ItemHeader
-Item.Image = ItemImage
-Item.Meta = ItemMeta
-
-export default Item
+// this module back; that cycle broke `Item.Group` whenever the Group loaded first (#8).
+//
+// The statics are attached in the export itself, not as statements before it. Exporting
+// the imported binding lets rollup point the package entry straight at internal/Item,
+// leaving this module as a side-effect-only import that bundlers drop under
+// "sideEffects": false, and `Item.Group` with it.
+export default Object.assign(Item, {
+  Content: ItemContent,
+  Description: ItemDescription,
+  Extra: ItemExtra,
+  Group: ItemGroup,
+  Header: ItemHeader,
+  Image: ItemImage,
+  Meta: ItemMeta,
+})
